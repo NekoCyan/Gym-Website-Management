@@ -4,6 +4,36 @@ package-lock.json
 # Edit at https://www.toptal.com/developers/gitignore?templates=node
 
 ### Node ###
+# dependencies
+/node_modules
+/.pnp
+.pnp.js
+.yarn/install-state.gz
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# next.js
+/.next/
+/out/
+
+# local env files
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
 # Logs
 logs
 *.log
