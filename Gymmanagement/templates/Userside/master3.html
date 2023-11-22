@@ -1,0 +1,434 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<!-- Mirrored from expert-themes.com/html/gym/index-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Jan 2021 02:50:05 GMT -->
+<head>
+<meta charset="utf-8">
+
+<!-- Stylesheets -->
+<link href="{% static 'User/css/bootstrap.css' %}" rel="stylesheet">
+
+<link href="{% static 'User/css/style.css' %}" rel="stylesheet">
+<link href="{% static 'User/css/responsive.css' %}" rel="stylesheet">
+
+<!-- Color Switcher Mockup -->
+<link href="{% static 'User/css/color-switcher-design.css' %}" rel="stylesheet">
+
+<!-- Color Themes -->
+<link id="theme-color-file" href="{% static 'User/css/color-themes/default-theme.css' %}" rel="stylesheet">
+
+
+
+<link rel="shortcut icon" href="{% static 'User/images/favicon.png' %}" type="image/x-icon">
+<link rel="icon" href="{% static 'User/images/favicon.png' %}" type="image/x-icon">
+
+<!-- Responsive -->
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+
+<!--[if lt IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.js"></script><![endif]-->
+<!--[if lt IE 9]><script src="js/respond.js"></script><![endif]-->
+</head>
+
+<body class="hidden-bar-wrapper">
+
+<div class="page-wrapper">
+ 	
+    <!-- Preloader -->
+     
+ 	
+ 	<!-- Main Header-->
+    <header class="main-header header-style-two">
+    	
+		<!-- Header Top -->
+        <div class="header-top">
+            <div class="auto-container">
+                <div class="clearfix">
+				
+					<!-- Top Left -->
+					<div class="top-left pull-left">
+						<!-- Info List -->
+                        <ul class="info-list">
+							<li><span class="icon fa fa-location-arrow"></span>10th floor, Galaxy Appartments,<br> Navrangpura, Ahmedabad</li>
+							<li><span class="icon fa fa-phone"></span>(+91) 9998110921</li>
+							<li><span class="icon fa fa-envelope-o"></span> <a href="{% static 'mailto:info@example.com' %}">Dynamofitness@gmail.com</a></li>
+						    <li><li><a href="register.html">Apply For Membership</a> /
+								<a href="login.html">Login</a></li>
+						   </li>
+						</ul>
+					</div>
+					
+					
+					
+                </div>
+            </div>
+        </div>
+		
+		<!-- Header Upper -->
+        <div class="header-upper">
+        	<div class="auto-container clearfix">
+            	
+				<div class="pull-left logo-box">
+					<div class="logo"><a href="index-3.html"><img src="{% static 'User/images/logo.png' %}" alt="" title=""></a></div>
+				</div>
+				<div class="nav-outer clearfix">
+					<!--Mobile Navigation Toggler-->
+					<div class="mobile-nav-toggler"><span class="icon flaticon-menu"></span></div>
+					<!-- Main Menu -->
+					<nav class="main-menu navbar-expand-md">
+						<div class="navbar-header">
+							<!-- Toggle Button -->    	
+							<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+								<span class="icon-bar"></span>
+							</button>
+						</div>
+						
+						<div class="navbar-collapse collapse clearfix" id="navbarSupportedContent">
+							<ul class="navigation clearfix">
+								
+										<li><a href="home.html">Home</a></li>
+								
+								<li class="dropdown"><a href="#">About</a>
+									<ul>
+										<li><a href="about.html">About Us</a></li>
+										<li><a href="faq.html">Faq</a></li>
+										<li><a href="team.html">Team</a></li>
+										<li><a href="price.html">Plans</a></li>
+										<li><a href="testimonial.html">Reviews</a></li>
+									
+									</ul>
+								</li>
+								
+										<li><a href="classes.html">Classes</a></li>
+										
+
+								
+										<li><a href="portfolio.html">Portfolio</a></li>
+										
+									
+								
+										<li><a href="shop.html">shop</a></li>
+										
+										
+									
+								
+										<li><a href="blog.html">Blog</a></li>
+										
+									
+								<li><a href="workout.html">My workout</a></li>
+								<li><a href="contact.html">Contact us</a></li>
+							</ul>
+						</div>
+					</nav>
+					
+				</div>
+				
+            </div>
+        </div>
+        <!--End Header Upper-->
+        
+		<!-- Sticky Header  -->
+        <div class="sticky-header">
+            <div class="auto-container clearfix">
+                <!--Logo-->
+                <div class="logo pull-left">
+                    <a href="home.html" title=""><img src="{% static 'User/images/logo-small.png' %}" alt="" title=""></a>
+                </div>
+                <!--Right Col-->
+                <div class="pull-right">
+                    <!-- Main Menu -->
+                    <nav class="main-menu">
+                        <!--Keep This Empty / Menu will come through Javascript-->
+                    </nav><!-- Main Menu End-->
+					
+                </div>
+            </div>
+        </div><!-- End Sticky Menu -->
+    
+		<!-- Mobile Menu  -->
+        <div class="mobile-menu">
+            <div class="menu-backdrop"></div>
+            <div class="close-btn"><span class="icon flaticon-multiply"></span></div>
+            
+            <nav class="menu-box">
+                <div class="nav-logo"><a href="home.html"><img src="{% static 'User/images/logo-2.png' %}" alt="" title=""></a></div>
+                <div class="menu-outer"><!--Here Menu Will Come Automatically Via Javascript / Same Menu as in Header--></div>
+            </nav>
+        </div><!-- End Mobile Menu -->
+	
+    </header>
+    <!-- End Main Header -->
+     
+    {% block mycontent %}
+
+	{% endblock %}
+
+    <!-- Main Footer -->
+
+    <footer class="main-footer style-four" style="background-image:url(static/images/background/2.jpg)">
+
+		<div class="auto-container">
+
+        	<!-- Widgets Section -->
+
+            <div class="widgets-section">
+
+            	<div class="row clearfix">
+
+                	
+
+                    <!-- Big Column -->
+
+                    <div class="big-column col-lg-6 col-md-12 col-sm-12">
+
+                        <div class="row clearfix">
+
+							
+
+							<!--Footer Column-->
+
+                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
+
+                                <div class="footer-widget logo-widget">
+
+									<div class="logo">
+
+                                    	<a href="index-2.html"><img src="{% static 'User/images/footer-logo.png' %}" alt="" /></a>
+
+                                    </div>
+
+									<div class="text">Dynamo Fitness is a champ in providing its users with absolutely everything a fitness or gym site needs.</div>
+
+									
+								</div>
+
+							</div>
+
+							
+
+							<!-- Footer Column -->
+
+							<div class="footer-column col-lg-6 col-md-6 col-sm-12">
+
+								<div class="footer-widget news-widget">
+
+									<h4>Latest Posts</h4>
+
+									<!-- Footer Column -->
+
+									<div class="widget-content">
+
+										<div class="post">
+
+											<div class="thumb"><a href="blog-single.html"><img src="{% static 'User/images/resource/post-thumb-3.jpg' %}" alt=""></a></div>
+
+											<h5><a href="blog-single.html">Your Future is Created by What You Do Today</a></h5>
+
+											<span class="date">JUNE 21, 2020</span>
+
+										</div>
+
+
+
+										<div class="post">
+
+											<div class="thumb"><a href="blog-single.html"><img src="{% static 'User/images/resource/post-thumb-4.jpg' %}" alt=""></a></div>
+
+											<h5><a href="blog-single.html">How to Maximise Time Spent at The GYM.</a></h5>
+
+											<span class="date">JUNE 21, 2019</span>
+
+										</div>
+
+									</div>
+
+								</div>
+
+							</div>
+
+							
+
+						</div>
+
+					</div>
+
+					
+
+					<!-- Big Column -->
+
+                    <div class="big-column col-lg-6 col-md-12 col-sm-12">
+
+                        <div class="row clearfix">
+
+							
+
+							<!-- Footer Column -->
+
+                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
+
+                                <div class="footer-widget links-widget">
+
+									<h4>Our Services</h4>
+
+									<ul class="list-link">
+
+										<li><a href="#">Fat Burn</a></li>
+
+										<li><a href="#">Streching</a></li>
+
+										<li><a href="#">Weight Loss</a></li>
+
+										<li><a href="#">Self Defense</a></li>
+
+										<li><a href="#">Body Building</a></li>
+
+										<li><a href="#">Psycho Trainning</a></li>
+
+										<li><a href="#">Strength Trainning</a></li>
+
+									</ul>
+
+								</div>
+
+							</div>
+
+							
+
+							<!-- Footer Column -->
+
+                            <div class="footer-column col-lg-6 col-md-6 col-sm-12">
+
+                                <div class="footer-widget timing-widget">
+
+									<h4>Working Hours</h4>
+
+									<ul>
+
+										<li>Monday – Friday:<span>07:00 – 21:00</span></li>
+
+										<li>Saturday:<span>07:00 – 16:00</span></li>
+
+										<li>Sunday Closed</li>
+
+									</ul>
+
+								</div>
+
+							</div>
+
+							
+
+						</div>
+
+					</div>
+
+					
+
+				</div>
+
+			</div>
+
+		
+
+			<!-- Footer Bottom -->
+
+			<div class="footer-bottom">
+
+				<div class="copyright">Copyright Dynamofitnessgym</div>
+
+			</div>
+
+		
+
+		</div>
+
+	</footer>
+
+	
+
+</div>
+
+<!--End pagewrapper-->
+
+
+
+<!-- Color Palate / Color Switcher -->
+
+
+
+
+
+<!-- Search Popup -->
+
+<div class="search-popup">
+
+	<button class="close-search style-two"><span class="flaticon-multiply"></span></button>
+
+	<button class="close-search"><span class="flaticon-up-arrow-1"></span></button>
+
+	<form method="post" action="https://expert-themes.com/html/gym/blog.html">
+
+		<div class="form-group">
+
+			<input type="search" name="search-field" value="" placeholder="Search Here" required="">
+
+			<button type="submit"><i class="fa fa-search"></i></button>
+
+		</div>
+
+	</form>
+
+</div>
+
+<!-- End Header Search -->
+
+
+
+<!--Scroll to top-->
+
+<div class="scroll-to-top scroll-to-target" data-target="html"><span class="fa fa-arrow-up"></span></div>
+
+
+
+<script src="{% static 'User/js/jquery.js' %}"></script>
+
+<script src="{% static 'User/js/popper.min.js' %}"></script>
+
+<script src="{% static 'User/js/bootstrap.min.js' %}"></script>
+
+<script src="{% static 'User/js/jquery.mCustomScrollbar.concat.min.js' %}"></script>
+
+<script src="{% static 'User/js/jquery.fancybox.js' %}"></script>
+
+<script src="{% static 'User/js/appear.js' %}"></script>
+
+<script src="{% static 'User/js/parallax.min.js' %}"></script>
+
+<script src="{% static 'User/js/tilt.jquery.min.js' %}"></script>
+
+<script src="{% static 'User/js/jquery.paroller.min.js' %}"></script>
+
+<script src="{% static 'User/js/owl.js' %}"></script>
+
+<script src="{% static 'User/js/mixitup.js' %}"></script>
+
+<script src="{% static 'User/js/wow.js' %}"></script>
+
+<script src="{% static 'User/js/validate.js' %}"></script>
+
+<script src="{% static 'User/js/nav-tool.js' %}"></script>
+
+<script src="{% static 'User/js/jquery-ui.js' %}"></script>
+
+<script src="{% static 'User/js/script.js' %}"></script>
+
+<script src="{% static 'User/js/color-settings.js' %}"></script>
+
+</body>
+
+
+<!-- Mirrored from expert-themes.com/html/gym/contact.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 30 Jan 2021 02:50:39 GMT -->
+</html>

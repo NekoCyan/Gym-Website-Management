@@ -1,0 +1,100 @@
+{% extends 'base1.html' %}
+
+{% load static %}
+{% block mycontent %}
+    <script src="{% static 'Admin/js/jquery.js' %}"></script>
+    <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $("#WorkoutForm").validate({
+            messages: {
+                User_id:"*Please Enter User Id",
+                rewards:"*Please Enter Valid Reward Points Value"
+            }
+        });
+    });
+    </script>
+    <style>
+        .error{
+            color:red;
+            margin: 2px;
+        }
+    </style>
+
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Add Workout Detail:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="WorkoutForm" class="form-horizontal" method="POST" action="/trainerapp/Workoutaddprocess"> 
+                                {% csrf_token %}
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*User Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="User_id" class="form-control" style="color: black;" required>
+                                            <option value="">Select</option>
+                                            {% for i in mydata %}
+                                            <option value="{{i.0}}">{{i.0}} ({{i.2}})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Diet Chart:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="file" accept="application/pdf" class="form-control" name="Diet_Chart" placeholder="Diet Chart"> 
+                                        <p class="help-block">Format must be PDF.</p>
+                                        <p class="help-block">Maximum File Size Limit is 5MB.</p> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Workout Schedule:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="file" accept="application/pdf" name="Workout_schedule" placeholder="Workout Schedule" class="form-control">
+                                        <p class="help-block">Format must be PDF.</p>
+                                        <p class="help-block">Maximum File Size Limit is 5MB.</p>  
+                                    </div> 
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Workout Videos:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="file" accept="video/mp4" class="form-control" name="Workout_videos" placeholder="Workout Videos"> 
+                                        <p class="help-block">Format must be MP4.</p>
+                                        <p class="help-block">Maximum File Size Limit is 20MB.</p> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Reward Points:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="999" min="0" class="form-control" name="rewards" placeholder="Reward Points" required>
+                                        <p class="help-block">Reward Points should be between 0 to 999.</p> 
+                                    </div> 
+                                </div>
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="reset" class="btn btn-primary" value="Reset"> 
+                                </div> 
+                                {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                                {% endif %}
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}

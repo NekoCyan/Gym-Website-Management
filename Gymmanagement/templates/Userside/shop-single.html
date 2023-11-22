@@ -1,0 +1,176 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+
+
+<!DOCTYPE html>
+	
+	<!--Page Title-->
+    <section class="page-title" style="background-image:url(static/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Shop Detail</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Shop Detail</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+    <!--End Page Title-->
+	
+	<!-- Sidebar Cart Item -->
+	<div class="xs-sidebar-group info-group">
+		<div class="xs-overlay xs-bg-black"></div>
+		<div class="xs-sidebar-widget">
+			<div class="sidebar-widget-container">
+				<div class="widget-heading">
+					<a href="#" class="close-side-widget">
+						X
+					</a>
+				</div>
+				<div class="sidebar-textwidget">
+					
+					<!-- Sidebar Info Content -->
+					<div class="sidebar-info-contents">
+						<div class="content-inner">
+							<div class="logo">
+								<a href="index-2.html"><img src="{% static 'User/images/logo.png' %}" alt="" /></a>
+							</div>
+							<div class="content-box">
+								<h2>About Us</h2>
+								<p class="text">The argument in favor of using filler text goes something like this: If you use real content in the Consulting Process, anytime you reach a review point you’ll end up reviewing and negotiating the content itself and not the design.</p>
+								<a href="#" class="theme-btn btn-style-two"><span class="txt">Consultation</span></a>
+							</div>
+							<div class="contact-info">
+								<h2>Contact Info</h2>
+								<ul class="list-style-one">
+									<li><span class="icon fa fa-location-arrow"></span>Chicago 12, Melborne City, USA</li>
+									<li><span class="icon fa fa-phone"></span>(111) 111-111-1111</li>
+									<li><span class="icon fa fa-envelope"></span>Gym@gmail.com</li>
+									<li><span class="icon fa fa-clock-o"></span>Week Days: 09.00 to 18.00 Sunday: Closed</li>
+								</ul>
+							</div>
+							<!-- Social Box -->
+							<ul class="social-box">
+								<li class="facebook"><a href="#" class="fa fa-facebook-f"></a></li>
+								<li class="twitter"><a href="#" class="fa fa-twitter"></a></li>
+								<li class="linkedin"><a href="#" class="fa fa-linkedin"></a></li>
+								<li class="instagram"><a href="#" class="fa fa-instagram"></a></li>
+								<li class="youtube"><a href="#" class="fa fa-youtube"></a></li>
+							</ul>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END sidebar widget item -->
+	
+	<!--Shop Single Section-->
+    <section class="shop-single-section">
+    	<div class="auto-container">
+        	
+            <!--Shop Single-->
+            <div class="shop-page product-details">
+                
+                <!--Basic Details-->
+                <div class="basic-details">
+                    <div class="row clearfix">
+                    
+                        <div class="image-column col-lg-6 col-md-12 col-sm-12">
+                            <div class="carousel-outer">
+        
+                                <ul class="image-carousel owl-carousel owl-theme">
+                                   <li><a href="{% static 'static/upload/{{mydata.5}}' %}" class="lightbox-image" title="Image Caption Here"><img src="{% static 'User/images/background/11.jpg' %}'" alt=""></a></li>
+                                </ul>
+                                
+                                <ul class="thumbs-carousel owl-carousel owl-theme">
+                                    <li><img src="{% static 'static/upload/{{mydata.5}}' %}" alt=""></li>
+                                </ul>
+                                
+                            </div>
+                        </div>
+                        
+                        <!--Info Column-->
+                        <div class="info-column col-lg-6 col-md-12 col-sm-12">
+                            <div class="details-header">
+                                <h2>{{mydata.1}}</h2>
+                                <div class="rating"><span class="fa fa-star"></span> <span class="fa fa-star"></span> <span class="fa fa-star"></span> <span class="fa fa-star"></span> <span class="fa fa-star"></span></div>
+                                <div class="item-price">Price: {{mydata.4}}</div>
+                            </div>
+
+                             
+<form action="/add-to-cart/{{mydata.0}}" method="post">
+ {% csrf_token %} 
+									 <input type="hidden" name="pid" value="{{mydata.0}}" />
+									 <input type="hidden" name="price" value="{{mydata.2}}" />
+									  
+                            <div class="other-options">
+                                <div class="clearfix">
+                                    <div class="pull-left">
+                                        <div class="item-quantity"><input class="quantity-spinner" type="text" value="2" name="quantity"></div>
+                                    </div>
+                                    <div class="pull-left">
+                                        <!--Btns Box-->
+                                        <div class="btns-box">
+                                            <button type="submit" class="theme-btn btn-style-three"><span class="txt">Add To Cart</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                        </form>     
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+                <!--Basic Details-->
+                
+                <!--Product Info Tabs-->
+                <div class="product-info-tabs">
+                    <!--Product Tabs-->
+                    <div class="prod-tabs tabs-box">
+                    
+                        <!--Tab Btns-->
+                        <ul class="tab-btns tab-buttons clearfix">
+                            <li data-tab="#prod-details" class="tab-btn active-btn">Description</li>
+                            <!--<li data-tab="#prod-info" class="tab-btn">Additional Information</li>
+                            <li data-tab="#prod-reviews" class="tab-btn">Reviews (2)</li>-->
+                        </ul>
+                        
+                        <!--Tabs Container-->
+                        <div class="tabs-content">
+                            
+                            <!--Tab / Active Tab-->
+                            <div class="tab active-tab" id="prod-details">
+                                <div class="content">
+                                  {{mydata.3}}
+                                  
+                                    </div>
+                            </div>
+                            
+                            <!--Tab / Active Tab-->
+                                                        <!--End Tab-->
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+                <!--End Product Info Tabs-->
+                
+            </div>
+            
+        </div>
+    </section>
+    <!--End Shop Single Section-->
+	{% endblock %}	
+				

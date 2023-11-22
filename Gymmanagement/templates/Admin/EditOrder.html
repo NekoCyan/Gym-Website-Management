@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+   {% load static %}
+    {% block mycontent %}
+        <script src="{% static 'Admin/js/jquery.js' %}"></script>
+        <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+        <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+        <script>
+        $(document).ready(function() {
+            $("#PlanForm").validate({
+                rules: {
+                    ddate:"required",
+                },
+                messages: {
+                    ddate: "*Please Provide a Delivery Date"
+                }
+            });
+        });
+        </script>
+        <style>
+            .error{
+                color:red;
+                margin: 2px;
+            }
+        </style> 
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Edit Order:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="PlanForm" class="form-horizontal" method="POST" action="http://127.0.0.1:8000/myadmin/OrderEditProcess/edit/{{Odata.0}}"> 
+                                {% csrf_token %} 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Delivery Date:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="date" class="form-control" id="ddate" name="ddate" placeholder="Delivery date" value="{{Odata.3|date:'Y-m-d'}}"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Delivery Status:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="Delivery_Status" class="form-control" style="color: black;">
+                                            <option value="{{Odata.4}}" selected>{{Odata.4}}</option>
+                                            <option value="Ordered">Ordered</option>
+                                            <option value="Shipped">Shipped</option>
+                                            <option value="Delivered">Delivered</option>
+                                        </select> 
+                                    </div> 
+                                </div> 
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Save Changes">
+                                    <a href="http://127.0.0.1:8000/myadmin/ViewOrder.html"><input type="button" class="btn btn-primary"  value="Cancel"></a> 
+                                </div>
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    {% endblock %}

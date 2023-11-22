@@ -1,0 +1,102 @@
+{% extends 'master3.html' %}
+{% load static %}
+
+{% block mycontent %}
+<title>My Orders</title>
+
+<style>
+ table,tr,td,th{
+     border: solid;
+     border-color: black;
+     background-color:rgb(241, 186, 144);
+     color:black
+ }
+ th{
+     font-size: larger;
+     font-weight: bolder;
+ }
+</style>
+<!--Register Section-->
+<section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
+    <div class="auto-container">
+        <div class="clearfix">
+            <div class="pull-left">
+                <h2>Order Details</h2>
+                <div class="text">Fitness is not a destination it is a way of life.</div>
+            </div>
+            <div class="pull-right">
+                <ul class="page-breadcrumb">
+                    <li><a href="index-2.html">home</a></li>
+                    <li>My Orders</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<br>
+<div>
+    <center>
+     
+</center>
+</div>
+
+<section class="register-section">
+    <div class="auto-container">
+        <div class="row clearfix">
+
+            
+                
+         
+            
+            <!--Form Column-->
+            
+            <!--Form Column-->
+            <div class="form-column column col-lg-12 col-md-12 col-sm-12">
+            
+                <div class="sec-title">
+                     
+                    <div class="separate"></div>
+                </div>
+                
+                <!--Login Form-->
+                <div class="styled-form register-form">
+                  <table class="table table"> 
+                        <thead>
+                            <tr >  
+                                <th>PRODUCT</th>
+                                <th>QUANTITY</th>
+                                <th>PRICE</th>
+                                <th>TOTAL AMOUNT</th>
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>   
+                                <td style="width: 100px;">{{i.0}}-{{i.2}}<br><img src="static/upload/{{i.1}}" height="100px" width="100px"></td>
+                                <td>{{i.3}}</td>
+                                <td>₹{{i.4}}</td>
+                                <td>₹{{i.5}}</td>
+                            </tr>  
+                            {% endfor %}
+                            <tr>
+                                <td colspan="3" style="text-align: right;font-weight: bolder;">SUBTOTAL</td><td style="font-weight: bolder">₹900</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: right;font-weight: bolder">SHIPPING CHARGES</td><td style="font-weight: bolder">₹0</td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" style="text-align: right;font-weight: bolder">TOTAL</td><td style="font-weight: bolder">₹900</td>
+                            </tr>
+                        </tbody> 
+                    </table>
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+</section>
+<!--End Register Section-->
+
+{% endblock %}

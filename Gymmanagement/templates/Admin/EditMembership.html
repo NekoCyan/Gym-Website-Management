@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block mycontent %}
+<script src="{% static 'Admin/js/jquery.js' %}"></script>
+    <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $("#MembershipForm").validate({
+            rules: {
+                User_id:"required",
+                Plan_id:"required",
+                sdate:"required",
+                edate:"required",
+                details:"required",
+                Amount:"required",
+                Membership_status:"required"
+            },
+            messages: {
+                User_id:"*Please Choose a User Id",
+                Plan_id:"*Please Choose a Plan Id",
+                sdate:"*Please Enter the Starting Date",
+                edate:"*Please Enter the Ending Date",
+                details:"*Please Enter Details about Membership",
+                Amount:"*Please Enter a Valid Amount",
+                Membership_status:"*Please Choose Membership Status"
+            }
+        });
+    });
+    </script>
+    <style>
+        .error{
+            color:red;
+            margin: 2px;
+        }
+    </style>
+
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Edit Membership:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="MembershipForm" class="form-horizontal" method="POST" action="http://127.0.0.1:8000/myadmin/MembershipEditProcess/edit/{{Mdata.0}}"> 
+                                {% csrf_token %} 
+                                
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*User Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="User_id" class="form-control">
+                                            <option value="{{Mdata.1}}">{{Mdata.1}}</option>
+                                            {% for i in U %}
+                                            <option value="{{i.0}}">{{i.0}} ({{i.2}})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Plan Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="Plan_id" class="form-control">
+                                            <option value="{{Mdata.2}}">{{Mdata.2}}</option>
+                                            {% for i in P %}
+                                            <option value="{{i.0}}">{{i.0}} ({{i.1}})</option>
+                                            {% endfor %}
+                                        </select> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Start Date:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="date" class="form-control" name="sdate" value="{{Mdata.3|date:'Y-m-d'}}" placeholder="Starting Date of Membership"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*End Date:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="date" class="form-control" name="edate" value="{{Mdata.4|date:'Y-m-d'}}" placeholder="Ending Date of Membership"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Details:</label> 
+                                    <div class="col-sm-9"> 
+                                        <textarea name="details" rows="3" cols="3" placeholder="Description Of Membership" class="form-control">{{Mdata.6}}</textarea> 
+                                    </div> 
+                                </div>  
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Amount:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="99999" min="0" class="form-control" name="Amount" value="{{Mdata.5}}" placeholder="Amount(in Rs.)"> 
+                                        <p class="help-block">Amount must be Between 0 to 99999.</p>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Membership Status:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="Membership_status" class="form-control">
+                                            <option value="{{Mdata.7}}">{{Mdata.7}}</option>
+                                            <option>Approved</option>
+                                            <option>Not Approved</option>
+                                        </select>
+                                    </div> 
+                                </div>
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Save Changes">
+                                    <a href="http://127.0.0.1:8000/myadmin/ViewMembership.html"><input type="button" class="btn btn-primary"  value="Cancel"></a> 
+                                </div> 
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}

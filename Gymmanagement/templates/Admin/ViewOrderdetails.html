@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+    {% block mycontent %}
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="tables">
+                <div class="bs-example widget-shadow" data-example-id="bordered-table"> 
+                    <h4>Order Details:</h4>
+                    <table class="table table-bordered"> 
+                        <thead> 
+                            <tr>  
+                                <th>Details Id</th>
+                                <th>Product</th>
+                                <th>Product Image</th>
+                                <th>Qty</th>
+                                <th>Price</th>
+                                <th>Total Amount</th> 
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>   
+                                <td>{{i.0}}</td>
+                                <td>{{i.1}}</td>
+                                <td><img src="/static/upload/{{i.2}}" height="100px" width="100px"></td>
+                                <td>{{i.3}}</td>
+                                <td>{{i.4}}</td>
+                                <td>{{i.5}}</td> 
+                            </tr>  
+                            {% endfor %}
+                            <tr>
+                                <td colspan="5" style="text-align: right;font-weight: bolder;">SUBTOTAL</td><td style="font-weight: bolder">₹{{sub}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: right;font-weight: bolder">SHIPPING CHARGES</td><td style="font-weight: bolder">₹{{shc}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" style="text-align: right;font-weight: bolder">TOTAL</td><td style="font-weight: bolder">₹{{total}}</td>
+                            </tr>
+                        </tbody> 
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

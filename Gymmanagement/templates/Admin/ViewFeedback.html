@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+    {% block mycontent %}
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="tables">
+                <div class="bs-example widget-shadow" data-example-id="bordered-table"> 
+                    <h4>Feedbacks:</h4>
+                    <table class="table table-bordered"> 
+                        <thead> 
+                            <tr> 
+                                <th>Feedback Id</th> 
+                                <th>User Id</th>
+                                <th>Details</th>
+                                <th>Ratings</th>
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>   
+                                <td>{{i.0}}</td>
+                                <td>{{i.1}}</td>
+                                <td>{{i.2}}</td>
+                                <td>{{i.3}}</td>
+                            </tr>  
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block mycontent %}
+	
+	<div id="page-wrapper">
+      <div class="main-page">
+		<div class="charts">		
+			<div class="mid-content-top charts-grids">
+				<div class="middle-content">
+						<h4 class="title"></h4>
+					<!-- start content_slider -->
+						<table align="center">
+							<tr>
+                                {% for i in mydata %}
+
+                                    <td>    
+										<form method="post" action="#" class="form-horizontal" enctype="multipart/form-data">
+											<span class="prfil-img"><img src='/static/upload/{{i.8}}'/ alt=""> </span>
+                                            <div class="form-group">		
+												<h5 style="color:black">Name:</h5>
+												<input type="text" name="username"  class="form-control"  value="{{i.2}}" placeholder="Your Name " pattern="^[A-Za-z -]+$"  title="Please Enter Only Characters" minlength="3" readonly>
+											</div>
+											<div class="form-group">
+																
+												<h5 style="color:black">Gender:</h5>
+												<input type="text" name="gender"  class="form-control"  value="{{i.3}}" placeholder="Gender " readonly>
+											</div>
+											<div class="form-group">
+												<h5 style="color:black">Email:</h5>
+												<input type="email"  class="form-control" name="useremil"  value="{{i.4}}" placeholder="Email Address" readonly>
+											</div>
+											<div class="form-group">
+												
+												<h5 style="color:black">Address:</h5>
+												<textarea class="form-control" style="resize:none;" name="Address" readonly>{{i.6}}</textarea>
+											</div>
+											<div class="form-group">
+												
+												<h5 style="color:black">Mobile:</h5>
+												<input type="text" maxlength="10"  class="form-control" name="Mobile" minlength="10" pattern="[0-9]{10}" value="{{i.7}}" title="please enter valid Mobile Number" placeholder="Your Mobile No.." readonly>
+											</div>
+											<div class="clearfix">
+												<a href="#" style="color:blue;"> Edit Profile</a> |
+												<a href="Chngpass.html" style="color:blue;"> Change Password</a>
+											</div>
+									
+										</form>
+									</td>
+                                    {% endfor %}
+							</tr>
+						</table>
+                </div>
+					<!--//sreen-gallery-cursual---->
+			</div>
+		</div>
+	  </div>
+	</div>
+
+        {% endblock %}
+		
+		
+				
+				
+			

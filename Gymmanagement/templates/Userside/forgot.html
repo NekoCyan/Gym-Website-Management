@@ -1,0 +1,70 @@
+{{% extends 'master3.html' %}
+{% load static %}
+
+{% block mycontent %}
+<!--Form Column-->
+<title>Forgot Password</title>
+<section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
+    <div class="auto-container">
+        <div class="clearfix">
+            <div class="pull-left">
+                <h2>Forgot Password</h2>
+                <div class="text">Fitness is not a destination it is a way of life.</div>
+            </div>
+            <div class="pull-right">
+                <ul class="page-breadcrumb">
+                    <li><a href="index-2.html">home</a></li>
+                    <li>Login</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="register-section">
+    <div class="auto-container">
+        <div class="row clearfix">
+    
+            <div class="form-column column col-lg-6 col-md-12 col-sm-12">
+                
+    <div class="sec-title">
+        <h2 style = "color: black; ">Forgot Password</h2>
+        <div class="separate"></div>
+    </div>
+    
+    <!--Login Form-->
+    <div class="styled-form login-form">
+        <form method="POST" action="/forgotpasswordprocess">
+            {% csrf_token %}
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                    <script>alert('{{ message }}')</script>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="form-group">
+                <span class="adon-icon"><span class="fa fa-envelope-o"></span></span>
+                <h5 style = "color: black; " >E-mail: </h5>
+                <input type="email" name="useremil" value="" placeholder="Email Address" style="border: solid;border-color: black;border-width: thin;" required>
+            </div>
+
+            <div class="clearfix">
+                <div class="form-group pull-left">
+                    <input type="submit" value="Get Password On Mail" style="color: white;background-color: black;" class="theme-btn btn-style-three">
+                </div>
+                <div class="form-group submit-text pull-right">
+                </div>
+            </div>
+                
+            </div>
+            
+        </form>
+    </div>
+    
+</div>
+</div>
+</section>
+{% endblock %}

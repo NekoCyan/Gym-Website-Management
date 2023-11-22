@@ -1,0 +1,162 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+    <title>Checkout</title>
+	<!--Page Title-->
+    <section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Checkout</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Checkout</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+    <!--End Page Title-->
+	
+	<!-- Sidebar Cart Item -->
+	<div class="xs-sidebar-group info-group">
+		<div class="xs-overlay xs-bg-black"></div>
+		<div class="xs-sidebar-widget">
+			<div class="sidebar-widget-container">
+				<div class="widget-heading">
+					<a href="#" class="close-side-widget">
+						X
+					</a>
+				</div>
+				<div class="sidebar-textwidget">
+					
+					<!-- Sidebar Info Content -->
+					<div class="sidebar-info-contents">
+						<div class="content-inner">
+							<div class="logo">
+								<a href="index-2.html"><img src="{% static 'User/images/logo.png' %}" alt="" /></a>
+							</div>
+							<div class="content-box">
+								<h2>About Us</h2>
+								<p class="text">The argument in favor of using filler text goes something like this: If you use real content in the Consulting Process, anytime you reach a review point you’ll end up reviewing and negotiating the content itself and not the design.</p>
+								<a href="#" class="theme-btn btn-style-two"><span class="txt">Consultation</span></a>
+							</div>
+							<div class="contact-info">
+								<h2>Contact Info</h2>
+								<ul class="list-style-one">
+									<li><span class="icon fa fa-location-arrow"></span>Chicago 12, Melborne City, USA</li>
+									<li><span class="icon fa fa-phone"></span>(111) 111-111-1111</li>
+									<li><span class="icon fa fa-envelope"></span>Gym@gmail.com</li>
+									<li><span class="icon fa fa-clock-o"></span>Week Days: 09.00 to 18.00 Sunday: Closed</li>
+								</ul>
+							</div>
+							<!-- Social Box -->
+							<ul class="social-box">
+								<li class="facebook"><a href="#" class="fa fa-facebook-f"></a></li>
+								<li class="twitter"><a href="#" class="fa fa-twitter"></a></li>
+								<li class="linkedin"><a href="#" class="fa fa-linkedin"></a></li>
+								<li class="instagram"><a href="#" class="fa fa-instagram"></a></li>
+								<li class="youtube"><a href="#" class="fa fa-youtube"></a></li>
+							</ul>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END sidebar widget item -->
+	
+	<!--Checkout Page-->
+    <div class="checkout-page">
+        <div class="auto-container">
+            	
+           
+                
+            <!--Billing Details-->
+            <div class="billing-details">
+                <div class="shop-form">
+                    <form method="post" action="https://expert-themes.com/html/gym/checkout.html">
+                        <div class="row clearfix">
+                            <div class="col-lg-7 col-md-12 col-sm-12">
+								
+                                <div class="sec-title"><h2>Billing Details</h2></div>
+                        		<div class="billing-inner">
+                                    <div class="row clearfix">
+                                        
+                                        <!--Form Group-->
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                            <div class="field-label">Name <sup>*</sup></div>
+                                            <input type="text" name="field-name" value="Akshay Jain" placeholder="Name">
+                                        </div>
+                                    
+                                        <!--Form Group-->
+                                        <div class="form-group col-md-12 col-sm-12 col-xs-12">
+                                            <div class="field-label">Address <sup>*</sup></div>
+                                            <input type="text" name="address" value="12/24, Godrej city, Ahmedabad" placeholder="Street Address">
+                                           
+                                        </div>
+                                        
+                                        <!--Form Group-->
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                            <div class="field-label">Email Address <sup>*</sup></div>
+                                            <input type="text" name="field-name" value="akjain114@gmail.com" placeholder="Email Address">
+                                        </div>
+                                        
+                                        <!--Form Group-->
+                                        <div class="form-group col-md-6 col-sm-6 col-xs-12">
+                                            <div class="field-label">Phone <sup>*</sup></div>
+                                            <input type="text" name="field-name" value="8974563214" placeholder="Phone">
+                                        </div>
+                                                                         
+                                    </div>
+                                </div>
+
+                            </div>
+                           
+							
+                            <div class="col-lg-5 col-md-12 col-sm-12">
+                                <div class="sec-title"><h2>Your Order</h2></div>
+                                <div class="shop-order-box">
+                                	<ul class="order-list">
+                                    	<li>Product<span>TOTAL</span></li>
+                                        <hr>
+                                        <li>Protein(X 1)<span>900</li></span></li>
+                                        <li>Shipping And Handling<span>Free Shipping</span></li>
+                                        <li class="total">TOTAL<span class="dark">900</span></li>
+                                    </ul>
+                                    
+                                    
+                                    <!--Place Order-->
+                                    <div class="place-order">
+                                        <!--Payment Options-->
+                                        <div class="payment-option">
+                                        
+                                         Payment Mode:-<h5>Cash On Delivery</h5> 
+                                                    
+                                        </div>
+                                        <br><br>
+                                        <button type="button" class="theme-btn btn-style-three"><span class="txt">Place Order</span></button>
+										<div>*Order Once Placed Cannot be cancelled</div>
+                                        
+                                    </div>
+                                    <!--End Place Order-->
+									    
+                                </div>
+                                
+                                
+                            </div>
+                        </div>    
+						                         
+                    </form>
+                    
+                </div>
+                
+            </div><!--End Billing Details-->
+    	</div>
+    </div>
+	{% endblock %}
+	

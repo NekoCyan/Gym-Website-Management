@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+   {% load static %}
+    {% block mycontent %}
+        <script src="{% static 'Admin/js/jquery.js' %}"></script>
+        <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+        <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+        <script>
+        $(document).ready(function() {
+            $("#PlanForm").validate({
+                rules: {
+                    title:"required",
+                    details:"required",
+                    Price:"required",
+                    Duration:"required"
+                },
+                messages: {
+                    title: "*Please Enter a title for Plan",
+                    details:"*Please Enter Details About Plan",
+                    Price:"*Please Enter a Valid Price of Plan",
+                    Duration:"*Please Enter Duration of the Plan"
+                }
+            });
+        });
+        </script>
+        <style>
+            .error{
+                color:red;
+                margin: 2px;
+            }
+        </style> 
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Add Plan:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="PlanForm" class="form-horizontal" method="POST" action="/myadmin/add-plan-process"> 
+                                {% csrf_token %} 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Title:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="text" class="form-control" id="title" name="title" placeholder="Title of Plan"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Details:</label> 
+                                    <div class="col-sm-9"> 
+                                        <textarea name="details" cols="5" rows="5" placeholder="Description Of Plan" class="form-control"></textarea> 
+                                    </div> 
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Price:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="99999" min="0" class="form-control" name="Price" placeholder="Price of the Plan(in Rs.)"> 
+                                        <p class="help-block">Price must be Between 0 to 99999.</p>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Duration:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="text" class="form-control" name="Duration" placeholder="Duration Of Plan"> 
+                                    </div> 
+                                </div>
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="reset" class="btn btn-primary" value="Reset"> 
+                                </div>
+                                {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                                {% endif %} 
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
+    {% endblock %}

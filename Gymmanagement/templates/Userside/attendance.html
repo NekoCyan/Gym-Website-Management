@@ -1,0 +1,72 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+
+<html>
+    <title>Attendance</title>
+    <!--Page Title-->
+    <style>
+        tr,td,th{
+            padding: 30px;
+            border-style:solid;
+            font-weight: bolder;
+            font-size: medium;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            border-color: black;
+            color: black;
+            text-align: center;
+        }
+        td{
+            padding:5px ;
+            font-size: 15px;
+            font-weight: lighter;
+        }
+        th{
+            background-image: url(static/images/background/pattern-5.png);
+            font-weight: bold;
+            font-size: 20px;
+        }
+        
+    </style>    
+    <section class="page-title" style="background-image:url(static/User/images/background/51.jpg);">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Attendance</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Attendance</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+    <br><br>
+    <var></var>
+    <center>
+    <table> 
+        <thead> 
+            <tr><th colspan="3" style="background-image:url(static/images/background/7.jpg) ;font-weight: bold;font-size:30px "><center>ATTENDANCE SUMMARY</center></th></tr>
+            <tr> 
+                <th>DATE</th>
+                <th>TIME IN</th>
+                <th>TIME OUT</th>
+            </tr> 
+        </thead> 
+        <tbody> 
+            {% for i in mydata %}
+            <tr>
+                <td>{{i.2}}</td>
+                <td>{{i.3}}</td>
+                <td>{{i.4}}</td>
+            </tr>
+            {% endfor %}
+        </tbody> 
+    </table>
+</center>
+   <br><br>
+
+   {% endblock %}

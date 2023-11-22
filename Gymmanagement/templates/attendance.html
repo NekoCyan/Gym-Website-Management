@@ -1,0 +1,41 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+
+<html>
+    <title>Attendance</title>
+    <!--Page Title-->
+    <style>
+        tr,td,th{
+            padding: 20px;
+            border-style:solid;
+            font-weight: bolder;
+            font-size: medium;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            border-color: black;
+            color: black;
+        }
+        th {
+        background-image: url(static/images/background/7.jpg);
+    }
+        
+    </style>    
+    <section class="page-title" style="background-image:url(static/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Attendance</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Attedance</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+   <br><br>
+
+   {% endblock %}
