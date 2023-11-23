@@ -8,7 +8,7 @@ export async function middleware(req: NextRequest) {
 		if (req.method == 'POST') {
 			const reqText = await req.text();
 			if (reqText.trim()) JSON.parse(reqText.trim());
-			else throw new Error('POST body must have body.');
+			else throw new Error('POST must have body.');
 		}
 	} catch (e) {
 		return Response({ message: 'Bad Request' }, HTTPStatusCode.BAD_REQUEST);
@@ -17,8 +17,9 @@ export async function middleware(req: NextRequest) {
 
 	// pathname when request is: /api/:path* so we need to split and get
 	// the first one only to define route (sometime user will try to put
-	// /api/ only then ?.[0] will be undefined).
-	const route = nextURL.pathname.split('/').slice(2)?.[0];
+	// "/api/" only then ?.[0] will be undefined if split by "/").
+	const route = nextURL.pathname.split('/').slice(2)?.[0]; 
+	// pathname split with "/" and will be ['', 'api', ...routes]
 
 	if (!['login', 'register'].some((x) => x == route)) {
 		// get authorization in header.
@@ -28,23 +29,6 @@ export async function middleware(req: NextRequest) {
 				{ message: 'Unauthorized.' },
 				HTTPStatusCode.UNAUTHORIZED,
 			);
-
-		// verify authorization.
-		// const verify = (await JWT_Verify(authorization)) as any;
-		// when verify is null.
-		// if (!verify) {
-		// 	return Response(
-		// 		{ message: 'Unauthorized.' },
-		// 		HTTPStatusCode.UNAUTHORIZED,
-		// 	);
-		// }
-
-		// we set _username and _email to useful define user.
-		const next = NextResponse.next();
-		// next.headers.set('_username', verify.username);
-		// next.headers.set('_email', verify.email);
-
-		return next;
 	}
 
 	return NextResponse.next();
