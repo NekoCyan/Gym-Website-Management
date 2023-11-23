@@ -9,7 +9,7 @@ export async function GET(req: NextRequest) {
 	await dbConnect();
 	const authorization = req.headers.get('Authorization');
 
-	const user = (await User.findByAuthToken(authorization).catch(
+	const user = (await User.findByAuthToken(authorization!).catch(
 		(e) => e,
 	)) as UserHydratedDocument;
 	if (user instanceof Error) return HandleValidationError(user);

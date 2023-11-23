@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 	)) as UserHydratedDocument;
 
 	if (result instanceof Error) return HandleValidationError(result);
-	const token = await result.generateAuthToken(60);
+	const token = await result.generateAuthToken();
 
 	return Response({ token });
 }

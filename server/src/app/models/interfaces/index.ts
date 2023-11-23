@@ -23,6 +23,6 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 		username: string,
 		password: string,
 	): Promise<UserHydratedDocument>;
-	findByAuthToken(token?: string | null): Promise<UserHydratedDocument>;
+	findByAuthToken(token: string): Promise<UserHydratedDocument>;
 }
 export type UserHydratedDocument = HydratedDocument<IUser, IUserMethods>;
