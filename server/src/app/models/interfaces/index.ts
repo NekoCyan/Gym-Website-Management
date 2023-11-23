@@ -13,6 +13,9 @@ export interface IUser extends Document {
 }
 export interface IUserMethods {
 	comparePassword(password: string): Promise<boolean>;
+	/**
+	 * @param expiresIn seconds.
+	 */
 	generateAuthToken(expiresIn?: number): Promise<string>;
 }
 export interface IUserModel extends Model<IUser, {}, IUserMethods> {
