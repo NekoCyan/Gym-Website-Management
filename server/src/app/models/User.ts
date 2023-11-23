@@ -68,6 +68,9 @@ UserSchema.statics.findByCredentials = async (
 	username: string,
 	password: string,
 ) => {
+	if (!username) throw new Error('Username is required.');
+	if (!password) throw new Error('Password is required.');
+
 	const user = await UserModel.findOne({ username });
 	if (!user) throw new Error('Username is not found.');
 
@@ -95,6 +98,19 @@ UserSchema.pre('save', async function (next) {
 	if (user.isModified('password')) {
 		user.password = await Password_Hash(user.password);
 	}
+	next();
+});
+UserSchema.pre('validate', function (next) {
+	const passwordLower = this.password.toLowerCase();
+	const usernameLower = this.username.toLowerCase();
+	if (
+		[
+			usernameLower.includes(passwordLower),
+			passwordLower.includes(usernameLower),
+		].some((x) => x === true)
+	)
+		throw new Error('Password too weak.');
+
 	next();
 });
 
