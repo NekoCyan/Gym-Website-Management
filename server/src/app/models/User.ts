@@ -34,7 +34,7 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 	},
 	gender: {
 		type: Number,
-		default: 0,
+		default: -1,
 	},
 	address: {
 		type: String,
@@ -99,16 +99,22 @@ UserSchema.statics.findByCredentials = async (
 
 	return user;
 };
-UserSchema.statics.findByAuthToken = async (token: string) => {
-	const verify = await JWT_Verify(token);
-	if (!verify) throw new Error('Unauthorized.');
+UserSchema.statics.findByAuthToken = async function (token: string) {
+	const verify = await this.decodeAuthToken(token);
 
 	const user = await UserModel.findOne({
 		username: verify.username,
 		email: verify.email,
 	});
+	if (!user) throw new Error('Unauthorized.');
 
 	return user;
+};
+UserSchema.statics.decodeAuthToken = async function (token: string) {
+	const verify = await JWT_Verify(token);
+	if (!verify) throw new Error('Unauthorized.');
+
+	return verify;
 };
 
 // middleware.

@@ -1,14 +1,15 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { HTTPStatusCode, Response } from './utils';
+import { HTTPStatusCode } from './utils';
+import { Response } from './utils/ResponseHandler';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(req: NextRequest) {
 	try {
-		if (req.method == 'POST') {
+		if (['POST', 'PUT', 'PATCH'].some((x) => x == req.method)) {
 			const reqText = await req.text();
 			if (reqText.trim()) JSON.parse(reqText.trim());
-			else throw new Error('POST must have body.');
+			else throw new Error(`${req.method} must have body.`);
 		}
 	} catch (e) {
 		return Response({ message: 'Bad Request' }, HTTPStatusCode.BAD_REQUEST);

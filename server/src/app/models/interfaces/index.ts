@@ -1,7 +1,9 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
+import { TokenPayload } from '@/Types';
 
 export type IModels = ICounterModel | IUserModel;
 
+// Counter.
 export interface ICounter extends Document {
 	_id: string;
 	seq: number;
@@ -16,21 +18,24 @@ export type CounterHydratedDocument = HydratedDocument<
 	ICounterMethods
 >;
 
-export interface IUser extends Document {
+// User.
+export interface UserInformations {
+	fullName: string;
+	gender: -1 | 0 | 1;
+	address: string;
+	phoneNumber: string;
+	photo: string;
+	proofId: string;
+}
+export interface UserData {
 	userId: number;
 	username: string;
 	password: string;
 	email: string;
 
-	fullName: string;
-	gender: 0 | 1;
-	address: string;
-	phoneNumber: string;
-	photo: string;
-	proofId: string;
-
 	roleId: number;
 }
+export interface IUser extends UserData, UserInformations, Document {}
 export interface IUserMethods {
 	comparePassword(password: string): Promise<boolean>;
 	/**
@@ -44,5 +49,6 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 		password: string,
 	): Promise<UserHydratedDocument>;
 	findByAuthToken(token: string): Promise<UserHydratedDocument>;
+	decodeAuthToken(token: string): Promise<TokenPayload>;
 }
 export type UserHydratedDocument = HydratedDocument<IUser, IUserMethods>;
