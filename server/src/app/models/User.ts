@@ -4,7 +4,12 @@ import { IUser, IUserMethods, IUserModel } from './interfaces';
 import { PATTERN, JWT_Sign, JWT_Verify } from '@/utils';
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
+import CounterModel from './Counter';
+
 const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
+	userId: {
+		type: Number,
+	},
 	username: {
 		type: String,
 		required: [true, 'Username is required.'],
@@ -25,15 +30,30 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 
 	fullName: {
 		type: String,
+		default: '',
+	},
+	gender: {
+		type: Number,
+		default: 0,
 	},
 	address: {
 		type: String,
+		default: '',
 	},
 	phoneNumber: {
 		type: String,
+		default: '',
+	},
+	photo: {
+		type: String,
+		default: '',
+	},
+	proofId: {
+		type: String,
+		default: '',
 	},
 
-	role: {
+	roleId: {
 		type: Number,
 		default: 0,
 	},
@@ -98,6 +118,9 @@ UserSchema.pre('save', async function (next) {
 	if (user.isModified('password')) {
 		user.password = await Password_Hash(user.password);
 	}
+
+	this.userId = await CounterModel.getNextSequence(UserModel, 'userId');
+
 	next();
 });
 UserSchema.pre('validate', function (next) {

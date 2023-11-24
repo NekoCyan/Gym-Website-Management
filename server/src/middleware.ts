@@ -18,10 +18,12 @@ export async function middleware(req: NextRequest) {
 	// pathname when request is: /api/:path* so we need to split and get
 	// the first one only to define route (sometime user will try to put
 	// "/api/" only then ?.[0] will be undefined if split by "/").
-	const route = nextURL.pathname.split('/').slice(2)?.[0]; 
+	const route = nextURL.pathname.split('/').slice(2)?.[0];
 	// pathname split with "/" and will be ['', 'api', ...routes]
 
-	if (!['login', 'register'].some((x) => x == route)) {
+	// if route is not in the following list,
+	// then we need to check authorization.
+	if (!['auth'].some((x) => x == route)) {
 		// get authorization in header.
 		const authorization = req.headers.get('Authorization');
 		if (!authorization)

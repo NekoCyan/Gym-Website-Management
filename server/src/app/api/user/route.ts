@@ -18,10 +18,15 @@ export async function GET(req: NextRequest) {
 		data: {
 			username: user.username,
 			email: user.email,
+
 			fullName: user.fullName,
+			gender: user.gender, // 1 is Male, 0 is Female.
 			address: user.address,
 			phoneNumber: user.phoneNumber,
-			role: user.role,
+			photo: user.photo,
+			proofId: user.proofId,
+			
+			roleId: user.roleId,
 		},
 	});
 }

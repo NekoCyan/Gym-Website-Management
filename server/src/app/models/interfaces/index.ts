@@ -1,15 +1,35 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
 
+export type IModels = ICounterModel | IUserModel;
+
+export interface ICounter extends Document {
+	_id: string;
+	seq: number;
+}
+export interface ICounterMethods {}
+export interface ICounterModel extends Model<ICounter, {}, ICounterMethods> {
+	getNextSequence(modelName: string, fieldName: string): Promise<number>;
+	getNextSequence(model: IModels, fieldName: string): Promise<number>;
+}
+export type CounterHydratedDocument = HydratedDocument<
+	ICounter,
+	ICounterMethods
+>;
+
 export interface IUser extends Document {
+	userId: number;
 	username: string;
 	password: string;
 	email: string;
 
 	fullName: string;
+	gender: 0 | 1;
 	address: string;
 	phoneNumber: string;
+	photo: string;
+	proofId: string;
 
-	role: 0 | 1;
+	roleId: number;
 }
 export interface IUserMethods {
 	comparePassword(password: string): Promise<boolean>;
