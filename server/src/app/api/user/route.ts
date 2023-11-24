@@ -44,6 +44,10 @@ export async function GET(req: NextRequest) {
 export async function PUT(req: NextRequest) {
 	await dbConnect();
 	const authorization = req.headers.get('Authorization');
+	const tokenObj = (await User.decodeAuthToken(authorization!).catch(
+		(e) => e,
+	)) as TokenPayload;
+	if (tokenObj instanceof Error) return ValidationErrorResponse(tokenObj);
 
 	const body = await req.json();
 	let { fullName, gender, address, phoneNumber, photo, proofId } =
@@ -63,11 +67,6 @@ export async function PUT(req: NextRequest) {
 	if (typeof phoneNumber !== 'undefined') updateObj.phoneNumber = phoneNumber;
 	if (typeof photo !== 'undefined') updateObj.photo = photo;
 	if (typeof proofId !== 'undefined') updateObj.proofId = proofId;
-
-	const tokenObj = (await User.decodeAuthToken(authorization!).catch(
-		(e) => e,
-	)) as TokenPayload;
-	if (tokenObj instanceof Error) return ValidationErrorResponse(tokenObj);
 
 	const result = await User.updateOne(
 		{ username: tokenObj.username, email: tokenObj.email },
