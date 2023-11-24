@@ -63,7 +63,7 @@ UserSchema.methods.generateAuthToken = async function (
 	);
 };
 
-// statics
+// statics.
 UserSchema.statics.findByCredentials = async (
 	username: string,
 	password: string,
@@ -91,7 +91,7 @@ UserSchema.statics.findByAuthToken = async (token: string) => {
 	return user;
 };
 
-// middleware
+// middleware.
 UserSchema.pre('save', async function (next) {
 	const user = this;
 
