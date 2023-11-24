@@ -14,7 +14,7 @@ export function Response(data: object = {}, status: number = 200) {
 			status,
 			headers: {
 				'Content-Type': 'application/json',
-			}
+			},
 		},
 	);
 }
@@ -68,8 +68,8 @@ export function ValidationErrorResponse(err: Error | mongoose.Error) {
 	else if (resLower.includes('already exists'))
 		statusCode = HTTPStatusCode.CONFLICT;
 	else if (
-		['less than', 'greater than', 'range of'].some(
-			(x) => x.toLowerCase() == resLower,
+		['less than', 'greater than', 'range of'].some((x) =>
+			resLower.includes(x.toLowerCase()),
 		)
 	)
 		statusCode = HTTPStatusCode.UNPROCESSABLE_ENTITY;

@@ -59,7 +59,7 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 	},
 });
 
-// Validation.
+// validation.
 UserSchema.path('username').validate(async function (value: any) {
 	return (await this.model('User').countDocuments({ username: value })) === 0;
 }, 'Username already exists');
