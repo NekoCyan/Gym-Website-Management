@@ -1,5 +1,5 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
-import { TokenPayload } from '@/Types';
+import { GENDER, ROLES, TokenPayload } from '@/Types';
 
 // External Document.
 interface DocumentResult<T> {
@@ -29,7 +29,7 @@ export type CounterHydratedDocument = HydratedDocument<
 // User.
 export interface UserInformations {
 	fullName: string;
-	gender: -1 | 0 | 1;
+	gender: GENDER;
 	address: string;
 	phoneNumber: string;
 	photo: string;
@@ -39,7 +39,7 @@ export interface UserData {
 	email: string;
 	password: string;
 
-	role: 0 | 1 | 2;
+	role: ROLES;
 }
 export interface IUser
 	extends UserData,

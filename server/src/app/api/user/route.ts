@@ -21,11 +21,8 @@ export async function GET(req: NextRequest) {
 
 	return Response({
 		data: {
-			// username: user.username,
-			// email: user.email,
-
 			fullName: user.fullName,
-			gender: user.gender, // 1 is Male, 0 is Female.
+			gender: user.gender,
 			address: user.address,
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,

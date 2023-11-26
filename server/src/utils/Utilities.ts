@@ -67,3 +67,17 @@ export function Capitalize(str: string) {
 export function IsUndefined(variable: any): boolean {
 	return typeof variable === 'undefined';
 }
+
+export function CreateEnum<T extends { [key: string]: number }>(
+	keys: T,
+): Readonly<T & { [key: number]: keyof T }> {
+	const obj: any = {};
+
+	for (const [key, value] of Object.entries(keys)) {
+		if (value === null) continue;
+		obj[key] = value;
+		obj[value] = key;
+	}
+
+	return Object.freeze(obj);
+}
