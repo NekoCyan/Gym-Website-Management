@@ -1,8 +1,9 @@
 import type { NextRequest } from 'next/server';
 import {
 	Response,
-	ResponseText,
 	ErrorResponse,
+	NotFoundResponse,
+	NoPermissionResponse,
 } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
@@ -23,14 +24,12 @@ export async function GET(
 	)) as UserHydratedDocument;
 	if (self instanceof Error) return ErrorResponse(self);
 
-	if (self.role < ROLES.ADMIN)
-		return ErrorResponse(ResponseText.NoPermission);
+	if (self.role < ROLES.ADMIN) return NoPermissionResponse();
 	const user = (await User.findOne({ userId: id }).catch(
 		(e) => e,
 	)) as UserHydratedDocument;
 	if (user instanceof Error) return ErrorResponse(user);
-	if (user == null)
-		return ErrorResponse(ResponseText.NotFound(`userId ${id}`));
+	if (user == null) return NotFoundResponse(`userId ${id}`);
 
 	return Response({
 		data: {

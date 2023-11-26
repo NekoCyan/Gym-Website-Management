@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { ResponseText, ErrorResponse } from './utils/ResponseHandler';
+import { BadRequestResponse } from './utils/ResponseHandler';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(req: NextRequest) {
@@ -11,7 +11,7 @@ export async function middleware(req: NextRequest) {
 			else throw new Error(`${req.method} must have body.`);
 		}
 	} catch (e) {
-		return ErrorResponse(ResponseText.BadRequest);
+		return BadRequestResponse();
 	}
 	const nextURL = req.nextUrl;
 
@@ -27,7 +27,7 @@ export async function middleware(req: NextRequest) {
 		// get authorization in header.
 		const authorization = req.headers.get('Authorization');
 		if (!authorization)
-			return ErrorResponse(ResponseText.Unauthorized);
+			return BadRequestResponse();
 	}
 
 	return NextResponse.next();

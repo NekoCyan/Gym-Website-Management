@@ -8,11 +8,16 @@ import {
 	UserInformations,
 } from './interfaces';
 
-import { PATTERN, JWT_Sign, JWT_Verify, IsUndefined } from '@/utils';
+import {
+	PATTERN,
+	JWT_Sign,
+	JWT_Verify,
+	IsUndefined,
+	ResponseText,
+} from '@/utils';
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
 import CounterModel from './Counter';
-import { ResponseText } from '@/utils/ResponseHandler';
 import { TokenPayload } from '@/Types';
 
 const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({

@@ -1,49 +1,60 @@
 import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
-import { HTTPStatusCode } from './';
+import { HTTPStatusCode, ResponseText } from './';
 
-export const ResponseText = {
-	InvalidType: (variable: string, allowType?: 'string' | 'number') => {
-		let errorMessage = `Invalid type of ${variable}`;
-		if (allowType) {
-			errorMessage += ` (Only accept ${allowType})`;
-		}
-		errorMessage += '.';
-
-		return errorMessage;
-	},
-	Invalid: (variable: string) => {
-		return `${variable} is invalid.`;
-	},
-	MinLength: (variable: string, minLength: number) => {
-		return `${variable} cannot be less than ${minLength} characters.`;
-	},
-	MaxLength: (variable: string, maxLength: number) => {
-		return `${variable} cannot be more than ${maxLength} characters.`;
-	},
-	OutOfRange: (variable: string, from: number, to: number) => {
-		return `Invalid range of ${variable} (Only accept from ${from} to ${to}).`;
-	},
-	AlreadyExists: (variable: string) => {
-		return `${variable} is already exists.`;
-	},
-	NotExists: (variable: string) => {
-		return `${variable} does not exists.`;
-	},
-	NotMatch: (variable: string) => {
-		return `${variable} does not match.`;
-	},
-	NotFound: (variable: string) => {
-		return `${variable} is not found.`;
-	},
-	Required: (variable: string) => {
-		return `${variable} is required.`;
-	},
-	OldPasswordSameNew: `The new password cannot be the same with the old password.`,
-	BadRequest: `Bad Request.`,
-	NoPermission: `You do not have permission to access this resource.`,
-	Unauthorized: `Unauthorized.`,
-};
+export function InvalidTypeResponse(
+	variable: string,
+	allowType?: 'string' | 'number',
+) {
+	return ErrorResponse(
+		new Error(ResponseText.InvalidType(variable, allowType)),
+	);
+}
+export function InvalidResponse(variable: string) {
+	return ErrorResponse(new Error(ResponseText.Invalid(variable)));
+}
+export function MinLengthResponse(variable: string, minLength: number) {
+	return ErrorResponse(
+		new Error(ResponseText.MinLength(variable, minLength)),
+	);
+}
+export function MaxLengthResponse(variable: string, maxLength: number) {
+	return ErrorResponse(
+		new Error(ResponseText.MaxLength(variable, maxLength)),
+	);
+}
+export function OutOfRangeResponse(variable: string, from: number, to: number) {
+	return ErrorResponse(
+		new Error(ResponseText.OutOfRange(variable, from, to)),
+	);
+}
+export function AlreadyExistsResponse(variable: string) {
+	return ErrorResponse(new Error(ResponseText.AlreadyExists(variable)));
+}
+export function NotExistsResponse(variable: string) {
+	return ErrorResponse(new Error(ResponseText.NotExists(variable)));
+}
+export function NotMatchResponse(variable: string) {
+	return ErrorResponse(new Error(ResponseText.NotMatch(variable)));
+}
+export function NotFoundResponse(variable: string) {
+	return ErrorResponse(new Error(ResponseText.NotFound(variable)));
+}
+export function RequiredResponse(variable: string) {
+	return ErrorResponse(new Error(ResponseText.Required(variable)));
+}
+export function OldPasswordSameNewResponse() {
+	return ErrorResponse(new Error(ResponseText.OldPasswordSameNew));
+}
+export function BadRequestResponse() {
+	return ErrorResponse(new Error(ResponseText.BadRequest));
+}
+export function NoPermissionResponse() {
+	return ErrorResponse(new Error(ResponseText.NoPermission));
+}
+export function UnauthorizedResponse() {
+	return ErrorResponse(new Error(ResponseText.Unauthorized));
+}
 
 export function Response(data: object = {}, status: number = 200) {
 	return NextResponse.json(
@@ -62,32 +73,9 @@ export function Response(data: object = {}, status: number = 200) {
 	);
 }
 
-export function InvalidTypeResponse(
-	variable: string,
-	allowType?: 'string' | 'number',
-) {
-	return ErrorResponse(
-		new Error(ResponseText.InvalidType(variable, allowType)),
-	);
-}
-
-export function OutOfRangeResponse(variable: string, from: number, to: number) {
-	return ErrorResponse(
-		new Error(ResponseText.OutOfRange(variable, from, to)),
-	);
-}
-
-export function UnauthorizedResponse() {
-	return ErrorResponse(new Error(ResponseText.Unauthorized));
-}
-
-export function RequiredResponse(variable: string) {
-	return ErrorResponse(new Error(ResponseText.Required(variable)));
-}
-
 export function ErrorResponse(err: Error | mongoose.Error | string) {
 	if (typeof err === 'string') err = new Error(err);
-	
+
 	console.log(err);
 	let statusCode;
 	let responseMessage = '';
