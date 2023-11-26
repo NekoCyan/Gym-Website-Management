@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import {
 	RequiredResponse,
 	Response,
-	ValidationErrorResponse,
+	ErrorResponse,
 } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
 	let updateObj = (await User.extractUserInformations(body).catch(
 		(e) => e,
 	)) as Partial<UserInformations>;
-	if (updateObj instanceof Error) return ValidationErrorResponse(updateObj);
+	if (updateObj instanceof Error) return ErrorResponse(updateObj);
 
 	const result = (await User.create({
 		email,
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 		...updateObj,
 	}).catch((e) => e)) as UserHydratedDocument;
 
-	if (result instanceof Error) return ValidationErrorResponse(result);
+	if (result instanceof Error) return ErrorResponse(result);
 	const token = await result.generateAuthToken();
 
 	return Response({ token });

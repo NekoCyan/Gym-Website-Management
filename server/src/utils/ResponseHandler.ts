@@ -40,6 +40,7 @@ export const ResponseText = {
 		return `${variable} is required.`;
 	},
 	OldPasswordSameNew: `The new password cannot be the same with the old password.`,
+	BadRequest: `Bad Request.`,
 	NoPermission: `You do not have permission to access this resource.`,
 	Unauthorized: `Unauthorized.`,
 };
@@ -65,26 +66,26 @@ export function InvalidTypeResponse(
 	variable: string,
 	allowType?: 'string' | 'number',
 ) {
-	return ValidationErrorResponse(
+	return ErrorResponse(
 		new Error(ResponseText.InvalidType(variable, allowType)),
 	);
 }
 
 export function OutOfRangeResponse(variable: string, from: number, to: number) {
-	return ValidationErrorResponse(
+	return ErrorResponse(
 		new Error(ResponseText.OutOfRange(variable, from, to)),
 	);
 }
 
 export function UnauthorizedResponse() {
-	return ValidationErrorResponse(new Error(ResponseText.Unauthorized));
+	return ErrorResponse(new Error(ResponseText.Unauthorized));
 }
 
 export function RequiredResponse(variable: string) {
-	return ValidationErrorResponse(new Error(ResponseText.Required(variable)));
+	return ErrorResponse(new Error(ResponseText.Required(variable)));
 }
 
-export function ValidationErrorResponse(err: Error | mongoose.Error | string) {
+export function ErrorResponse(err: Error | mongoose.Error | string) {
 	if (typeof err === 'string') err = new Error(err);
 	
 	console.log(err);

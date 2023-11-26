@@ -1,7 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { NextResponse } from 'next/server';
-import { HTTPStatusCode } from './utils';
-import { Response } from './utils/ResponseHandler';
+import { ResponseText, ErrorResponse } from './utils/ResponseHandler';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(req: NextRequest) {
@@ -12,7 +11,7 @@ export async function middleware(req: NextRequest) {
 			else throw new Error(`${req.method} must have body.`);
 		}
 	} catch (e) {
-		return Response({ message: 'Bad Request' }, HTTPStatusCode.BAD_REQUEST);
+		return ErrorResponse(ResponseText.BadRequest);
 	}
 	const nextURL = req.nextUrl;
 
@@ -28,10 +27,7 @@ export async function middleware(req: NextRequest) {
 		// get authorization in header.
 		const authorization = req.headers.get('Authorization');
 		if (!authorization)
-			return Response(
-				{ message: 'Unauthorized.' },
-				HTTPStatusCode.UNAUTHORIZED,
-			);
+			return ErrorResponse(ResponseText.Unauthorized);
 	}
 
 	return NextResponse.next();

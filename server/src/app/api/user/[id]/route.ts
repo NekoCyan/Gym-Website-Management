@@ -2,7 +2,7 @@ import type { NextRequest } from 'next/server';
 import {
 	Response,
 	ResponseText,
-	ValidationErrorResponse,
+	ErrorResponse,
 } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
@@ -21,16 +21,16 @@ export async function GET(
 	const self = (await User.findByAuthToken(authorization!).catch(
 		(e) => e,
 	)) as UserHydratedDocument;
-	if (self instanceof Error) return ValidationErrorResponse(self);
+	if (self instanceof Error) return ErrorResponse(self);
 
 	if (self.role < ROLES.ADMIN)
-		return ValidationErrorResponse(ResponseText.NoPermission);
+		return ErrorResponse(ResponseText.NoPermission);
 	const user = (await User.findOne({ userId: id }).catch(
 		(e) => e,
 	)) as UserHydratedDocument;
-	if (user instanceof Error) return ValidationErrorResponse(user);
+	if (user instanceof Error) return ErrorResponse(user);
 	if (user == null)
-		return ValidationErrorResponse(ResponseText.NotFound(`userId ${id}`));
+		return ErrorResponse(ResponseText.NotFound(`userId ${id}`));
 
 	return Response({
 		data: {
