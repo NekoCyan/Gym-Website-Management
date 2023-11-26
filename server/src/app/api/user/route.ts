@@ -1,15 +1,10 @@
 import type { NextRequest } from 'next/server';
-import {
-	Response,
-	InvalidTypeResponse,
-	OutOfRangeResponse,
-	UnauthorizedResponse,
-	ValidationErrorResponse,
-} from '@/utils/ResponseHandler';
+import { Response, ValidationErrorResponse } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
 import {
+	UserData,
 	UserHydratedDocument,
 	UserInformations,
 } from '@/app/models/interfaces';
@@ -34,9 +29,8 @@ export async function GET(req: NextRequest) {
 			address: user.address,
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
-			proofId: user.proofId,
 
-			roleId: user.roleId,
+			role: user.role,
 		},
 	});
 }
@@ -49,30 +43,30 @@ export async function PUT(req: NextRequest) {
 	)) as TokenPayload;
 	if (tokenObj instanceof Error) return ValidationErrorResponse(tokenObj);
 
-	const body = await req.json();
-	let { fullName, gender, address, phoneNumber, photo, proofId } =
-		body as Partial<UserInformations>;
-	let updateObj: Partial<UserInformations> = {};
+	const body = (await req.json()) as Partial<
+		UserInformations & Pick<UserData, 'password'>
+	>;
+	let updateObj: typeof body = {};
 
-	if (typeof gender !== 'undefined') {
-		if (isNaN(gender)) return InvalidTypeResponse('gender', 'number');
-		if (typeof gender === 'string') gender = parseInt(gender) as -1 | 0 | 1;
-		if (gender < -1 || gender > 1)
-			return OutOfRangeResponse('gender', -1, 1);
+	// UserInformations.
+	const userInformations = (await User.extractUserInformations(body).catch(
+		(e) => e,
+	)) as Partial<UserInformations>;
+	if (userInformations instanceof Error)
+		return ValidationErrorResponse(userInformations);
+	// UserData.
+	const userData = (await User.extractUserData(body).catch(
+		(e) => e,
+	)) as Partial<UserData>;
+	if (userData instanceof Error) return ValidationErrorResponse(userData);
 
-		updateObj.gender = gender;
-	}
-	if (typeof fullName !== 'undefined') updateObj.fullName = fullName;
-	if (typeof address !== 'undefined') updateObj.address = address;
-	if (typeof phoneNumber !== 'undefined') updateObj.phoneNumber = phoneNumber;
-	if (typeof photo !== 'undefined') updateObj.photo = photo;
-	if (typeof proofId !== 'undefined') updateObj.proofId = proofId;
+	updateObj = { ...userInformations };
+	if (userData.password) updateObj.password = userData.password;
 
-	const result = await User.updateOne(
-		{ username: tokenObj.username, email: tokenObj.email },
-		{ $set: updateObj },
-	);
-	if (result.matchedCount === 0) return UnauthorizedResponse();
+	const result = (await User.updateUser(tokenObj.userId, updateObj).catch(
+		(e) => e,
+	)) as UserHydratedDocument;
+	if (result instanceof Error) return ValidationErrorResponse(result);
 
 	return Response({ data: updateObj });
 }

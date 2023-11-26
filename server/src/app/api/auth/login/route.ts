@@ -8,9 +8,9 @@ import { UserHydratedDocument } from '@/app/models/interfaces';
 export async function POST(req: NextRequest) {
 	await dbConnect();
 
-	const { username, password } = await req.json();
+	const { email, password } = await req.json();
 
-	const result = (await User.findByCredentials(username, password).catch(
+	const result = (await User.findByCredentials(email, password).catch(
 		(e) => e,
 	)) as UserHydratedDocument;
 

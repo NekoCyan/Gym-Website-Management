@@ -1,31 +1,34 @@
 import mongoose from 'mongoose';
-import { IUser, IUserMethods, IUserModel } from './interfaces';
+import {
+	IUser,
+	IUserMethods,
+	IUserModel,
+	UserData,
+	UserHydratedDocument,
+	UserInformations,
+} from './interfaces';
 
-import { PATTERN, JWT_Sign, JWT_Verify } from '@/utils';
+import { PATTERN, JWT_Sign, JWT_Verify, IsUndefined } from '@/utils';
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
 import CounterModel from './Counter';
+import { ResponseText } from '@/utils/ResponseHandler';
+import { TokenPayload } from '@/Types';
 
 const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 	userId: {
 		type: Number,
-	},
-	username: {
-		type: String,
-		required: [true, 'Username is required.'],
-		minlength: [5, 'Username cannot be less than 5 characters.'],
-		maxlength: [60, 'Username cannot be greater than 60 characters.'],
-		match: [PATTERN.USERNAME, 'Username is invalid.'],
-	},
-	password: {
-		type: String,
-		required: [true, 'Password is required.'],
-		minlength: [6, 'Username cannot be less than 6 characters.'],
+		default: 0,
 	},
 	email: {
 		type: String,
-		required: [true, 'Email is required.'],
-		match: [PATTERN.EMAIL, 'Email is invalid.'],
+		required: [true, ResponseText.Required('email')],
+		match: [PATTERN.EMAIL, ResponseText.Invalid('email')],
+	},
+	password: {
+		type: String,
+		required: [true, ResponseText.Required('password')],
+		minlength: [6, ResponseText.MinLength('password', 6)],
 	},
 
 	fullName: {
@@ -48,36 +51,31 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 		type: String,
 		default: '',
 	},
-	proofId: {
-		type: String,
-		default: '',
-	},
 
-	roleId: {
+	role: {
 		type: Number,
 		default: 0,
 	},
 });
 
 // validation.
-UserSchema.path('username').validate(async function (value: any) {
-	return (await this.model('User').countDocuments({ username: value })) === 0;
-}, 'Username already exists');
 UserSchema.path('email').validate(async function (value: any) {
+	if (!this.isNew) return true;
 	return (await this.model('User').countDocuments({ email: value })) === 0;
-}, 'Email already exists');
+}, ResponseText.AlreadyExists('email'));
 
 // methods.
-UserSchema.methods.comparePassword = async function (password: string) {
+UserSchema.methods.comparePassword = async function (
+	password: string,
+): Promise<boolean> {
 	return await Password_Compare(password, this.password);
 };
 UserSchema.methods.generateAuthToken = async function (
 	expiresIn: number = 24 * 60 * 60,
-) {
+): Promise<string> {
 	return await JWT_Sign(
 		{
-			username: this.username,
-			email: this.email,
+			userId: this.userId,
 		},
 		expiresIn,
 	);
@@ -85,57 +83,178 @@ UserSchema.methods.generateAuthToken = async function (
 
 // statics.
 UserSchema.statics.findByCredentials = async (
-	username: string,
+	email: string,
 	password: string,
-) => {
-	if (!username) throw new Error('Username is required.');
-	if (!password) throw new Error('Password is required.');
+): Promise<UserHydratedDocument> => {
+	if (!email) throw new Error(ResponseText.Required('email'));
+	if (!password) throw new Error(ResponseText.Required('password'));
 
-	const user = await UserModel.findOne({ username });
-	if (!user) throw new Error('Username is not found.');
+	const user = await UserModel.findOne({ email });
+	if (!user) throw new Error(ResponseText.NotExists('email'));
 
 	const isPasswordMatch = await user.comparePassword(password);
-	if (!isPasswordMatch) throw new Error('Password does not match.');
+	if (!isPasswordMatch) throw new Error(ResponseText.NotMatch('password'));
 
 	return user;
 };
-UserSchema.statics.findByAuthToken = async function (token: string) {
+UserSchema.statics.findByAuthToken = async function (
+	token: string,
+): Promise<UserHydratedDocument> {
 	const verify = await this.decodeAuthToken(token);
 
 	const user = await UserModel.findOne({
-		username: verify.username,
-		email: verify.email,
+		userId: verify.userId,
 	});
-	if (!user) throw new Error('Unauthorized.');
+	if (!user) throw new Error(ResponseText.Unauthorized);
 
 	return user;
 };
-UserSchema.statics.decodeAuthToken = async function (token: string) {
+UserSchema.statics.decodeAuthToken = async function (
+	token: string,
+): Promise<TokenPayload> {
 	const verify = await JWT_Verify(token);
-	if (!verify) throw new Error('Unauthorized.');
+	if (!verify) throw new Error(ResponseText.Unauthorized);
 
 	return verify;
+};
+UserSchema.statics.extractUserInformations = async function (
+	data: Partial<UserInformations>,
+): Promise<Partial<UserInformations>> {
+	let { fullName, gender, address, phoneNumber, photo } = data;
+	let updateObj: Partial<UserInformations> = {};
+
+	const validateGender = (gender: any) => {
+		if (isNaN(gender))
+			throw new Error(ResponseText.InvalidType('gender', 'number'));
+		if (typeof gender === 'string') gender = parseInt(gender) as -1 | 0 | 1;
+		if (gender < -1 || gender > 1)
+			throw new Error(ResponseText.OutOfRange('gender', -1, 1));
+		updateObj.gender = gender;
+	};
+	const validateFullName = (fullName: any) => {
+		if (typeof fullName !== 'string')
+			throw new Error(ResponseText.InvalidType('fullName', 'string'));
+		updateObj.fullName = fullName;
+	};
+	const validateAddress = (address: any) => {
+		if (typeof address !== 'string')
+			throw new Error(ResponseText.InvalidType('address', 'string'));
+		updateObj.address = address;
+	};
+	const validatePhoneNumber = (phoneNumber: any) => {
+		if (typeof phoneNumber !== 'string')
+			throw new Error(ResponseText.InvalidType('phoneNumber', 'string'));
+		updateObj.phoneNumber = phoneNumber;
+	};
+	const validatePhoto = (photo: any) => {
+		if (typeof photo !== 'string')
+			throw new Error(ResponseText.InvalidType('photo', 'string'));
+		updateObj.photo = photo;
+	};
+
+	!IsUndefined(gender) && validateGender(gender);
+	!IsUndefined(fullName) && validateFullName(fullName);
+	!IsUndefined(address) && validateAddress(address);
+	!IsUndefined(phoneNumber) && validatePhoneNumber(phoneNumber);
+	!IsUndefined(photo) && validatePhoto(photo);
+
+	return updateObj;
+};
+UserSchema.statics.extractUserData = async function (
+	data: Partial<UserData>,
+): Promise<Partial<UserData>> {
+	let { password, role } = data;
+	let updateObj: Partial<UserData> = {};
+
+	const validatePassword = (password: any) => {
+		if (typeof password !== 'string')
+			throw new Error(ResponseText.InvalidType('password', 'string'));
+		updateObj.password = password;
+	};
+	const validateRole = (role: any) => {
+		if (isNaN(role))
+			throw new Error(ResponseText.InvalidType('role', 'number'));
+		if (typeof role === 'string') role = parseInt(role) as 0 | 1 | 2;
+		if (role < 0 || role > 2)
+			throw new Error(ResponseText.OutOfRange('role', 0, 2));
+		updateObj.role = role;
+	};
+
+	!IsUndefined(password) && validatePassword(password);
+	!IsUndefined(role) && validateRole(role);
+
+	return updateObj;
+};
+UserSchema.statics.updateUser = async function (
+	userId: number,
+	data: Partial<UserData & UserInformations>,
+	extraData?: { [key: string]: any },
+): Promise<UserHydratedDocument> {
+	const user = await this.findOne({ userId });
+	if (!user) throw new Error(ResponseText.Unauthorized);
+
+	let updateObj: Partial<UserData & UserInformations> & {
+		[key: string]: any;
+	} = {};
+
+	// UserInformations.
+	const userInformations = (await this.extractUserInformations(data).catch(
+		(e) => e,
+	)) as Partial<UserInformations>;
+	if (userInformations instanceof Error) throw userInformations;
+	// UserData.
+	const userData = (await this.extractUserData(data).catch(
+		(e) => e,
+	)) as Partial<UserData>;
+	if (userData instanceof Error) throw userData;
+
+	// Group validated fields to update.
+	updateObj = { ...userInformations, ...userData };
+
+	// Custom edit for field.
+	if (
+		updateObj.password &&
+		(await user.comparePassword(updateObj.password))
+	) {
+		throw new Error(ResponseText.OldPasswordSameNew);
+	}
+
+	// Group extra data to update.
+	updateObj = { ...updateObj, ...extraData };
+
+	for (let key in updateObj) {
+		if (Object.hasOwn(user._doc, key)) {
+			(user as any)[key] = updateObj[key];
+		} else {
+			delete updateObj[key];
+		}
+	}
+
+	return user.save();
 };
 
 // middleware.
 UserSchema.pre('save', async function (next) {
-	const user = this;
+	const hashPass = async () => {
+		this.password = await Password_Hash(this.password);
+	};
 
-	if (user.isModified('password')) {
-		user.password = await Password_Hash(user.password);
+	if (this.isNew) {
+		this.userId = await CounterModel.getNextSequence(UserModel, 'userId');
+		await hashPass();
 	}
 
-	this.userId = await CounterModel.getNextSequence(UserModel, 'userId');
+	if (this.isModified('password')) await hashPass();
 
 	next();
 });
 UserSchema.pre('validate', function (next) {
 	const passwordLower = this.password.toLowerCase();
-	const usernameLower = this.username.toLowerCase();
+	const emailLower = this.email.toLowerCase();
 	if (
 		[
-			usernameLower.includes(passwordLower),
-			passwordLower.includes(usernameLower),
+			emailLower.includes(passwordLower),
+			passwordLower.includes(emailLower),
 		].some((x) => x === true)
 	)
 		throw new Error('Password too weak.');

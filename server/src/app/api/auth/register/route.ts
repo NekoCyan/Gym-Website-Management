@@ -1,19 +1,41 @@
 import type { NextRequest } from 'next/server';
-import { Response, ValidationErrorResponse } from '@/utils/ResponseHandler';
+import {
+	RequiredResponse,
+	Response,
+	ValidationErrorResponse,
+} from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { UserHydratedDocument } from '@/app/models/interfaces';
+import {
+	UserData,
+	UserHydratedDocument,
+	UserInformations,
+} from '@/app/models/interfaces';
+import { IsUndefined } from '@/utils';
 
 export async function POST(req: NextRequest) {
 	await dbConnect();
 
-	const { username, password, email } = await req.json();
+	const body = (await req.json()) as UserData & UserInformations;
+	let { email, password, fullName, gender, address, phoneNumber } = body;
+
+	if (IsUndefined(email)) return RequiredResponse('email');
+	if (IsUndefined(password)) return RequiredResponse('password');
+	if (IsUndefined(fullName)) return RequiredResponse('fullName');
+	if (IsUndefined(gender)) return RequiredResponse('gender');
+	if (IsUndefined(address)) return RequiredResponse('address');
+	if (IsUndefined(phoneNumber)) return RequiredResponse('phoneNumber');
+
+	let updateObj = (await User.extractUserInformations(body).catch(
+		(e) => e,
+	)) as Partial<UserInformations>;
+	if (updateObj instanceof Error) return ValidationErrorResponse(updateObj);
 
 	const result = (await User.create({
-		username,
-		password,
 		email,
+		password,
+		...updateObj,
 	}).catch((e) => e)) as UserHydratedDocument;
 
 	if (result instanceof Error) return ValidationErrorResponse(result);

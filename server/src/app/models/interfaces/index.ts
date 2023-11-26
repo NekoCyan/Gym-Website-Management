@@ -1,12 +1,20 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
 import { TokenPayload } from '@/Types';
 
+// External Document.
+interface DocumentResult<T> {
+	_doc: T;
+}
+
 export type IModels = ICounterModel | IUserModel;
 
 // Counter.
-export interface ICounter extends Document {
+export interface CounterData {
 	_id: string;
 	seq: number;
+}
+export interface ICounter extends CounterData, Document {
+	_id: string;
 }
 export interface ICounterMethods {}
 export interface ICounterModel extends Model<ICounter, {}, ICounterMethods> {
@@ -25,17 +33,19 @@ export interface UserInformations {
 	address: string;
 	phoneNumber: string;
 	photo: string;
-	proofId: string;
 }
 export interface UserData {
 	userId: number;
-	username: string;
-	password: string;
 	email: string;
+	password: string;
 
-	roleId: number;
+	role: 0 | 1 | 2;
 }
-export interface IUser extends UserData, UserInformations, Document {}
+export interface IUser
+	extends UserData,
+		UserInformations,
+		DocumentResult<UserInformations & UserData>,
+		Document {}
 export interface IUserMethods {
 	comparePassword(password: string): Promise<boolean>;
 	/**
@@ -50,5 +60,14 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 	): Promise<UserHydratedDocument>;
 	findByAuthToken(token: string): Promise<UserHydratedDocument>;
 	decodeAuthToken(token: string): Promise<TokenPayload>;
+	extractUserInformations(
+		data: Partial<UserInformations>,
+	): Promise<Partial<UserInformations>>;
+	extractUserData(data: Partial<UserData>): Promise<Partial<UserData>>;
+	updateUser(
+		userId: number,
+		data: Partial<UserInformations & Pick<UserData, 'password'>>,
+		extraData?: { [key: string]: any },
+	): Promise<UserHydratedDocument>;
 }
 export type UserHydratedDocument = HydratedDocument<IUser, IUserMethods>;

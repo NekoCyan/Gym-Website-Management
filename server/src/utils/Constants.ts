@@ -13,3 +13,9 @@ export const PATTERN = {
     USERNAME: /[a-zA-Z0-9_.]+/,
 	EMAIL: /^[a-zA-Z0-9_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
 };
+
+export const ROLES = {
+    USER: 0,
+    TRAINER: 1,
+    ADMIN: 2,
+}
