@@ -65,4 +65,10 @@ export const ResponseText = {
 	BadRequest: `Bad Request.`,
 	NoPermission: `You do not have permission to access this resource.`,
 	Unauthorized: `Unauthorized.`,
+
+	// Attendance.
+	NoCheckInRecord: `You have not check in yet.`,
+	AlreadyCheckedIn: (stringTime: string) => {
+		return `You have already checked in since ${stringTime} in the last time, please check out first before check in again.`;
+	},
 };

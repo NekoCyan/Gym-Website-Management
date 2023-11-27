@@ -81,3 +81,22 @@ export function CreateEnum<T extends { [key: string]: number }>(
 
 	return Object.freeze(obj);
 }
+
+export function FormatDateTime(date: Date | string) {
+	if (typeof date === 'string') date = new Date(date);
+	
+	let year = date.getFullYear();
+	let month = date.getMonth() + 1;
+	let day = date.getDate();
+
+	let hours = date.getHours();
+	let minutes = date.getMinutes();
+	let seconds = date.getSeconds();
+
+	let tt = hours >= 12 ? 'PM' : 'AM';
+
+	hours = hours % 12;
+	hours = hours || 12; // the hour '0' should be '12'
+
+	return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${tt}`;
+}
