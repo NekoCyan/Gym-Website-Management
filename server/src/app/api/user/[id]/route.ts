@@ -8,38 +8,36 @@ import {
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { UserHydratedDocument } from '@/app/models/interfaces';
 import { ROLES } from '@/utils';
 
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: { id: string } },
 ) {
-	const { id } = params;
+	try {
+		const { id } = params;
 
-	await dbConnect();
-	const authorization = req.headers.get('Authorization');
-	const self = (await User.findByAuthToken(authorization!).catch(
-		(e) => e,
-	)) as UserHydratedDocument;
-	if (self instanceof Error) return ErrorResponse(self);
+		await dbConnect();
+		const authorization = req.headers.get('Authorization');
+		const self = await User.findByAuthToken(authorization!);
 
-	if (self.role < ROLES.ADMIN) return NoPermissionResponse();
-	const user = (await User.findOne({ userId: id }).catch(
-		(e) => e,
-	)) as UserHydratedDocument;
-	if (user instanceof Error) return ErrorResponse(user);
-	if (user == null) return NotFoundResponse(`userId ${id}`);
+		if (self.role < ROLES.ADMIN) return NoPermissionResponse();
+		if (isNaN(id as any)) return NotFoundResponse(`userId ${id}`);
+		const user = await User.findOne({ userId: id });
+		if (user == null) return NotFoundResponse(`userId ${id}`);
 
-	return Response({
-		data: {
-			email: user.email,
-			fullName: user.fullName,
-			gender: user.gender,
-			address: user.address,
-			phoneNumber: user.phoneNumber,
-			photo: user.photo,
-			role: user.role,
-		},
-	});
+		return Response({
+			data: {
+				email: user.email,
+				fullName: user.fullName,
+				gender: user.gender,
+				address: user.address,
+				phoneNumber: user.phoneNumber,
+				photo: user.photo,
+				role: user.role,
+			},
+		});
+	} catch (e: any) {
+		return ErrorResponse(e);
+	}
 }

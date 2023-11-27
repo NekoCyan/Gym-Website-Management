@@ -3,19 +3,20 @@ import { Response, ErrorResponse } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { UserHydratedDocument } from '@/app/models/interfaces';
+import { UserData } from '@/app/models/interfaces';
 
 export async function POST(req: NextRequest) {
-	await dbConnect();
+	try {
+		await dbConnect();
 
-	const { email, password } = await req.json();
+		const body: Pick<UserData, 'email' | 'password'> = await req.json();
+		const { email, password } = body;
 
-	const result = (await User.findByCredentials(email, password).catch(
-		(e) => e,
-	)) as UserHydratedDocument;
+		const result = await User.findByCredentials(email, password);
+		const token = await result.generateAuthToken();
 
-	if (result instanceof Error) return ErrorResponse(result);
-	const token = await result.generateAuthToken();
-
-	return Response({ token });
+		return Response({ token });
+	} catch (e: any) {
+		return ErrorResponse(e);
+	}
 }
