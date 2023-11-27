@@ -1,11 +1,11 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
 import { DocumentResult } from './ExternalDocument';
 
-import { GENDER, ROLES, TokenPayload } from '@/Types';
+import { TokenPayload } from '@/Types';
 
 export interface UserInformations {
 	fullName: string;
-	gender: GENDER;
+	gender: number;
 	address: string;
 	phoneNumber: string;
 	photo: string;
@@ -15,7 +15,7 @@ export interface UserData {
 	email: string;
 	password: string;
 
-	role: ROLES;
+	role: number;
 }
 
 export interface IUser
@@ -43,7 +43,7 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 	extractUserData(data: Partial<UserData>): Promise<Partial<UserData>>;
 	updateUser(
 		userId: number,
-		data: Partial<UserInformations & Pick<UserData, 'password'>>,
+		data: Partial<UserData & UserInformations>,
 		extraData?: { [key: string]: any },
 	): Promise<UserHydratedDocument>;
 }

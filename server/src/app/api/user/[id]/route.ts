@@ -27,15 +27,13 @@ export async function GET(
 		if (user == null) return NotFoundResponse(`userId ${id}`);
 
 		return Response({
-			data: {
-				email: user.email,
-				fullName: user.fullName,
-				gender: user.gender,
-				address: user.address,
-				phoneNumber: user.phoneNumber,
-				photo: user.photo,
-				role: user.role,
-			},
+			email: user.email,
+			fullName: user.fullName,
+			gender: user.gender,
+			address: user.address,
+			phoneNumber: user.phoneNumber,
+			photo: user.photo,
+			role: user.role,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);

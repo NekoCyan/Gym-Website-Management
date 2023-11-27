@@ -12,15 +12,12 @@ export async function GET(req: NextRequest) {
 		const user = await User.findByAuthToken(authorization!);
 
 		return Response({
-			data: {
-				fullName: user.fullName,
-				gender: user.gender,
-				address: user.address,
-				phoneNumber: user.phoneNumber,
-				photo: user.photo,
-
-				role: user.role,
-			},
+			fullName: user.fullName,
+			gender: user.gender,
+			address: user.address,
+			phoneNumber: user.phoneNumber,
+			photo: user.photo,
+			role: user.role,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);
@@ -46,7 +43,7 @@ export async function PUT(req: NextRequest) {
 
 		await User.updateUser(tokenObj.userId, updateObj);
 
-		return Response({ data: updateObj });
+		return Response({ ...updateObj });
 	} catch (e: any) {
 		return ErrorResponse(e);
 	}

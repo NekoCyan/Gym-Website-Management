@@ -56,24 +56,42 @@ export function UnauthorizedResponse() {
 	return ErrorResponse(new Error(ResponseText.Unauthorized));
 }
 
-export function Response(data: object = {}, status: number = 200) {
-	return NextResponse.json(
-		{
-			message: 'OK',
-			...data,
-			code: status,
-			success: status >= 200 && status < 300,
+export function Response<T extends { [key: string]: any }>(
+	data: T = {} as T,
+	status: number = 200,
+) {
+	type OmitMessage<T> = 'message' extends keyof T ? Omit<T, 'message'> : T;
+
+	let message = 'OK';
+	if ('message' in data) {
+		message = data.message;
+		delete data.message;
+	}
+
+	let obj: {
+		message: string;
+		code: number;
+		success: boolean;
+		data: OmitMessage<T>;
+	} = {
+		message,
+		code: status,
+		success: status >= 200 && status < 300,
+		data: data as OmitMessage<T>,
+	};
+
+	return NextResponse.json(obj, {
+		status,
+		headers: {
+			'Content-Type': 'application/json',
 		},
-		{
-			status,
-			headers: {
-				'Content-Type': 'application/json',
-			},
-		},
-	);
+	});
 }
 
-export function ErrorResponse(err: Error | mongoose.Error | string) {
+export function ErrorResponse(
+	err: Error | mongoose.Error | string,
+	data?: { [key: string]: any },
+) {
 	if (typeof err === 'string') err = new Error(err);
 
 	console.log(err);
@@ -117,6 +135,7 @@ export function ErrorResponse(err: Error | mongoose.Error | string) {
 	return Response(
 		{
 			message: responseMessage ?? 'Unknown error.',
+			...data,
 		},
 		statusCode,
 	);

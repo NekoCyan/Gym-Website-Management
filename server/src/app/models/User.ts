@@ -185,9 +185,16 @@ UserSchema.static(
 UserSchema.static(
 	'extractUserData',
 	async function (data: Partial<UserData>): Promise<Partial<UserData>> {
-		let { password, role } = data;
+		let { email, password, role } = data;
 		let updateObj: Partial<UserData> = {};
 
+		const validateEmail = (email: any) => {
+			if (typeof email !== 'string')
+				throw new Error(ResponseText.InvalidType('email', 'string'));
+			if (!PATTERN.EMAIL.test(email))
+				throw new Error(ResponseText.Invalid('email'));
+			updateObj.email = email;
+		};
 		const validatePassword = (password: any) => {
 			if (typeof password !== 'string')
 				throw new Error(ResponseText.InvalidType('password', 'string'));
@@ -202,6 +209,7 @@ UserSchema.static(
 			updateObj.role = role;
 		};
 
+		!IsUndefined(email) && validateEmail(email);
 		!IsUndefined(password) && validatePassword(password);
 		!IsUndefined(role) && validateRole(role);
 
