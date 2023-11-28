@@ -29,8 +29,13 @@ export interface IUserMethods {
 	 * @param expiresIn seconds.
 	 */
 	generateAuthToken(expiresIn?: number): Promise<string>;
+	update(
+		data: Partial<UserData & UserInformations>,
+		extraData?: { [key: string]: any },
+	): Promise<UserHydratedDocument>;
 }
 export interface IUserModel extends Model<IUser, {}, IUserMethods> {
+	getUser(userId: number): Promise<UserHydratedDocument>;
 	findByCredentials(
 		username: string,
 		password: string,
@@ -45,6 +50,6 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 		userId: number,
 		data: Partial<UserData & UserInformations>,
 		extraData?: { [key: string]: any },
-	): Promise<UserHydratedDocument>;
+	): ReturnType<IUserMethods['update']>;
 }
 export type UserHydratedDocument = HydratedDocument<IUser, IUserMethods>;

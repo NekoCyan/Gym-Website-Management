@@ -7,12 +7,12 @@ export async function Password_Hash(password: string) {
 
 	const saltRounds = await bcrypt.genSalt(salt);
 
-	return await bcrypt.hash(password, saltRounds);
+	return bcrypt.hash(password, saltRounds);
 }
 
 export async function Password_Compare(
 	originalPassword: string,
 	hashedPassword: string,
 ) {
-	return await bcrypt.compare(originalPassword, hashedPassword);
+	return bcrypt.compare(originalPassword, hashedPassword);
 }

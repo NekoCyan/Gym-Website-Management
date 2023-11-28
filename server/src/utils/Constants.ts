@@ -61,6 +61,9 @@ export const ResponseText = {
 	NotFound: (variable: string) => {
 		return `${variable} is not found.`;
 	},
+	UserIdNotFound: (variable: string | number) => {
+		return `User with ID ${variable.toString()} is not found.`;
+	},
 	Required: (variable: string) => {
 		return `${variable} is required.`;
 	},

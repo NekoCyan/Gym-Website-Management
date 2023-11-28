@@ -4,7 +4,6 @@ import {
 	IUserMethods,
 	IUserModel,
 	UserData,
-	UserHydratedDocument,
 	UserInformations,
 } from './interfaces';
 
@@ -18,7 +17,6 @@ import {
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
 import CounterModel from './Counter';
-import { TokenPayload } from '@/Types';
 
 const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 	userId: {
@@ -76,13 +74,13 @@ ResponseText.AlreadyExists('email'));
 UserSchema.method(
 	'comparePassword',
 	async function (password: string): Promise<boolean> {
-		return await Password_Compare(password, this.password);
+		return Password_Compare(password, this.password);
 	},
 );
 UserSchema.method(
 	'generateAuthToken',
 	async function (expiresIn: number = 24 * 60 * 60): Promise<string> {
-		return await JWT_Sign(
+		return JWT_Sign(
 			{
 				userId: this.userId,
 			},
@@ -90,14 +88,67 @@ UserSchema.method(
 		);
 	},
 );
+UserSchema.method(
+	'update',
+	async function (
+		data: Partial<UserData & UserInformations>,
+		extraData?: { [key: string]: any },
+	): Promise<ReturnType<IUserMethods['update']>> {
+		let updateObj: Partial<UserData & UserInformations> & {
+			[key: string]: any;
+		} = {};
+
+		// UserInformations.
+		const userInformations: Partial<UserInformations> =
+			await UserModel.extractUserInformations(data).catch((e) => e);
+		if (userInformations instanceof Error) throw userInformations;
+		// UserData.
+		const userData: Partial<UserData> = await UserModel.extractUserData(
+			data,
+		).catch((e) => e);
+		if (userData instanceof Error) throw userData;
+
+		// Group validated fields to update.
+		updateObj = { ...userInformations, ...userData };
+
+		// Custom edit for field.
+		if (
+			updateObj.password &&
+			(await this.comparePassword(updateObj.password))
+		) {
+			throw new Error(ResponseText.OldPasswordSameNew);
+		}
+
+		// Group extra data to update.
+		updateObj = { ...updateObj, ...extraData };
+
+		for (let key in updateObj) {
+			if (Object.hasOwn(this._doc, key)) {
+				(this as any)[key] = updateObj[key];
+			} else {
+				delete updateObj[key];
+			}
+		}
+
+		return this.save();
+	},
+);
 
 // statics.
+UserSchema.static('getUser', async function (userId: number): Promise<
+	ReturnType<IUserModel['getUser']>
+> {
+	const user = await this.findOne({ userId });
+	if (!user) throw new Error(ResponseText.UserIdNotFound(userId));
+
+	return user;
+});
 UserSchema.static(
 	'findByCredentials',
 	async function (
 		email: string,
 		password: string,
-	): Promise<UserHydratedDocument> {
+	): Promise<ReturnType<IUserModel['findByCredentials']>> {
 		if (!email) throw new Error(ResponseText.Required('email'));
 		if (!password) throw new Error(ResponseText.Required('password'));
 
@@ -111,33 +162,28 @@ UserSchema.static(
 		return user;
 	},
 );
-UserSchema.static(
-	'findByAuthToken',
-	async function (token: string): Promise<UserHydratedDocument> {
-		const verify = await this.decodeAuthToken(token);
+UserSchema.static('findByAuthToken', async function (token: string): Promise<
+	ReturnType<IUserModel['findByAuthToken']>
+> {
+	const verify = await this.decodeAuthToken(token);
 
-		const user = await UserModel.findOne({
-			userId: verify.userId,
-		});
-		if (!user) throw new Error(ResponseText.Unauthorized);
+	const user = await this.getUser(verify.userId);
 
-		return user;
-	},
-);
-UserSchema.static(
-	'decodeAuthToken',
-	async function (token: string): Promise<TokenPayload> {
-		const verify = await JWT_Verify(token);
-		if (!verify) throw new Error(ResponseText.Unauthorized);
+	return user;
+});
+UserSchema.static('decodeAuthToken', async function (token: string): Promise<
+	ReturnType<IUserModel['decodeAuthToken']>
+> {
+	const verify = await JWT_Verify(token);
+	if (!verify) throw new Error(ResponseText.Unauthorized);
 
-		return verify;
-	},
-);
+	return verify;
+});
 UserSchema.static(
 	'extractUserInformations',
 	async function (
 		data: Partial<UserInformations>,
-	): Promise<Partial<UserInformations>> {
+	): Promise<ReturnType<IUserModel['extractUserInformations']>> {
 		let { fullName, gender, address, phoneNumber, photo } = data;
 		let updateObj: Partial<UserInformations> = {};
 
@@ -184,7 +230,9 @@ UserSchema.static(
 
 UserSchema.static(
 	'extractUserData',
-	async function (data: Partial<UserData>): Promise<Partial<UserData>> {
+	async function (
+		data: Partial<UserData>,
+	): Promise<ReturnType<IUserModel['extractUserData']>> {
 		let { email, password, role } = data;
 		let updateObj: Partial<UserData> = {};
 
@@ -222,47 +270,10 @@ UserSchema.static(
 		userId: number,
 		data: Partial<UserData & UserInformations>,
 		extraData?: { [key: string]: any },
-	): Promise<UserHydratedDocument> {
-		const user = await this.findOne({ userId });
-		if (!user) throw new Error(ResponseText.Unauthorized);
+	): Promise<ReturnType<IUserModel['updateUser']>> {
+		const user = await this.getUser(userId);
 
-		let updateObj: Partial<UserData & UserInformations> & {
-			[key: string]: any;
-		} = {};
-
-		// UserInformations.
-		const userInformations: Partial<UserInformations> =
-			await this.extractUserInformations(data).catch((e) => e);
-		if (userInformations instanceof Error) throw userInformations;
-		// UserData.
-		const userData: Partial<UserData> = await this.extractUserData(
-			data,
-		).catch((e) => e);
-		if (userData instanceof Error) throw userData;
-
-		// Group validated fields to update.
-		updateObj = { ...userInformations, ...userData };
-
-		// Custom edit for field.
-		if (
-			updateObj.password &&
-			(await user.comparePassword(updateObj.password))
-		) {
-			throw new Error(ResponseText.OldPasswordSameNew);
-		}
-
-		// Group extra data to update.
-		updateObj = { ...updateObj, ...extraData };
-
-		for (let key in updateObj) {
-			if (Object.hasOwn(user._doc, key)) {
-				(user as any)[key] = updateObj[key];
-			} else {
-				delete updateObj[key];
-			}
-		}
-
-		return user.save();
+		return user.update(data, extraData);
 	},
 );
 

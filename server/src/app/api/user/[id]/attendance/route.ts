@@ -2,8 +2,7 @@ import type { NextRequest } from 'next/server';
 import {
 	Response,
 	ErrorResponse,
-	NotFoundResponse,
-	NoPermissionResponse,
+	UserIdNotFoundResponse,
 } from '@/utils/ResponseHandler';
 import { SearchParamsToObject, AdminRequired } from '@/utils';
 
@@ -16,27 +15,27 @@ export async function GET(
 	{ params }: { params: { id: string } },
 ) {
 	try {
-		const { id } = params;
-		const body: { limit: string; page: string, format: string } = SearchParamsToObject(
-			req.nextUrl.searchParams,
-		);
+		let { id } = params;
+
+		const body: { limit: string; page: string; format: string } =
+			SearchParamsToObject(req.nextUrl.searchParams);
 		let { limit, page, format } = body;
-        const isFormat = format === 'true';
+		const isFormat = format === 'true';
 
 		await dbConnect();
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
-        AdminRequired(self);
+		AdminRequired(self);
 
-		if (isNaN(id as any)) return NotFoundResponse(`userId ${id}`);
-		const user = await User.findOne({ userId: id });
-		if (user == null) return NotFoundResponse(`userId ${id}`);
+		if (isNaN(id as any)) return UserIdNotFoundResponse(id);
+		const userId = parseInt(id);
+		const user = await User.getUser(userId);
 
 		const listCheckIn = await Attendance.getListCheckIn(
-			self.userId,
+			user.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
-            isFormat,
+			isFormat,
 		);
 		const { list, currentPage, totalPage } = listCheckIn;
 

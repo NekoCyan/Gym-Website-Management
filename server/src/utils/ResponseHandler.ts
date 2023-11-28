@@ -40,6 +40,9 @@ export function NotMatchResponse(variable: string) {
 export function NotFoundResponse(variable: string) {
 	return ErrorResponse(new Error(ResponseText.NotFound(variable)));
 }
+export function UserIdNotFoundResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.UserIdNotFound(variable)));
+}
 export function RequiredResponse(variable: string) {
 	return ErrorResponse(new Error(ResponseText.Required(variable)));
 }

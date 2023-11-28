@@ -2,29 +2,29 @@ import type { NextRequest } from 'next/server';
 import {
 	Response,
 	ErrorResponse,
-	NotFoundResponse,
-	NoPermissionResponse,
+	UserIdNotFoundResponse,
 } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
 import { AdminRequired } from '@/utils';
+import { UserData, UserInformations } from '@/app/models/interfaces';
 
 export async function GET(
 	req: NextRequest,
 	{ params }: { params: { id: string } },
 ) {
 	try {
-		const { id } = params;
+		let { id } = params;
 
 		await dbConnect();
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
 		AdminRequired(self);
 
-		if (isNaN(id as any)) return NotFoundResponse(`userId ${id}`);
-		const user = await User.findOne({ userId: id });
-		if (user == null) return NotFoundResponse(`userId ${id}`);
+		if (isNaN(id as any)) return UserIdNotFoundResponse(id);
+		const userId = parseInt(id);
+		const user = await User.getUser(userId);
 
 		return Response({
 			email: user.email,
@@ -35,6 +35,40 @@ export async function GET(
 			photo: user.photo,
 			role: user.role,
 		});
+	} catch (e: any) {
+		return ErrorResponse(e);
+	}
+}
+
+export async function PUT(
+	req: NextRequest,
+	{ params }: { params: { id: string } },
+) {
+	try {
+		let { id } = params;
+
+		await dbConnect();
+		const authorization = req.headers.get('Authorization');
+		const self = await User.findByAuthToken(authorization!);
+		AdminRequired(self);
+
+		if (isNaN(id as any)) return UserIdNotFoundResponse(id);
+		const userId = parseInt(id);
+		const user = await User.getUser(userId);
+
+		const body: Partial<UserInformations & Omit<UserData, 'userId'>> =
+			await req.json();
+		let updateObj: typeof body = {};
+
+		// Validate & Extract.
+		const userInformations = await User.extractUserInformations(body);
+		const userData = await User.extractUserData(body);
+
+		updateObj = { ...userInformations, ...userData };
+
+		await user.update(updateObj);
+
+		return Response({ ...updateObj });
 	} catch (e: any) {
 		return ErrorResponse(e);
 	}
