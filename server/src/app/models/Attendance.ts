@@ -28,12 +28,14 @@ const AttendanceSchema = new mongoose.Schema<
 
 // validation.
 
+// methods.
+
 // statics.
 AttendanceSchema.static(
 	'getLastCheckIn',
 	async function (
 		userId: number,
-	): Promise<Pick<AttendanceData, 'timeIn' | 'timeOut'> | null> {
+	): Promise<ReturnType<IAttendanceModel['getLastCheckIn']>> {
 		const getLastCheckIn =
 			(
 				await this.aggregate()
@@ -47,40 +49,36 @@ AttendanceSchema.static(
 		return getLastCheckIn;
 	},
 );
-AttendanceSchema.static(
-	'checkIn',
-	async function (userId: number): Promise<void> {
-		const lastCheckIn = await this.getLastCheckIn(userId);
+AttendanceSchema.static('checkIn', async function (userId: number): Promise<
+	ReturnType<IAttendanceModel['checkIn']>
+> {
+	const lastCheckIn = await this.getLastCheckIn(userId);
 
-		if (lastCheckIn != null && lastCheckIn.timeOut === '')
-			throw new Error(
-				ResponseText.AlreadyCheckedIn(
-					FormatDateTime(lastCheckIn.timeIn),
-				),
-			);
-
-		await this.create({ userId, timeIn: new Date().toISOString() });
-	},
-);
-AttendanceSchema.static(
-	'checkOut',
-	async function (userId: number): Promise<void> {
-		const lastCheckIn = await this.getLastCheckIn(userId);
-
-		if (lastCheckIn == null || lastCheckIn.timeOut !== '')
-			throw new Error(ResponseText.NoCheckInRecord);
-
-		await this.updateOne(
-			{
-				userId,
-				timeIn: lastCheckIn.timeIn,
-			},
-			{
-				timeOut: new Date().toISOString(),
-			},
+	if (lastCheckIn != null && lastCheckIn.timeOut === '')
+		throw new Error(
+			ResponseText.AlreadyCheckedIn(FormatDateTime(lastCheckIn.timeIn)),
 		);
-	},
-);
+
+	await this.create({ userId, timeIn: new Date().toISOString() });
+});
+AttendanceSchema.static('checkOut', async function (userId: number): Promise<
+	ReturnType<IAttendanceModel['checkOut']>
+> {
+	const lastCheckIn = await this.getLastCheckIn(userId);
+
+	if (lastCheckIn == null || lastCheckIn.timeOut !== '')
+		throw new Error(ResponseText.NoCheckInRecord);
+
+	await this.updateOne(
+		{
+			userId,
+			timeIn: lastCheckIn.timeIn,
+		},
+		{
+			timeOut: new Date().toISOString(),
+		},
+	);
+});
 AttendanceSchema.static(
 	'getListCheckIn',
 	async function (
@@ -88,11 +86,7 @@ AttendanceSchema.static(
 		limit: number = 20,
 		page: number = 1,
 		formatTime: boolean = false,
-	): Promise<{
-		list: Pick<AttendanceData, 'timeIn' | 'timeOut'>[];
-		currentPage: number;
-		totalPage: number;
-	}> {
+	): Promise<ReturnType<IAttendanceModel['getListCheckIn']>> {
 		if (typeof limit !== 'number')
 			throw new Error(ResponseText.InvalidType('limit', 'number'));
 		if (limit < 1) throw new Error(ResponseText.InvalidPageNumber(limit));
@@ -122,7 +116,7 @@ AttendanceSchema.static(
 				.skip(skipFromPage)
 				.project({ _id: 0, timeIn: 1, timeOut: 1 })
 				.exec();
-			
+
 			listCheckIn = getListCheckIn;
 
 			if (formatTime) {
@@ -142,8 +136,6 @@ AttendanceSchema.static(
 		};
 	},
 );
-
-// methods.
 
 // middleware.
 
