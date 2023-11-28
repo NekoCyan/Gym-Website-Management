@@ -2,6 +2,11 @@ import mongoose from 'mongoose';
 import { NextResponse } from 'next/server';
 import { HTTPStatusCode, ResponseText } from './';
 
+// API Response.
+export function InvalidAPIRequestResponse() {
+	return ErrorResponse(new Error(ResponseText.InvalidAPIRequest));
+}
+// System Response.
 export function InvalidTypeResponse(
 	variable: string,
 	allowType?: 'string' | 'number',
@@ -40,14 +45,8 @@ export function NotMatchResponse(variable: string) {
 export function NotFoundResponse(variable: string) {
 	return ErrorResponse(new Error(ResponseText.NotFound(variable)));
 }
-export function UserIdNotFoundResponse(variable: string | number) {
-	return ErrorResponse(new Error(ResponseText.UserIdNotFound(variable)));
-}
 export function RequiredResponse(variable: string) {
 	return ErrorResponse(new Error(ResponseText.Required(variable)));
-}
-export function OldPasswordSameNewResponse() {
-	return ErrorResponse(new Error(ResponseText.OldPasswordSameNew));
 }
 export function BadRequestResponse() {
 	return ErrorResponse(new Error(ResponseText.BadRequest));
@@ -57,6 +56,13 @@ export function NoPermissionResponse() {
 }
 export function UnauthorizedResponse() {
 	return ErrorResponse(new Error(ResponseText.Unauthorized));
+}
+// User.
+export function OldPasswordSameNewResponse() {
+	return ErrorResponse(new Error(ResponseText.OldPasswordSameNew));
+}
+export function UserIdNotFoundResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.UserIdNotFound(variable)));
 }
 
 export function Response<T extends { [key: string]: any }>(

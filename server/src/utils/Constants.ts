@@ -25,6 +25,10 @@ export const ROLES = CreateEnum({
 export const GENDER = CreateEnum({ UNKNOWN: -1, FEMALE: 0, MALE: 1 });
 
 export const ResponseText = {
+	// API Response.
+	InvalidAPIRequest: `Invalid API request.`,
+
+	// System Response.
 	Invalid: (variable: string) => {
 		return `${variable} is invalid.`;
 	},
@@ -61,16 +65,18 @@ export const ResponseText = {
 	NotFound: (variable: string) => {
 		return `${variable} is not found.`;
 	},
-	UserIdNotFound: (variable: string | number) => {
-		return `User with ID ${variable.toString()} is not found.`;
-	},
 	Required: (variable: string) => {
 		return `${variable} is required.`;
 	},
-	OldPasswordSameNew: `The new password cannot be the same with the old password.`,
 	BadRequest: `Bad Request.`,
 	NoPermission: `You do not have permission to access this resource.`,
 	Unauthorized: `Unauthorized.`,
+
+	// User.
+	OldPasswordSameNew: `The new password cannot be the same with the old password.`,
+	UserIdNotFound: (variable: string | number) => {
+		return `User with ID ${variable.toString()} is not found.`;
+	},
 
 	// Attendance.
 	NoCheckInRecord: `You have not check in yet.`,
