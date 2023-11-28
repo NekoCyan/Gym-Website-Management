@@ -3,15 +3,15 @@ import { Response, ErrorResponse } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import AttendanceModel from '@/app/models/Attendance';
+import Attendance from '@/app/models/Attendance';
 
-export async function GET(req: NextRequest) {
+export async function POST(req: NextRequest) {
 	try {
 		await dbConnect();
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
 
-		await AttendanceModel.checkOut(self.userId);
+		await Attendance.checkOut(self.userId);
 
 		return Response();
 	} catch (e: any) {
