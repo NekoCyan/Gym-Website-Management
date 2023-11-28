@@ -83,20 +83,45 @@ export function CreateEnum<T extends { [key: string]: number }>(
 }
 
 export function FormatDateTime(date: Date | string) {
+	if (!date) return '';
+
 	if (typeof date === 'string') date = new Date(date);
-	
-	let year = date.getFullYear();
-	let month = date.getMonth() + 1;
-	let day = date.getDate();
+	let result = [];
 
-	let hours = date.getHours();
-	let minutes = date.getMinutes();
-	let seconds = date.getSeconds();
+	let year = date.getFullYear(); // getFullYear() returns the year (four digits for dates between year 1000 and 9999) of the specified date.
+	let month = date.getMonth() + 1; // getMonth() is zero-based
+	let day = date.getDate(); // getDate() returns the day of the month (from 1 to 31) for the specified date.
 
-	let tt = hours >= 12 ? 'PM' : 'AM';
+	let hours = date.getHours(); // getHours() returns the hour (from 0 to 23) of the specified date and time.
+	let minutes = date.getMinutes(); // getMinutes() returns the minutes (from 0 to 59) of the specified date and time.
+	let seconds = date.getSeconds(); // getSeconds() returns the seconds (from 0 to 59) of the specified date and time.
+
+	const _0 = AddZero;
+
+	let tt = hours >= 12 ? 'PM' : 'AM'; // AM and PM
 
 	hours = hours % 12;
 	hours = hours || 12; // the hour '0' should be '12'
 
-	return `${day}/${month}/${year} ${hours}:${minutes}:${seconds} ${tt}`;
+	result.push(`${_0(day)}/${_0(month)}/${year}`);
+	result.push(`${_0(hours)}:${_0(minutes)}:${_0(seconds)}`);
+	result.push(tt);
+
+	return result.join(' ');
+}
+
+export function AddZero(number: number) {
+	return number < 10 ? `0${number}` : number;
+}
+
+export function SearchParamsToObject<T extends { [key: string]: string }>(
+	searchParams: URLSearchParams,
+): T {
+	const obj: any = {};
+
+	for (const [key, value] of searchParams.entries()) {
+		obj[key] = value;
+	}
+
+	return obj;
 }

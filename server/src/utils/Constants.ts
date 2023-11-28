@@ -25,6 +25,9 @@ export const ROLES = CreateEnum({
 export const GENDER = CreateEnum({ UNKNOWN: -1, FEMALE: 0, MALE: 1 });
 
 export const ResponseText = {
+	Invalid: (variable: string) => {
+		return `${variable} is invalid.`;
+	},
 	InvalidType: (variable: string, allowType?: 'string' | 'number') => {
 		let errorMessage = `Invalid type of ${variable}`;
 		if (allowType) {
@@ -34,8 +37,8 @@ export const ResponseText = {
 
 		return errorMessage;
 	},
-	Invalid: (variable: string) => {
-		return `${variable} is invalid.`;
+	InvalidPageNumber: (page: number) => {
+		return `Invalid page number ${page}.`;
 	},
 	MinLength: (variable: string, minLength: number) => {
 		return `${variable} cannot be less than ${minLength} characters.`;

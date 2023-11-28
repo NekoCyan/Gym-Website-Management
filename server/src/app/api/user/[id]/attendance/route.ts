@@ -5,10 +5,11 @@ import {
 	NotFoundResponse,
 	NoPermissionResponse,
 } from '@/utils/ResponseHandler';
+import { SearchParamsToObject, AdminRequired } from '@/utils';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { AdminRequired } from '@/utils';
+import Attendance from '@/app/models/Attendance';
 
 export async function GET(
 	req: NextRequest,
@@ -16,25 +17,30 @@ export async function GET(
 ) {
 	try {
 		const { id } = params;
+		const body: { limit: string; page: string, format: string } = SearchParamsToObject(
+			req.nextUrl.searchParams,
+		);
+		let { limit, page, format } = body;
+        const isFormat = format === 'true';
 
 		await dbConnect();
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
-		AdminRequired(self);
+        AdminRequired(self);
 
 		if (isNaN(id as any)) return NotFoundResponse(`userId ${id}`);
 		const user = await User.findOne({ userId: id });
 		if (user == null) return NotFoundResponse(`userId ${id}`);
 
-		return Response({
-			email: user.email,
-			fullName: user.fullName,
-			gender: user.gender,
-			address: user.address,
-			phoneNumber: user.phoneNumber,
-			photo: user.photo,
-			role: user.role,
-		});
+		const listCheckIn = await Attendance.getListCheckIn(
+			self.userId,
+			limit ? parseInt(limit) : undefined,
+			page ? parseInt(page) : undefined,
+            isFormat,
+		);
+		const { list, currentPage, totalPage } = listCheckIn;
+
+		return Response({ list, currentPage, totalPage });
 	} catch (e: any) {
 		return ErrorResponse(e);
 	}

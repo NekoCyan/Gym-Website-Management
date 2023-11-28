@@ -60,6 +60,15 @@ export function Response<T extends { [key: string]: any }>(
 	data: T = {} as T,
 	status: number = 200,
 ) {
+	if (typeof data !== 'object')
+		throw new Error(
+			'Parameter data must be an Object, please contact Admin for more informations.',
+		);
+	if (typeof status !== 'number')
+		throw new Error(
+			'Parameter status must be a Number, please contact Admin for more informations.',
+		);
+
 	type OmitMessage<T> = 'message' extends keyof T ? Omit<T, 'message'> : T;
 
 	let message = 'OK';

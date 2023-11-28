@@ -81,6 +81,67 @@ AttendanceSchema.static(
 		);
 	},
 );
+AttendanceSchema.static(
+	'getListCheckIn',
+	async function (
+		userId: number,
+		limit: number = 20,
+		page: number = 1,
+		formatTime: boolean = false,
+	): Promise<{
+		list: Pick<AttendanceData, 'timeIn' | 'timeOut'>[];
+		currentPage: number;
+		totalPage: number;
+	}> {
+		if (typeof limit !== 'number')
+			throw new Error(ResponseText.InvalidType('limit', 'number'));
+		if (limit < 1) throw new Error(ResponseText.InvalidPageNumber(limit));
+
+		if (typeof page !== 'number')
+			throw new Error(ResponseText.InvalidType('page', 'number'));
+		if (page < 1) throw new Error(ResponseText.InvalidPageNumber(page));
+
+		limit > 100 && (limit = 100);
+
+		const totalDocument = await this.countDocuments({ userId });
+		const totalPage = Math.ceil(totalDocument / limit);
+		let listCheckIn;
+
+		if (page > totalPage) {
+			listCheckIn = [];
+		} else {
+			// Skip and Limit will works like the following:
+			// Get array from {skipFromPage} to {limitNext}.
+			const limitNext = page * limit;
+			const skipFromPage = limitNext - limit;
+
+			const getListCheckIn = await this.aggregate()
+				.match({ userId })
+				.sort({ _id: -1 })
+				.limit(limitNext)
+				.skip(skipFromPage)
+				.project({ _id: 0, timeIn: 1, timeOut: 1 })
+				.exec();
+			
+			listCheckIn = getListCheckIn;
+
+			if (formatTime) {
+				listCheckIn = getListCheckIn.map((checkIn) => {
+					return {
+						timeIn: FormatDateTime(checkIn.timeIn),
+						timeOut: FormatDateTime(checkIn.timeOut),
+					};
+				});
+			}
+		}
+
+		return {
+			list: listCheckIn,
+			currentPage: page,
+			totalPage,
+		};
+	},
+);
 
 // methods.
 
