@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block mycontent %}
+<script src="{% static 'Admin/js/jquery.js' %}"></script>
+    <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $("#PaymentForm").validate({
+            rules: {
+                Membership_id:"required",
+                Amount:"required",
+                Method:"required",
+                transaction_no:"required",
+                Payment_status:"required"
+            },
+            messages: {
+                Membership_id:"*Please Enter Membership Id",
+                Method:"*Please Choose the Payment Method",
+                Amount:"*Please Enter a Valid Amount",
+                transaction_no:"*Please Enter Transaction Number",
+                Payment_status:"*Please Choose the Payment Status",
+                receipt:"*Please Select a Valid Payment Receipt file"
+   }
+        });
+    });
+    </script>
+    <style>
+        .error{
+            color:red;
+            margin: 2px;
+        }
+    </style>
+
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Add Payment:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="PaymentForm" class="form-horizontal" method="POST" action="/myadmin/add-payment-process"> 
+                                {% csrf_token %} 
+                                
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Membership Id:</label>
+                                    <div class="col-sm-9">  
+                                    <select name="Membership_id" class="form-control" style="color: black;" required>
+                                        <option value="">Select</option>
+                                        {% for i in mydata %}
+                                        <option value="{{i.0}}">{{i.0}} - ({{i.1}})</option>
+                                        {% endfor %}
+                                    </select>
+                                    </div>
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Amount:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="99999" min="0" class="form-control" name="Amount" placeholder="Amount(in Rs.)"> 
+                                        <p class="help-block">Amount must be Between 0 to 99999.</p>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Method:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="Method" class="form-control">
+                                            <option value="">Select</option>
+                                            <option>Google Pay</option>
+                                            <option>Paytm</option>
+                                            <option>Phonepe</option>
+                                            <option>Cash</option>
+                                        </select>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Transaction Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="text" class="form-control" name="transaction_no" placeholder="Transaction Id" maxlength="40"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Payment Receipt:</label>
+                                    <div class="col-sm-9"> 
+                                        <input type="file" class="form-control" name="receipt" accept="application/pdf" required> 
+                                        <p class="help-block">Format must be PDF.</p>
+                                        <p class="help-block">Maximum File Size Limit is 1MB.</p>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Payment Status:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="Payment_status" class="form-control">
+                                            <option value="">Select</option>
+                                            <option>Approved</option>
+                                            <option>Not Approved</option>
+                                        </select>
+                                    </div> 
+                                </div>
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="reset" class="btn btn-primary" value="Reset"> 
+                                </div>
+                                {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                                {% endif %} 
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}

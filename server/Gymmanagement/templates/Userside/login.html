@@ -1,0 +1,74 @@
+{% extends 'master3.html' %}
+{% load static %}
+
+{% block mycontent %}
+<!--Form Column-->
+<title>Login</title>
+<section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
+    <div class="auto-container">
+        <div class="clearfix">
+            <div class="pull-left">
+                <h2>Login</h2>
+                <div class="text">Fitness is not a destination it is a way of life.</div>
+            </div>
+            <div class="pull-right">
+                <ul class="page-breadcrumb">
+                    <li><a href="index-2.html">home</a></li>
+                    <li>Login</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="register-section">
+    <div class="auto-container">
+        <div class="row clearfix">
+    
+            <div class="form-column column col-lg-6 col-md-12 col-sm-12">
+                
+    <div class="sec-title">
+        <h2 style = "color: black; ">Login Now</h2>
+        <div class="separate"></div>
+    </div>
+    
+    <!--Login Form-->
+    <div class="styled-form login-form">
+        <form method="POST" action="#">
+            {% csrf_token %}
+            <div class="form-group">
+                <span class="adon-icon"><span class="fa fa-envelope-o"></span></span>
+                <h5 style = "color: black; " >E-mail: </h5>
+                <input type="email" name="useremil" value="" placeholder="Email Address" style="border: solid;border-color: black;border-width: thin;" required>
+            </div>
+            <div class="form-group">
+                <span class="adon-icon"><span class="fa fa-unlock-alt"></span></span>
+                <h5 style = "color: black; ">Password: </h5>
+                <input type="password" name="userpassword" value="" placeholder="Enter Password" style="border: solid;border-color: black;border-width: thin;" required>
+            </div>
+
+            <div class="form-group">
+                <h5 style = "color: black; ">Select user type: </h5><select name="type" style="border: solid;border-color: black;border-width: thin;" required>
+                    <option value="">----Select-----</option>
+                    <option value="Trainer">Trainer</option>
+                    <option value="Member">Member</option>
+                </select>
+            </div>
+
+            <div class="clearfix">
+                <div class="form-group pull-left">
+                    <input type="submit" value="Login" style="color: white;background-color: black;" class="theme-btn btn-style-three"><a href="forgot.html" style="color:blue;"> Forgot Password?</a>
+                </div>
+                <div class="form-group submit-text pull-right">
+                </div>
+            </div>
+                
+            </div>
+            
+        </form>
+    </div>
+    
+</div>
+</div>
+</section>
+{% endblock %}

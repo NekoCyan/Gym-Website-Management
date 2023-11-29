@@ -1,0 +1,53 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+
+<!DOCTYPE html>
+<title>Our Team</title>
+	<!--Page Title-->
+    <section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Our Trainers</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Trainers</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+    <!--End Page Title-->
+	
+	<!-- Team Page Section -->
+	<section class="team-page-section">
+		<div class="auto-container">
+			<!-- Sec Title -->
+			
+			<div class="row clearfix">
+				{% for i in mydata %}
+				<!-- Team Block -->
+				<div class="team-block col-lg-4 col-md-4 col-sm-12">
+					<div class="inner-box wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1500ms">
+						<div class="image">
+							<img src='/static/upload/{{i.2}}'/ style="height: 350px; width:350px ;" alt="" />
+						</div>
+						<div class="content">
+							<a href="team.html" class="name">{{i.1}}</a>
+							<div class="title">{{i.0}}</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+	</section>
+	<!-- End Team Page Section -->
+	
+	
+	
+	{% endblock %}

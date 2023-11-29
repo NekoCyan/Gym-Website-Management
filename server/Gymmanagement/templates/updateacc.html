@@ -1,0 +1,64 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+<section class="page-title" style="background-image:url(static/images/background/51.jpg)">
+    <div class="auto-container">
+        <div class="clearfix">
+            <div class="pull-left">
+                <h2>My Account</h2>
+                <div class="text">Fitness is not a destination it is a way of life.</div>
+            </div>
+            <div class="pull-right">
+                <ul class="page-breadcrumb">
+                    <li><a href="index-2.html">home</a></li>
+                    <li>My Account</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="register-section">
+    <div class="auto-container">
+        <div class="row clearfix">
+        <div class="styled-form register-form">
+    <form method="post" action="#" enctype="multipart/form-data">
+        <div class="form-group">
+            
+            <h5 style="color:black">Name:</h5>
+            <input type="text" name="username" style="border: solid;border-color: black;border-width: thin;" value="Prajay Trivedi" placeholder="Your Name " pattern="^[A-Za-z -]+$"  title="Please Enter Only Characters" minlength="3" required >
+        </div>
+        <div class="form-group">
+                            
+            <h5 style="color:black">Gender:</h5><br/>
+            <input type="radio" name="gender" value="M" checked> Male
+            <br>
+            <input type="radio" name="gender" value="F"> Female
+        </div>
+        <div class="form-group">
+            <span class="adon-icon"><span class="fa fa-envelope-o"></span></span>
+            <h5 style="color:black">Email:</h5>
+            <input type="email" name="useremil" style="border: solid;border-color: black;border-width: thin;" value="P@gmail.com" placeholder="Email Address" required>
+        </div>
+        <div class="form-group">
+            
+            <h5 style="color:black">Address:</h5>
+            <input type="text" name="Address" value="Navrangpura, Ahmedabad" placeholder="Your Address" style="border: solid;border-color: black;border-width: thin;" required>
+        </div>
+        <div class="form-group">
+            
+            <h5 style="color:black">Mobile:</h5>
+            <input type="text" maxlength="10" name="Mobile" minlength="10" pattern="[0-9]{10}" value="9875412368" title="please enter valid Mobile Number" style="border: solid;border-color: black;border-width: thin;" placeholder="Your Mobile No.." required>
+        </div>
+        <div class="clearfix">
+                <div class="form-group pull-left">
+                    <input type="submit" value="Save Changes" style="color: white;background-color: black;" class="theme-btn btn-style-three">
+                </div>       
+            </div>
+        </div>
+
+    </form>
+    </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

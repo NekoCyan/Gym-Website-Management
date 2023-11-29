@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+    {% block mycontent %}
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="tables">
+                <div class="bs-example widget-shadow" data-example-id="bordered-table"> 
+                    <h4>Memberships:</h4>
+                    <table class="table table-bordered"> 
+                        <thead> 
+                            <tr> 
+                                <th>Membership Id</th> 
+                                <th>User Id</th>
+                                <th>Plan Id</th>
+                                <th>Start Date</th>
+                                <th>End Date</th>
+                                <th>Amount</th>
+                                <th>Details</th>
+                                <th>Membership Status</th>
+                                <th>Action</th>
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>
+                                <td>{{i.0}}</td>
+                                <td>{{i.1}}</td>
+                                <td>{{i.2}}</td>
+                                <td>{{i.3}}</td>
+                                <td>{{i.4}}</td>
+                                <td>{{i.5}}</td>
+                                <td>{{i.6}}</td>
+                                <td>{{i.7}}</td>
+                                <td><a href='MembershipEdit/edit/{{i.0}}'>Edit</a> | <a href='Membership/delete/{{i.0}}' onclick="return delMsg();">Delete</a> </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody> 
+                        {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                        {% endif %}
+                        <script type="text/javascript">
+                            function delMsg() {
+                                if (confirm("Are you sure about deleting record?")) {
+                                    alert('1 row deleted.');
+                                    return true;
+                                }
+                                else
+                                    return false;
+                            }
+                        </script>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

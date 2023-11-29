@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+    {% block mycontent %}
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="tables">
+                <div class="bs-example widget-shadow" data-example-id="bordered-table"> 
+                    <h4>Trainer Details:</h4>
+                    <table class="table table-bordered"> 
+                        <thead> 
+                            <tr> 
+                                <th>Trainer Id</th> 
+                                <th>User Id</th>
+                                <th>Name</th>
+                                <th>Salary</th>
+                                <th>Details</th>
+                                <th>Action</th>
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>   
+                                <td>{{i.0}}</td>
+                                <td>{{i.1}}</td>
+                                <td>{{i.2}}</td>
+                                <td>{{i.3}}</td>
+                                <td>{{i.4}}</td>
+                                <td><a href='TrainerDetail/edit/{{i.0}}'>Edit</a> | <a href='TrainerDetail/delete/{{i.0}}' onclick="return delMsg();">Delete</a></td> 
+                            </tr>
+                            {% endfor %}  
+                        </tbody> 
+                    </table>
+                    <script type="text/javascript">
+                        function delMsg() {
+                            if (confirm("Are you sure about deleting record?")) {
+                                alert('1 row deleted.');
+                                return true;
+                            }
+                            else
+                                return false;
+                        }
+                    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

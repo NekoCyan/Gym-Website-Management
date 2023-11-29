@@ -1,0 +1,108 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+
+<!DOCTYPE html>
+<title>Reviews</title>
+	<!--Page Title-->
+    <section class="page-title" style="background-image:url(static/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Our Testimonial</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Testimonial</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+    <!--End Page Title-->
+	
+	<!-- Testimonial Page Section -->
+	<section class="testimonial-page-section">
+		<div class="auto-container">
+			<!-- Sec Title -->
+			<div class="sec-title centered">
+				<div class="title">TESTIMONIAL</div>
+				<h2>REVIEWS FROM <br> YOU</h2>
+			</div>
+			
+			<div class="row clearfix">
+				{{% for i in mydata  %}}
+				<!-- Testimonial Block Three -->
+				<div class="testimonial-block-three col-lg-4 col-md-6 col-sm-12">
+					<div class="inner-box">
+						<div class="text">{{i.3}}</div>
+						<div class="rating">
+							{{% for i in mydata.4 %}}
+							<span class="fa fa-star"></span>
+							{{% endfor %}}
+						</div>
+						<h4>{{i.1}}</h4>
+						<div class="designation">{{i.0}}</div>
+						<div class="author-image">
+							<div class="image">
+								<img src="/static/upload/{{i.2}}" alt="" />
+							</div>
+							<span class="quote-icon flaticon-quote"></span>
+						</div>
+					</div>
+				</div>
+				{{% endfor %}}
+				<!-- Testimonial Block Three -->
+				
+			</div>
+			
+		</div>
+	</section>
+
+	<!-- End Testimonial Section -->
+                <center>
+				<!-- Form Column -->
+				<div class="form-column col-lg-6 col-md-12 col-sm-12" style="border:double; border-color: black;">
+					<div class="inner-column">
+						<!-- Sec Title -->
+						<div class="sec-title">
+							<h2>Give Us Your Valuable Feedback</h2>
+							<div class="title">Tell Us Now</div>
+						</div>
+						
+						<!-- Default Form -->
+						<div class="default-form style-two">
+							
+							<!-- Default Form -->
+							<form method="post" action="#" >
+                                {% csrf_token %}
+								<div class="form-group">
+									<textarea name="message" placeholder="Your Feedback" style="border: solid;border-color: black;border-width: thin;" required></textarea>
+								</div>
+								<div class="form-group">
+									<input type="number" name="ratings" min="1" max="10" placeholder="Ratings Out of 10" style="border: solid;border-color: black;border-width: thin;width: 25%;" required> <b style="color: black;font-size: large;"> /10</b></textarea>
+								</div>
+								<b style="color: black;font-size: large;">
+								-------Rating Scale------
+								</b><br>
+								<h6 style="color: red;">
+								    1-3: Bad<br>
+									4-6: Average<br>
+									7-8: Good<br>
+									9-10: Excellent
+								</h6>	
+									<br>
+								<div class="form-group">
+								    <input type="submit" value="SEND" class="theme-btn btn-style-three" name="submit"></div>
+								</div>
+
+							</form>
+							<!--End Default Form -->
+						</div>
+						
+					</div>
+				</div>
+			</center>
+	{% endblock %}

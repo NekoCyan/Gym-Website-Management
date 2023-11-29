@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+    {% block mycontent %}
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="tables">
+                <div class="bs-example widget-shadow" data-example-id="bordered-table"> 
+                    <h4>Users:</h4>
+                    <table class="table table-bordered"> 
+                        <thead> 
+                            <tr>  
+                                <th>User Id</th>
+                                <th>Type Id</th>
+                                <th>Name</th>
+                                <th>Gender</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Address</th>
+                                <th>Mobile No.</th>
+                                <th>Photo</th>
+                                <th>ID Proof</th>
+                                <th>Action</th>  
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>   
+                                <td>{{i.0}}</td>
+                                <td>{{i.1}}</td>
+                                <td>{{i.2}}</td>
+                                <td>{{i.3}}</td>
+                                <td>{{i.4}}</td>
+                                <td>{{i.5}}</td>
+                                <td>{{i.6}}</td>
+                                <td>{{i.7}}</td>
+                                <td>{{i.8}}</td>
+                                <td>{{i.9}}</td>  
+                                <td><a href='User/edit/{{i.0}}'>Edit</a> | <a href='User/delete/{{i.0}}'>Delete</a></td>
+                            </tr>  
+                            {% endfor %}
+                        </tbody> 
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

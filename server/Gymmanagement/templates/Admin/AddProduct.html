@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block mycontent %}
+    <script src="{% static 'Admin/js/jquery.js' %}"></script>
+    <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $("#ProductForm").validate({
+            rules: {
+                product_name:"required",
+                Qty:"required",
+                Details:"required",
+                Price:"required",
+                photo:"required",
+            },
+            messages: {
+                product_name:"*Please Enter Product Name",
+                Details:"*Please Enter Description About Product",
+                Price:"*Please Enter a Valid Price of Product",
+                Qty:"*Please Enter a Valid Quantity of the Product",
+                photo:"*Please Choose Product Image Files"
+            }
+        });
+    });
+    </script>
+    <style>
+        .error{
+            color:red;
+            margin: 2px;
+        }
+    </style>
+
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Add Product:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="ProductForm" class="form-horizontal" enctype="multipart/form-data" method="POST" action="/myadmin/Productaddprocess"> 
+                                {% csrf_token %}
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Product Name:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="text" class="form-control" name="product_name" placeholder="Product Name" required> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Qty:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="100" min="1" name="Qty" placeholder="Quantity" class="form-control" required>
+                                        <p class="help-block">Quantity must be Between 1 to 100.</p> 
+                                    </div> 
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Price:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="99999" min="0" class="form-control" name="Price" placeholder="Price of the Product(in Rs.)" required>
+                                        <p class="help-block">Price must be Between 0 to 99999.</p> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Details:</label> 
+                                    <div class="col-sm-9"> 
+                                        <textarea class="form-control" cols="4" rows="4" name="Details" placeholder="Description of Product" required></textarea> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Product Image:</label>
+                                    <div class="col-sm-9"> 
+                                        <input type="file" class="form-control" name="photo" accept="image/jpeg"> 
+                                        <p class="help-block">Format must be JPG.</p>
+                                        <p class="help-block">Maximum File Size Limit is 1MB.</p>
+                                    </div> 
+                                </div>
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="reset" class="btn btn-primary" value="Reset"> 
+                                </div>
+                                {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                                {% endif %} 
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}
