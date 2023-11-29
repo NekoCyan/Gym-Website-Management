@@ -4,7 +4,7 @@ import {
 	IUserMethods,
 	IUserModel,
 	UserData,
-	UserInformations,
+	UserDetails,
 } from './interfaces';
 
 import {
@@ -91,16 +91,16 @@ UserSchema.method(
 UserSchema.method(
 	'update',
 	async function (
-		data: Partial<UserData & UserInformations>,
+		data: Partial<UserData & UserDetails>,
 		extraData: { [key: string]: any } = {},
 	): Promise<ReturnType<IUserMethods['update']>> {
-		let updateObj: Partial<UserData & UserInformations> & {
+		let updateObj: Partial<UserData & UserDetails> & {
 			[key: string]: any;
 		} = {};
 
-		// UserInformations.
-		const userInformations: Partial<UserInformations> =
-			await UserModel.extractUserInformations(data);
+		// UserDetails.
+		const userInformations: Partial<UserDetails> =
+			await UserModel.extractUserDetails(data);
 		// UserData.
 		const userData: Partial<UserData> = await UserModel.extractUserData(
 			data,
@@ -178,12 +178,12 @@ UserSchema.static('decodeAuthToken', async function (token: string): Promise<
 	return verify;
 });
 UserSchema.static(
-	'extractUserInformations',
+	'extractUserDetails',
 	async function (
-		data: Partial<UserInformations>,
-	): Promise<ReturnType<IUserModel['extractUserInformations']>> {
+		data: Partial<UserDetails>,
+	): Promise<ReturnType<IUserModel['extractUserDetails']>> {
 		let { fullName, gender, address, phoneNumber, photo } = data;
-		let updateObj: Partial<UserInformations> = {};
+		let updateObj: Partial<UserDetails> = {};
 
 		const validateGender = (gender: any) => {
 			if (isNaN(gender))
@@ -266,7 +266,7 @@ UserSchema.static(
 	'updateUser',
 	async function (
 		userId: number,
-		data: Partial<UserData & UserInformations>,
+		data: Partial<UserData & UserDetails>,
 		extraData: { [key: string]: any },
 	): Promise<ReturnType<IUserModel['updateUser']>> {
 		const user = await this.getUser(userId);

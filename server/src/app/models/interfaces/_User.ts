@@ -3,7 +3,7 @@ import { DocumentResult } from './ExternalDocument';
 
 import { TokenPayload } from '@/Types';
 
-export interface UserInformations {
+export interface UserDetails {
 	fullName: string;
 	gender: number;
 	address: string;
@@ -20,8 +20,8 @@ export interface UserData {
 
 export interface IUser
 	extends UserData,
-		UserInformations,
-		DocumentResult<UserInformations & UserData>,
+		UserDetails,
+		DocumentResult<UserDetails & UserData>,
 		Document {}
 export interface IUserMethods {
 	comparePassword(password: string): Promise<boolean>;
@@ -30,7 +30,7 @@ export interface IUserMethods {
 	 */
 	generateAuthToken(expiresIn?: number): Promise<string>;
 	update(
-		data: Partial<UserData & UserInformations>,
+		data: Partial<UserData & UserDetails>,
 		extraData?: { [key: string]: any },
 	): Promise<UserHydratedDocument>;
 }
@@ -42,13 +42,13 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 	): Promise<UserHydratedDocument>;
 	findByAuthToken(token: string): Promise<UserHydratedDocument>;
 	decodeAuthToken(token: string): Promise<TokenPayload>;
-	extractUserInformations(
-		data: Partial<UserInformations>,
-	): Promise<Partial<UserInformations>>;
+	extractUserDetails(
+		data: Partial<UserDetails>,
+	): Promise<Partial<UserDetails>>;
 	extractUserData(data: Partial<UserData>): Promise<Partial<UserData>>;
 	updateUser(
 		userId: number,
-		data: Partial<UserData & UserInformations>,
+		data: Partial<UserData & UserDetails>,
 		extraData?: { [key: string]: any },
 	): ReturnType<IUserMethods['update']>;
 }
