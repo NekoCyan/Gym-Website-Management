@@ -92,7 +92,7 @@ UserSchema.method(
 	'update',
 	async function (
 		data: Partial<UserData & UserInformations>,
-		extraData?: { [key: string]: any },
+		extraData: { [key: string]: any } = {},
 	): Promise<ReturnType<IUserMethods['update']>> {
 		let updateObj: Partial<UserData & UserInformations> & {
 			[key: string]: any;
@@ -100,13 +100,11 @@ UserSchema.method(
 
 		// UserInformations.
 		const userInformations: Partial<UserInformations> =
-			await UserModel.extractUserInformations(data).catch((e) => e);
-		if (userInformations instanceof Error) throw userInformations;
+			await UserModel.extractUserInformations(data);
 		// UserData.
 		const userData: Partial<UserData> = await UserModel.extractUserData(
 			data,
-		).catch((e) => e);
-		if (userData instanceof Error) throw userData;
+		);
 
 		// Group validated fields to update.
 		updateObj = { ...userInformations, ...userData };
@@ -269,7 +267,7 @@ UserSchema.static(
 	async function (
 		userId: number,
 		data: Partial<UserData & UserInformations>,
-		extraData?: { [key: string]: any },
+		extraData: { [key: string]: any },
 	): Promise<ReturnType<IUserModel['updateUser']>> {
 		const user = await this.getUser(userId);
 
