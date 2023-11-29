@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 import {
-	AttendanceData,
 	IAttendance,
 	IAttendanceMethods,
 	IAttendanceModel,
 } from './interfaces';
-import { FormatDateTime, ResponseText } from '@/utils';
+import { FormatDateTime, ResponseText, ValidateForList } from '@/utils';
 
 const AttendanceSchema = new mongoose.Schema<
 	IAttendance,
@@ -83,19 +82,11 @@ AttendanceSchema.static(
 	'getCheckInList',
 	async function (
 		userId: number,
-		limit: number = 20,
-		page: number = 1,
+		_limit: number = 20,
+		_page: number = 1,
 		formatTime: boolean = false,
 	): Promise<ReturnType<IAttendanceModel['getCheckInList']>> {
-		if (typeof limit !== 'number')
-			throw new Error(ResponseText.InvalidType('limit', 'number'));
-		if (limit < 1) throw new Error(ResponseText.InvalidPageNumber(limit));
-
-		if (typeof page !== 'number')
-			throw new Error(ResponseText.InvalidType('page', 'number'));
-		if (page < 1) throw new Error(ResponseText.InvalidPageNumber(page));
-
-		limit > 100 && (limit = 100);
+		const { limit, page } = await ValidateForList(_limit, _page);
 
 		const totalDocument = await this.countDocuments({ userId });
 		const totalPage = Math.ceil(totalDocument / limit);

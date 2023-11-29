@@ -1,5 +1,5 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
-import { DocumentResult } from './ExternalDocument';
+import { DocumentList, DocumentResult } from './ExternalDocument';
 
 export interface AttendanceData {
 	userId: number;
@@ -11,8 +11,7 @@ export interface IAttendance
 		DocumentResult<AttendanceData>,
 		Document {}
 export interface IAttendanceMethods {}
-export interface IAttendanceModel
-	extends Model<IAttendance, {}, IAttendanceMethods> {
+export interface IAttendanceModel extends Model<IAttendance, {}, IAttendanceMethods> {
 	getLastCheckIn(
 		userId: number,
 	): Promise<Pick<AttendanceData, 'timeIn' | 'timeOut'> | null>;
@@ -28,11 +27,7 @@ export interface IAttendanceModel
 		limit?: number,
 		page?: number,
 		formatTime?: boolean,
-	): Promise<{
-		list: Pick<AttendanceData, 'timeIn' | 'timeOut'>[];
-		currentPage: number;
-		totalPage: number;
-	}>;
+	): Promise<DocumentList<Pick<AttendanceData, 'timeIn' | 'timeOut'>>>;
 }
 export type AttendanceHydratedDocument = HydratedDocument<
 	IAttendance,
