@@ -1,0 +1,99 @@
+{% extends 'master4.html' %}
+{% load static %}
+
+{% block mycontent %}
+<title>Payment</title>
+<!--Register Section-->
+
+
+<section class="Payment-section" style="background-color: beige;">
+    <div class="auto-container">
+        <div class="row clearfix">
+            
+            <!--Form Column-->
+            
+            <!--Form Column-->
+            <div class="form-column column col-lg-6 col-md-12 col-sm-12">
+            
+                <div class="sec-title">
+                    <h2 >Payment</h2>
+                    <div class="separate"></div>
+                </div>
+                
+                <!--Login Form-->
+                <div class="styled-form register-form">
+                    <form method="post" action="/confrm" enctype="multipart/form-data">
+                        <div class="form-group">
+                            
+                            <h5 style="color:black">Name:</h5>
+                            <input type="text" name="mname" style="border: solid;border-color: black;border-width: thin;" value=""  pattern="^[A-Za-z -]+$"  title="Please Enter Only Characters" minlength="3" readonly required>
+                        </div>
+                       
+                        <div class="form-group">
+                            <span class="adon-icon"><span class="fa fa-envelope-o"></span></span>
+                            <h5 style="color:black">Email:</h5>
+                            <input type="email" name="email" style="border: solid;border-color: black;border-width: thin;" value="" readonly required>
+                        </div>
+                        
+                        <div class="form-group">
+                            
+                            <h5 style="color:black">Mobile:</h5>
+                            <input type="text" maxlength="10" name="mobile" minlength="10" pattern="[0-9]{10}" value="" title="please enter valid Mobile Number" style="border: solid;border-color: black;border-width: thin;" readonly required>
+                        </div>
+
+                        <div class="form-group">
+                            
+                            <h5 style="color:black">Plan type:</h5>
+                            <input type="text" name="Plan type" style="border: solid;border-color: black;border-width: thin;" value=""  pattern="^[A-Za-z -]+$"  title="Please Enter Only Characters" minlength="3" readonly required>
+                        </div>
+
+                        <div class="form-group">
+                            
+                            <h5 style="color:black">Choose Payment Option:</h5>
+                            <br>
+                            <input type="radio" name="payment" value="Phonepe"> Phonepe
+                            <br>
+                            <input type="radio" name="payment" value="Google Pay" required> Google Pay 
+                            <br>
+                            <input type="radio" name="payment" value="paytm"> Paytm 
+                            <br>
+                            <input type="radio" name="payment" value="Net Banking"> Net Banking 
+                            <br>
+                            <input type="radio" name="payment" value="Cash"> Cash
+                        </div>
+                        
+                        <div class="form-group">
+                            
+                            <h5 style="color:black">Transaction no.:</h5>
+                            <input type="text" maxlength="40" name="Transaction" minlength="10"  value="" title="please enter valid Transaction Number" style="border: solid;border-color: black;border-width: thin;" placeholder="Transaction No..*" required>
+                        </div>
+
+                       <div class="form-group">
+                            
+                            <h5 style="color:black">Payment Receipt:</h5><br>
+                            <input type="file" name="id_proof" accept=".pdf" style="border: solid;border-color: black;border-width: thin;" required>
+                        </div>
+                       
+                        <h6 style="color:black">I Agree Terms & Conditions</h6><input type="checkbox" id="term" name="term" required>
+                        <br><br>
+                        <div class="clearfix">
+                            <div class="form-group pull-left">
+                                <input type="submit" value="submit" style="color: white;background-color: black;" class="theme-btn btn-style-three">
+                            </div>
+                           
+                        </div>
+
+                    </form>
+                    
+                </div>
+                
+            </div>
+            
+        </div>
+    </div>
+
+</section>
+<!--End Register Section-->
+
+{% endblock %}
+

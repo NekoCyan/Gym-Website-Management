@@ -1,0 +1,397 @@
+{% extends 'master.html' %}
+{% load static %}
+
+{% block mycontent %}
+<!-- Calculate Section Two -->
+<section class="calculate-section-two">
+    <div class="auto-container">
+        <div class="inner-container">
+            <div class="pattern-layer" style="background-image:url(static/User/images/background/3.jpg)"></div>
+            <div class="row clearfix">
+                
+                <!-- Title Column -->
+                <div class="title-column col-lg-4 col-md-12 col-sm-12">
+                    <div class="inner-column">
+                        <!-- Sec Title -->
+                        <div class="sec-title light">
+                            <div class="title">CALCULATE BMI</div>
+                            <h2>Calculate Your <br> Body Mass Index</h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Column -->
+                <div class="form-column col-lg-8 col-md-12 col-sm-12">
+                    <div class="inner-column">
+                        
+                        <!-- Default Form -->
+                        <div class="default-form style-three">
+                            
+                            <!-- Default Form -->
+                            <form method="post" action="{% static 'https://expert-themes.com/html/gym/contact.html' %}">
+                                <div class="row clearfix">
+                                
+                                    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+                                        <input type="text" name="cm" placeholder="Height / cm" required>
+                                    </div>
+                                    
+                                    <div class="col-lg-4 col-md-6 col-sm-12 form-group">
+                                        <input type="text" name="weight" placeholder="Weight / kg" required>
+                                    </div>
+                                    
+                                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                        <select class="custom-select-box">
+                                            <option>Select an activity factor:</option>
+                                            <option>Factor 01</option>
+                                            <option>Factor 02</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                        <select class="custom-select-box">
+                                            <option>Gender</option>
+                                            <option>Male</option>
+                                            <option>Female</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                                        <div class="btn-two-outer"><button class="theme-btn btn-style-two" type="submit" name="submit-form"><span class="txt">Calculate</span></button></div>
+                                    </div>
+                                    
+                                </div>
+                            </form>
+                            
+                            <!--End Default Form -->
+                        </div>
+                        
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End Calculate Section Two -->
+
+<!-- Choose Section -->
+<section class="choose-section">
+    <div class="auto-container">
+        <div class="row clearfix">
+            
+            <!-- Images Column -->
+            <div class="images-column col-lg-6 col-md-12 col-sm-12">
+                <div class="inner-column">
+                    <div class="info-box">
+                        <h3><a href="#">Cardio <br> Training</a></h3>
+                        <a class="more" href="#">More <span class="arrow fa fa-arrow-circle-right"></span></a>
+                        <div class="icon flaticon-stationary-bike"></div>
+                    </div>
+                    
+                    <div class="info-box style-two">
+                        <h3><a href="#">Fitness <br> Training</a></h3>
+                        <a class="more" href="#">More <span class="arrow fa fa-arrow-circle-right"></span></a>
+                        <div class="icon flaticon-people"></div>
+                    </div>
+                    
+                    <div class="image">
+                        <img src="{% static 'User/images/resource/choose-1.jpg' %}" alt="" />
+                    </div>
+                    <div class="image-1">
+                        <img src="{% static 'User/images/resource/choose-2.jpg' %}" alt="" />
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Column -->
+            <div class="content-column col-lg-6 col-md-12 col-sm-12">
+                <div class="inner-column">
+                    <!-- Sec Title -->
+                    <div class="sec-title">
+                        <div class="title">Why Choose Us</div>
+                        <h2>We Raise Your <br> Confidence</h2>
+                    </div>
+                    
+                    <!-- Featured Block -->
+                    <div class="featured-block">
+                        <div class="block-inner">
+                            <span class="icon flaticon-people"></span>
+                            <strong>Fitness Training</strong>
+                            <div class="feature-text">Train with the best experts in bodybuilding field.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Featured Block -->
+                    <div class="featured-block">
+                        <div class="block-inner">
+                            <span class="icon flaticon-stationary-bike"></span>
+                            <strong>Cardio and Strength</strong>
+                            <div class="feature-text">Our personal trainers will help you find a perfect workout.</div>
+                        </div>
+                    </div>
+                    
+                    <!-- Featured Block -->
+                    <div class="featured-block">
+                        <div class="block-inner">
+                            <span class="icon flaticon-premium"></span>
+                            <strong>workout and Training videos</strong>
+                            <div class="feature-text">Our personal trainers will help you find a perfect workout.</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- End Choose Section -->
+
+<!-- Featured Section -->
+<section class="featured-section">
+    <div class="auto-container">
+        <!-- Sec Title -->
+        <div class="sec-title light centered">
+            <div class="title">OUR CLASSES</div>
+            <h2>Featured <br> Classes Service</h2>
+        </div>
+        <div class="row clearfix">
+            
+            <!-- Featured Block Two -->
+            <div class="featured-block-two col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1500ms">
+                    <div class="image">
+                        <a href="{% static 'classes-detail.html' %}"><img src="{% static 'User/images/resource/feature-1.jpg' %}" alt="" /></a>
+                        <div class="icon-box">
+                            <span class="icon flaticon-tools-and-utensils-1"></span>
+                        </div>
+                    </div>
+                    <div class="lower-content">
+                        <div class="title">GYM</div>
+                        <h4><a href="{% static 'User/classes-detail.html' %}">Psycho Training</a></h4>
+                        <div class="text">Winning means you’re willing to go longer, work harder for more.</div>
+                        <a class="read-more" href="{% static 'User/classes-detail.html' %}">Read More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Block Two -->
+            <div class="featured-block-two col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box wow fadeInUp" data-wow-delay="0ms" data-wow-duration="1500ms">
+                    <div class="image">
+                        <a href="{% static 'User/classes-detail.html' %}"><img src="{% static 'User/images/resource/feature-2.jpg' %}" alt="" /></a>
+                        <div class="icon-box">
+                            <span class="icon flaticon-muscle"></span>
+                        </div>
+                    </div>
+                    <div class="lower-content">
+                        <div class="title">CARDIO</div>
+                        <h4><a href="{% static 'User/classes-detail.html' %}">Self Defence</a></h4>
+                        <div class="text">Don’t practice until you get it right practice until can’t wrong</div>
+                        <a class="read-more" href="{% static 'User/classes-detail.html' %}">Read More</a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Featured Block Two -->
+            <div class="featured-block-two col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box wow fadeInRight" data-wow-delay="0ms" data-wow-duration="1500ms">
+                    <div class="image">
+                        <a href="{% static 'User/classes-detail.html' %}"><img src="{% static 'User/images/resource/feature-3.jpg' %}" alt="" /></a>
+                        <div class="icon-box">
+                            <span class="icon flaticon-people"></span>
+                        </div>
+                    </div>
+                    <div class="lower-content">
+                        <div class="title">Fitness</div>
+                        <h4><a href="{% static 'User/classes-detail.html' %}">FITNESS FOR MAN</a></h4>
+                        <div class="text">Winning means you’re willing to go longer, work harder for more.</div>
+                        <a class="read-more" href="{% static 'User/classes-detail.html' %}">Read More</a>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- End Featured Section -->
+
+
+<!-- End Counter Section -->
+
+
+                
+                
+<!-- Pricing Section -->
+<section class="pricing-section">
+    <div class="image-layer" style="background-image:url(static/User/images/background/2.jpg)"></div>
+    <div class="auto-container">
+        <!-- Sec Title -->
+        <div class="sec-title light centered">
+            
+            <h2>Gym Plans</h2>
+        </div>
+        <div class="row clearfix">
+            
+            <!-- Pricing Block -->
+            <div class="pricing-block col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box" style="background-image:url(static/User/images/resource/price-1.jpg)">
+                    <h4>Basic Plan</h4>
+                    <div class="title">Here Goes Some Descripation</div>
+                    <div class="price">For 1 Month<span>₹ 1200</span></div>
+                    <ul class="price-list">
+                        <li>Free Hand</li>
+                        <li>Gym Fitness</li>
+                        <li>Weight Loss</li>
+                        <li>Personal Trainer</li>
+                    </ul>
+                    <div class="btn-one-outer"><a href="#" class="theme-btn btn-style-one" type="submit"><span class="txt">Select Now</span></a></div>
+                </div>
+            </div>
+            
+            <!-- Pricing Block -->
+            <div class="pricing-block col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box" style="background-image:url(static/User/images/resource/price-2.jpg)">
+                    <h4>Standard Plan</h4>
+                    <div class="title">Here Goes Some Description</div>
+                    <div class="price">For 6 Month<span>₹ 6000</span></div>
+                    <ul class="price-list">
+                        <li>Free Hand</li>
+                        <li>Gym Fitness</li>
+                        <li>Weight Loss</li>
+                        <li>Personal Trainer</li>
+                    </ul>
+                    <div class="btn-one-outer"><a href="#" class="theme-btn btn-style-one" type="submit"><span class="txt">Select Now</span></a></div>
+                </div>
+            </div>
+            
+            <!-- Pricing Block -->
+            <div class="pricing-block col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box" style="background-image:url(static/User/images/resource/price-3.jpg)">
+                    <h4>Ultimate Plan</h4>
+                    <div class="title">Here Goes Some Descripation</div>
+                    <div class="price">For 1 Year<span>₹ 10000</span></div>
+                    <ul class="price-list">
+                        <li>Free Hand</li>
+                        <li>Gym Fitness</li>
+                        <li>Weight Loss</li>
+                        <li>Personal Trainer</li>
+                    </ul>
+                    <div class="btn-one-outer"><a href="#" class="theme-btn btn-style-one" type="submit"><span class="txt">Select Now</span></a></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+<!-- End Pricing Section -->
+
+<!-- News Section -->
+<section class="news-section-two">
+    <div class="auto-container">
+        <!-- Sec Title -->
+        <div class="sec-title centered">
+            <div class="title">Our Blog & Article</div>
+        </div>
+        
+        <div class="row clearfix">
+            
+            <!-- News Block Two -->
+            <div class="news-block-two col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box wow fadeInLeft" data-wow-delay="0ms" data-wow-duration="1500ms">
+                    <div class="image">
+                        <a href="{% static 'User/blog-single.html' %}"><img src="{% static 'User/images/resource/news-4.jpg' %}" alt="" /></a>
+                    </div>
+                    <div class="lower-content">
+                        <ul class="post-meta">
+                            <li><span class="icon fa fa-folder-open"></span> GYM</li>
+                        </ul>
+                        <h4><a href="{% static 'User/blog-single.html' %}">AVOID INJURIES AND TRAIN PAIN FREE</a></h4>
+                        <div class="lower-box">
+                            <div class="clearfix">
+                                <div class="pull-left">
+                                    <a class="comment" href="{% static 'User/blog-single.html' %}"><span class="icon fa fa-comment-o"></span> 02</a>
+                                </div>
+                                <div class="pull-right">
+                                    <div class="author-info">
+                                        <div class="info-inner">
+                                            <div class="icon flaticon-user-4"></div>
+                                            By Jone Ankar <span>11.12.2020</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- News Block Two -->
+            <div class="news-block-two col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box wow fadeInLeft" data-wow-delay="150ms" data-wow-duration="1500ms">
+                    <div class="image">
+                        <a href="{% static 'User/blog-single.html' %}"><img src="{% static 'User/images/resource/news-5.jpg' %}" alt="" /></a>
+                    </div>
+                    <div class="lower-content">
+                        <ul class="post-meta">
+                            <li><span class="icon fa fa-folder-open"></span> Fitness</li>
+                        </ul>
+                        <h4><a href="{% static 'User/blog-single.html' %}">IMPROVE YOUR TECHNIQUE, BODY MECHANICS, AND MUSCLE FUNCTION</a></h4>
+                        <div class="lower-box">
+                            <div class="clearfix">
+                                <div class="pull-left">
+                                    <a class="comment" href="{% static 'User/blog-single.html' %}"><span class="icon fa fa-comment-o"></span> 02</a>
+                                </div>
+                                <div class="pull-right">
+                                    <div class="author-info">
+                                        <div class="info-inner">
+                                            <div class="icon flaticon-user-4"></div>
+                                            By S.Smith <span>05.05.2013</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- News Block Two -->
+            <div class="news-block-two col-lg-4 col-md-6 col-sm-12">
+                <div class="inner-box wow fadeInLeft" data-wow-delay="300ms" data-wow-duration="1500ms">
+                    <div class="image">
+                        <a href="{% static 'User/blog-single.html' %}"><img src="{% static 'User/images/resource/news-6.jpg' %}" alt="" /></a>
+                    </div>
+                    <div class="lower-content">
+                        <ul class="post-meta">
+                            <li><span class="icon fa fa-folder-open"></span> Cardio Burn</li>
+                        </ul>
+                        <h4><a href="{% static 'User/blog-single.html' %}">Give your Fitness a Boost with our GYM Challenge</a></h4>
+                        <div class="lower-box">
+                            <div class="clearfix">
+                                <div class="pull-left">
+                                    <a class="comment" href="{% static 'User/blog-single.html' %}"><span class="icon fa fa-comment-o"></span> 02</a>
+                                </div>
+                                <div class="pull-right">
+                                    <div class="author-info">
+                                        <div class="info-inner">
+                                            <div class="icon flaticon-user-4"></div>
+                                            By James Pattinson <span>13.01.2017</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        
+    </div>
+</section>
+
+{% endblock %}
+
+
+<!-- End Clients Section -->

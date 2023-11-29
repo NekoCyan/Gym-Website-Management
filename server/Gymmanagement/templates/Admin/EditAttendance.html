@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+   {% load static %}
+    {% block mycontent %}
+    <script src="{% static 'Admin/js/jquery.js' %}"></script>
+        <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+        <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+        <script>
+        $(document).ready(function() {
+            $("#AttendanceForm").validate({
+                rules: {
+                    User_id:"required",
+                    date:"required",
+                    timein:"required",
+                    timeout:"required"
+                },
+                messages: {
+                    User_id:"*Please Enter a User_id",
+                    date:"*Please Enter the Date",
+                    timein:"*Please Enter Coming Time",
+                    timeout:"*Please Enter Leaving Time"
+                }
+            });
+        });
+        </script>
+        <style>
+            .error{
+                color:red;
+                margin: 2px;
+            }
+        </style>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Edit Attendance:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="AttendanceForm" class="form-horizontal" method="POST" action="#"> 
+                                
+                                {% csrf_token %} 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">User Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="User_id" class="form-control" style="color: black;">
+                                            <option value="">Select</option>
+                                            <option value="{{Adata.1}}" selected>{{Adata.1}}</option>
+                                        </select>
+                                    </div> 
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Date:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="date" class="form-control" id="Adate" name="data" value="{{Adata.2|date:'Y-m-d'}}"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Coming Time:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="time" class="form-control" name="timein" value="{{Adata.3|time:'h:i:s'}}">{{Adata.3}} 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Leaving Time:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="time" class="form-control" name="timeout" value="{{Adata.4}}"> 
+                                    </div> 
+                                </div>
+                                 <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Save Changes">
+                                    <input type="submit" class="btn btn-success" value="Cancel">
+                                </div> 
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}

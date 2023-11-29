@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% block mycontent %}
+    <script src="{% static 'Admin/js/jquery.js' %}"></script>
+    <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+    <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+    <script>
+    $(document).ready(function() {
+        $("#TrainerDetailsForm").validate({
+            rules:{
+                User_id:"required"
+            },
+            messages: {
+                User_id:"*Please Enter User_id",
+                details:"*Please Enter Description About Trainer",
+                Salary:"*Please Enter a Valid Salary of Trainer"
+            }
+        });
+    });
+    </script>
+    <style>
+        .error{
+            color:red;
+            margin: 2px;
+        }
+    </style>
+
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Add Trainer Detail:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="TrainerDetailsForm" class="form-horizontal" method="POST" action="/myadmin/Trainerdetailsaddprocess">
+                                {% csrf_token %}
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*User Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="User_id" class="form-control" style="color: black;">
+                                            <option value="">Select</option>
+                                            {% for i in mydata %}
+                                            <option value="{{i.0}}">{{i.0}} ({{i.2}})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Salary:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="number" max="99999" min="0" class="form-control" name="Salary" placeholder="Salary Of Trainer(in Rs.)" required> 
+                                        <p class="help-block">Salary must be Between 0 to 99999.</p>
+                                    </div> 
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">*Details:</label> 
+                                    <div class="col-sm-9"> 
+                                        <textarea name="details" rows="4" cols="4" placeholder="Additional Details About Trainer" class="form-control" required></textarea>
+                                    </div> 
+                                </div>  
+                                <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="reset" class="btn btn-primary" value="Reset"> 
+                                </div> 
+                                {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                                {% endif %}
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}

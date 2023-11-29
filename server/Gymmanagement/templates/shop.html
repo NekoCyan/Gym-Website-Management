@@ -1,0 +1,158 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+
+<!DOCTYPE html>
+<title>Shop</title>
+	<!--Page Title-->
+    <section class="page-title" style="background-image:url(static/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>Our Shop</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>Shops</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+    <!--End Page Title-->
+	
+	<!-- Sidebar Cart Item -->
+	<div class="xs-sidebar-group info-group">
+		<div class="xs-overlay xs-bg-black"></div>
+		<div class="xs-sidebar-widget">
+			<div class="sidebar-widget-container">
+				<div class="widget-heading">
+					<a href="#" class="close-side-widget">
+						X
+					</a>
+				</div>
+				<div class="sidebar-textwidget">
+					
+					<!-- Sidebar Info Content -->
+					<div class="sidebar-info-contents">
+						<div class="content-inner">
+							<div class="logo">
+								<a href="index-2.html"><img src="{% static 'images/logo.png' %}" alt="" /></a>
+							</div>
+							<div class="content-box">
+								<h2>About Us</h2>
+								<p class="text">The argument in favor of using filler text goes something like this: If you use real content in the Consulting Process, anytime you reach a review point you’ll end up reviewing and negotiating the content itself and not the design.</p>
+								<a href="#" class="theme-btn btn-style-two"><span class="txt">Consultation</span></a>
+							</div>
+							<div class="contact-info">
+								<h2>Contact Info</h2>
+								<ul class="list-style-one">
+									<li><span class="icon fa fa-location-arrow"></span>Chicago 12, Melborne City, USA</li>
+									<li><span class="icon fa fa-phone"></span>(111) 111-111-1111</li>
+									<li><span class="icon fa fa-envelope"></span>Gym@gmail.com</li>
+									<li><span class="icon fa fa-clock-o"></span>Week Days: 09.00 to 18.00 Sunday: Closed</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END sidebar widget item -->
+	
+	<!--Sidebar Page Container-->
+    <div class="sidebar-page-container">
+    	<div class="auto-container">
+        	<div class="row clearfix">
+            	
+                <!--Content Side-->
+                <div class="content-side col-lg-8 col-md-12 col-sm-12">
+                	<!--Shop Single-->
+                	<div class="shop-section">
+						
+                        <!--Sort By-->
+                        <div class="items-sorting">
+                        	<div class="row clearfix">
+                                <div class="results-column col-md-6 col-sm-6 col-xs-12">
+                                    <h6>Showing Items 1–9 of 36 results</h6>
+                                </div>
+                                <div class="select-column pull-right col-md-6 col-sm-6 col-xs-12">
+                                    <div class="form-group">
+                                        <select name="sort-by">
+                                            <option>Default Sorting</option>
+                                            <option>By Order</option>
+                                            <option>By Price</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="our-shops">
+                        	
+                            <div class="row clearfix">
+                            	{% for i in mydata %}
+								<!-- Shop Item -->
+								<div class="single-product-item col-lg-4 col-md-6 col-sm-12 text-center">
+									 <div class="img-holder">
+										<img width="270" height="300" src="{% static 'images/resource/products/Dumbells.jpg' %}" class="" alt="">
+									</div>
+									<div class="title-holder text-center">
+										<div class="static-content">
+											<h3 class="title text-center"><a href="shop-single.html">Dumbells</a></h3>
+											<span class="price"><span class="amount"><span class="">₹</span>150</span></span>
+										</div>
+										<div class="overlay-content">
+											<ul class="clearfix">
+												<li>
+													<a href="shop-single.html"><span class="flaticon-shopping-bag-3"></span>
+														<div class="toltip-content">
+															<p>Add to Cart</p>
+														</div>
+													</a>
+												</li>
+												 
+												<li>
+													<a href="{% static 'images/resource/products/Dumbells.jpg' %}" class="lightbox-image" data-fancybox="shop-gallery"><span class="fa fa-expand"></span>
+														<div class="toltip-content">
+															<p>Zoom In</p>
+														</div>
+													</a>
+												</li>
+											</ul>
+										</div>
+									</div>
+								</div>
+								{% endfor %}
+                                
+								
+                            </div>
+                            
+                        </div>
+                        
+                      
+                        
+                    </div>
+                </div>
+                
+                <!--Sidebar Side-->
+                <div class="sidebar-side col-lg-4 col-md-12 col-sm-12">
+                	<aside class="sidebar sticky-top">
+						
+						<!-- Search -->
+						<div class="sidebar-widget search-box">
+							<form method="post" action="{% static 'https://expert-themes.com/html/gym/contact.html' %}">
+								<div class="form-group">
+									<input type="search" name="search-field" value="" placeholder="Search....." required>
+									<button type="submit"><span class="icon fa fa-search"></span></button>
+								</div>
+							</form>
+						</div>
+						
+					</div>				
+	{% endblock %}	
+	

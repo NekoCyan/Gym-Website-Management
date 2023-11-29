@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+    {% block mycontent %}
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="tables">
+                <div class="bs-example widget-shadow" data-example-id="bordered-table"> 
+                    <h4>Attendance:</h4>
+                    <table class="table table-bordered"> 
+                        <thead> 
+                            <tr> 
+                                <th>Attendance Id</th> 
+                                <th>User Id</th>
+                                <th>User Name</th>
+                                <th>User Type</th>
+                                <th>Date</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th>Action</th>
+                            </tr> 
+                        </thead> 
+                        <tbody> 
+                            {% for i in mydata %}
+                            <tr>
+                                <td>{{i.0}}</td>
+                                <td>{{i.1}}</td>
+                                <td>{{i.2}}</td>
+                                <td>{{i.3}}</td>
+                                <td>{{i.4}}</td>
+                                <td>{{i.5}}</td>
+                                <td>{{i.6}}</td>
+                                <td><a href='Attendance/edit/{{i.0}}'>Edit</a> | <a href='Attendance/delete/{{i.0}}' onclick="return delMsg();">Delete</a> </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <script type="text/javascript">
+                            function delMsg() {
+                                if (confirm("Are you sure about deleting record?")) {
+                                    alert('1 row deleted.');
+                                    return true;
+                                }
+                                else
+                                    return false;
+                            }
+                        </script> 
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'master3.html' %}
+{% load static %}
+{% block mycontent %}
+<html>
+    <title>My Workout</title>
+    <!--Page Title-->
+    <style>
+        tr,td,th{
+            padding: 20px;
+            border-style: solid;
+            font-weight: bolder;
+            font-size: medium;
+            font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            border-color: black;
+            color: black;
+        }
+        th {
+            background-image: url(static/images/background/7.jpg);
+        }        
+    </style>    
+    <section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
+    	<div class="auto-container">
+			<div class="clearfix">
+				<div class="pull-left">
+					<h2>My Workout</h2>
+					<div class="text">Fitness is not a destination it is a way of life.</div>
+				</div>
+				<div class="pull-right">
+					<ul class="page-breadcrumb">
+						<li><a href="index-2.html">home</a></li>
+						<li>My Workout</li>
+					</ul>
+				</div>
+			</div>
+        </div>
+    </section>
+   <br><br>
+    <center>     
+        
+<table>
+        <th colspan="6" style="text-align: center;font-size: x-large;">Members</th>
+    
+    <tr >
+        <td>Sr No.</td>
+        <td>Name</td>
+        <td>Mobile</td>
+        <td>Email</td>
+        <td>Address</td>
+        <td style="text-align: center;">Action</td>
+    </tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a href="#">View Attendance</a>/<a href="#">Manage Workout</a></td>    
+    </tr>
+</table>
+</center>
+
+<br><br>
+</html>
+
+{% endblock %}

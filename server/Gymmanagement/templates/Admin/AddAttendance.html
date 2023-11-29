@@ -1,0 +1,94 @@
+{% extends 'base.html' %}
+   {% load static %}
+    {% block mycontent %}
+    <script src="{% static 'Admin/js/jquery.js' %}"></script>
+        <script src="{% static 'Admin/js/jquery.validate.js' %}"></script>
+        <script src="{% static 'Admin/js/additional-methods.js' %}"></script>
+        <script>
+        $(document).ready(function() {
+            $("#AttendanceForm").validate({
+                rules: {
+                    User_id:"required",
+                    date:"required",
+                    timein:"required",
+                    timeout:"required"
+                },
+                messages: {
+                    User_id:"*Please Enter a User_id",
+                    date:"*Please Enter the Date",
+                    timein:"*Please Enter Coming Time",
+                    timeout:"*Please Enter Leaving Time"
+                }
+            });
+        });
+        </script>
+        <style>
+            .error{
+                color:red;
+                margin: 2px;
+            }
+        </style>
+    <div id="page-wrapper">
+        <div class="main-page">
+            <div class="forms">
+                <div class=" form-grids row form-grids-right">
+                    <div class="widget-shadow " data-example-id="basic-forms"> 
+                        <div class="form-title">
+                            <h4>Add Attendance:</h4>
+                        </div>
+                        <div class="form-body">
+                            <form id="AttendanceForm" class="form-horizontal" method="POST" action="/myadmin/add-attendance-process"> 
+                                
+                                {% csrf_token %} 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">User Id:</label> 
+                                    <div class="col-sm-9"> 
+                                        <select name="User_id" class="form-control" style="color: black;">
+                                            <option value="">Select</option>
+                                            {% for i in mydata %}
+                                            <option value="{{i.0}}">{{i.0}} ({{i.2}})</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div> 
+                                </div> 
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Date:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="date" class="form-control" name="date"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Coming Time:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="time" class="form-control" name="timein"> 
+                                    </div> 
+                                </div>
+                                <div class="form-group"> 
+                                    <label class="col-sm-2 control-label">Leaving Time:</label> 
+                                    <div class="col-sm-9"> 
+                                        <input type="time" class="form-control" name="timeout"> 
+                                    </div> 
+                                </div>
+                                 <br>
+                                <div class="col-sm-offset-2"> 
+                                    <input type="submit" class="btn btn-success" value="Add">
+                                    <input type="reset" class="btn btn-primary" value="Reset"> 
+                                </div> 
+                                {% if messages %}
+                                   <ul class="messages">
+                                   {% for message in messages %}
+                                       <li {% if message.tags %} class=" {{ message.tags }} " {% endif %} >
+                                          <script>alert('{{ message }}')</script>
+                                       </li>
+                                   {% endfor %}
+                                   </ul>
+                                {% endif %}
+                            </form> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% endblock %}
