@@ -1,6 +1,7 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { TokenPayload } from '@/Types';
 import ms from 'ms';
+import { DiscordSnowflake } from '@sapphire/snowflake';
 
 /**
  * @param expiresIn Seconds.
@@ -167,4 +168,12 @@ export function CommaAnd(
 		text = Fix(arr[0]);
 	}
 	return text;
+}
+
+export function GenerateSnowflake() {
+	return DiscordSnowflake.generate();
+}
+
+export function TimestampFromSnowflake(id: bigint) {
+	return DiscordSnowflake.timestampFrom(id);
 }
