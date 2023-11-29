@@ -100,14 +100,14 @@
 
 ##### Parameters
 
-> | Name        | Type   | Data type | Default | Description        |
-> | ----------- | ------ | --------- | ------- | ------------------ |
-> | password    | string | optional  |         |                    |
-> | fullName    | string | optional  |         |                    |
-> | gender      | number | optional  |         | range from -1 to 1 |
-> | address     | string | optional  |         |                    |
-> | phoneNumber | string | optional  |         |                    |
-> | photo       | string | optional  |         |                    |
+> | Name        | Type     | Data type | Default | Description        |
+> | ----------- | -------- | --------- | ------- | ------------------ |
+> | password    | optional | string    |         |                    |
+> | fullName    | optional | string    |         |                    |
+> | gender      | optional | number    |         | range from -1 to 1 |
+> | address     | optional | string    |         |                    |
+> | phoneNumber | optional | string    |         |                    |
+> | photo       | optional | string    |         |                    |
 
 ##### Responses in data.
 
@@ -259,16 +259,16 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name        | Type   | Data type | Default | Description        |
-> | ----------- | ------ | --------- | ------- | ------------------ |
-> | email       | string | optional  |         |                    |
-> | password    | string | optional  |         |                    |
-> | role        | number | optional  |         |                    |
-> | fullName    | string | optional  |         |                    |
-> | gender      | number | optional  |         | range from -1 to 1 |
-> | address     | string | optional  |         |                    |
-> | phoneNumber | string | optional  |         |                    |
-> | photo       | string | optional  |         |                    |
+> | Name        | Type     | Data type | Default | Description        |
+> | ----------- | -------- | --------- | ------- | ------------------ |
+> | email       | optional | string    |         |                    |
+> | password    | optional | string    |         |                    |
+> | role        | optional | number    |         |                    |
+> | fullName    | optional | string    |         |                    |
+> | gender      | optional | number    |         | range from -1 to 1 |
+> | address     | optional | string    |         |                    |
+> | phoneNumber | optional | string    |         |                    |
+> | photo       | optional | string    |         |                    |
 
 ##### Responses in data.
 
@@ -310,12 +310,12 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name     | Type   | Data type | Default | Description        |
-> | -------- | ------ | --------- | ------- | ------------------ |
-> | title    | string | required  |         |                    |
-> | details  | string | required  |         |                    |
-> | price    | number | required  |         |                    |
-> | duration | number | required  |         | also accept string |
+> | Name     | Type     | Data type | Default | Description        |
+> | -------- | -------- | --------- | ------- | ------------------ |
+> | title    | required | string    |         |                    |
+> | details  | required | string    |         |                    |
+> | price    | required | number    |         |                    |
+> | duration | required | number    |         | also accept string |
 
 ##### Responses in data.
 
@@ -330,12 +330,12 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name     | Type   | Data type | Default | Description        |
-> | -------- | ------ | --------- | ------- | ------------------ |
-> | title    | string | optional  |         |                    |
-> | details  | string | optional  |         |                    |
-> | price    | number | optional  |         |                    |
-> | duration | number | optional  |         | also accept string |
+> | Name     | Type     | Data type | Default | Description        |
+> | -------- | -------- | --------- | ------- | ------------------ |
+> | title    | optional | string    |         |                    |
+> | details  | optional | string    |         |                    |
+> | price    | optional | number    |         |                    |
+> | duration | optional | number    |         | also accept string |
 
 ##### Responses in data.
 
