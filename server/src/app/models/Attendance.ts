@@ -111,11 +111,11 @@ AttendanceSchema.static(
 			listCheckIn = getCheckInList;
 
 			if (formatTime) {
-				listCheckIn = getCheckInList.map((checkIn) => {
-					return {
-						timeIn: FormatDateTime(checkIn.timeIn),
-						timeOut: FormatDateTime(checkIn.timeOut),
-					};
+				listCheckIn = getCheckInList.map((x) => {
+					x.timeIn = FormatDateTime(x.timeIn);
+					x.timeOut = FormatDateTime(x.timeOut);
+
+					return x;
 				});
 			}
 		}

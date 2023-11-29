@@ -7,12 +7,9 @@ export function InvalidAPIRequestResponse() {
 	return ErrorResponse(new Error(ResponseText.InvalidAPIRequest));
 }
 // System Response.
-export function InvalidTypeResponse(
-	variable: string,
-	allowType?: 'string' | 'number',
-) {
+export function InvalidTypeResponse(variable: string, ...allowTypes: string[]) {
 	return ErrorResponse(
-		new Error(ResponseText.InvalidType(variable, allowType)),
+		new Error(ResponseText.InvalidType(variable, ...allowTypes)),
 	);
 }
 export function InvalidResponse(variable: string) {
@@ -63,6 +60,10 @@ export function OldPasswordSameNewResponse() {
 }
 export function UserIdNotFoundResponse(variable: string | number) {
 	return ErrorResponse(new Error(ResponseText.UserIdNotFound(variable)));
+}
+// Plan.
+export function PlanIdNotFoundResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.PlanIdNotFound(variable)));
 }
 
 export function Response<T extends { [key: string]: any }>(

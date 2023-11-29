@@ -1,4 +1,4 @@
-import { CreateEnum } from '.';
+import { CommaAnd, CreateEnum } from '.';
 
 export const HTTPStatusCode = {
 	OK: 200,
@@ -32,10 +32,10 @@ export const ResponseText = {
 	Invalid: (variable: string) => {
 		return `${variable} is invalid.`;
 	},
-	InvalidType: (variable: string, allowType?: 'string' | 'number') => {
+	InvalidType: (variable: string, ...allowTypes: string[]) => {
 		let errorMessage = `Invalid type of ${variable}`;
-		if (allowType) {
-			errorMessage += ` (Only accept ${allowType})`;
+		if (allowTypes) {
+			errorMessage += ` (Only accept(s) ${CommaAnd(allowTypes)})`;
 		}
 		errorMessage += '.';
 
@@ -82,5 +82,10 @@ export const ResponseText = {
 	NoCheckInRecord: `You have not check in yet.`,
 	AlreadyCheckedIn: (stringTime: string) => {
 		return `You have already checked in since ${stringTime} in the last time, please check out first before check in again.`;
+	},
+
+	// Plan.
+	PlanIdNotFound: (variable: string | number) => {
+		return `Plan with ID ${variable.toString()} is not found.`;
 	},
 };

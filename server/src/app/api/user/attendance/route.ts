@@ -16,13 +16,13 @@ export async function GET(req: NextRequest) {
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
 
-		const listCheckIn = await Attendance.getCheckInList(
+		const checkInList = await Attendance.getCheckInList(
 			self.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
 			isFormat,
 		);
-		const { list, currentPage, totalPage } = listCheckIn;
+		const { list, currentPage, totalPage } = checkInList;
 
 		return Response({ list, currentPage, totalPage });
 	} catch (e: any) {

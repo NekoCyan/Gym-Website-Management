@@ -1,8 +1,8 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { TokenPayload } from '@/Types';
+import ms from 'ms';
 
 /**
- * @param username
  * @param expiresIn Seconds.
  * @returns
  */
@@ -124,4 +124,47 @@ export function SearchParamsToObject<T extends { [key: string]: string }>(
 	}
 
 	return obj;
+}
+
+export function MS<T extends boolean = false>(
+	data: string | number,
+	toLongString: T = false as T,
+): T extends true ? string : number {
+	let output: any;
+
+	if (typeof data == 'string') {
+		if (!ms(data)) throw new Error(`Invalid time string ${data}.`);
+		output = ms(data);
+	} else if (typeof data == 'number') {
+		output = data;
+	} else
+		throw new Error(
+			`Invalid data type ${typeof data} that was given in data.`,
+		);
+
+	if (toLongString) {
+		output = ms(output, { long: true });
+	}
+
+	return output;
+}
+
+export function CommaAnd(
+	args: string[],
+	Prefix: string = '',
+	Postfix: string = '',
+): string {
+	let arr = Array.from(args);
+	if (arr.length == 0) return '';
+	const Fix = (text: string) => Prefix + text + Postfix;
+
+	let text = '';
+	if (arr.length >= 2) {
+		let pop = arr.pop();
+
+		text = arr.map((x) => Fix(x)).join(', ') + ' and ' + Fix(pop!);
+	} else {
+		text = Fix(arr[0]);
+	}
+	return text;
 }
