@@ -56,10 +56,6 @@ export async function POST(req: NextRequest) {
 
 		return Response({
 			planId: newPlan.planId,
-			title: newPlan.title,
-			details: newPlan.details,
-			price: newPlan.price,
-			duration: newPlan.duration,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);

@@ -20,6 +20,8 @@
 }
 ```
 
+-   Default max of `limit` in search params for all request: `100`.
+
 ---
 
 ---
@@ -29,7 +31,7 @@
 ### ROUTE: `/auth`
 
 <details>
-    <summary><code>POST</code> <code><b>/register</b></code> <code>User register</code></summary>
+    <summary><code>POST</code> <code><b>/register</b></code> <code>Do create new user</code></summary>
 
 ##### Parameters
 
@@ -51,7 +53,7 @@
 </details>
 
 <details>
-    <summary><code>POST</code> <code><b>/login</b></code> <code>User login</code></summary>
+    <summary><code>POST</code> <code><b>/login</b></code> <code>Do user login</code></summary>
 
 ##### Parameters
 
@@ -126,17 +128,19 @@
 
 > | Name   | Type     | Data type | Default | Description                                 |
 > | ------ | -------- | --------- | ------- | ------------------------------------------- |
-> | limit  | optional | number    | 20      | max: 100                                    |
+> | limit  | optional | number    | 20      |                                             |
 > | page   | optional | number    | 1       |                                             |
 > | format | optional | boolean   | false   | format ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
 
-> | name        | Data type                                    | Description |
-> | ----------- | -------------------------------------------- | ----------- |
-> | list        | Array<`{ timeIn: string, timeOut: string }`> |             |
-> | currentPage | number                                       |             |
-> | totalPage   | number                                       |             |
+> | name            | Data type | Description   |
+> | --------------- | --------- | ------------- |
+> | list            | Array     |               |
+> | list[X].timeIn  | string    | Array in list |
+> | list[X].timeOut | string    | Array in list |
+> | currentPage     | number    |               |
+> | totalPage       | number    |               |
 
 </details>
 
@@ -170,16 +174,66 @@
 
 </details>
 
+<br />
+
+### ROUTE: `/plan`
+
+<details>
+    <summary><code>GET</code> <code><b>/</b></code> <code>Get list of plan</code></summary>
+
+##### Parameters
+
+> | Name  | Type     | Data type | Default | Description                            |
+> | ----- | -------- | --------- | ------- | -------------------------------------- |
+> | limit | optional | number    | 20      |                                        |
+> | page  | optional | number    | 1       |                                        |
+> | long  | optional | boolean   | false   | format timestamp to readable date time |
+
+##### Responses in data.
+
+> | name             | Data type        | Description   |
+> | ---------------- | ---------------- | ------------- |
+> | list             | Array            |               |
+> | list[X].planId   | number           | Array in list |
+> | list[X].title    | string           | Array in list |
+> | list[X].details  | string           | Array in list |
+> | list[X].price    | number           | Array in list |
+> | list[X].duration | number or string | Array in list |
+> | currentPage      | number           |               |
+> | totalPage        | number           |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/{planId}</b></code> <code>Get plan data from plan follow planId</code></summary>
+
+##### Parameters
+
+> | Name | Type     | Data type | Default | Description                            |
+> | ---- | -------- | --------- | ------- | -------------------------------------- |
+> | long | optional | boolean   | false   | format timestamp to readable date time |
+
+##### Responses in data.
+
+> | name     | Data type        | Description |
+> | -------- | ---------------- | ----------- |
+> | title    | string           |             |
+> | details  | string           |             |
+> | price    | number           |             |
+> | duration | number or string |             |
+
+</details>
+
 ## Role 1: Trainer
 
-*Currently empty.*
+_Currently empty._
 
 ## Role 2: Admin
 
 ### ROUTE: `/user`
 
 <details>
-    <summary><code>GET</code> <code><b>/{id}</b></code> <code>Get user data from an user data follow id</code></summary>
+    <summary><code>GET</code> <code><b>/{userId}</b></code> <code>Get user data from an user data follow userId</code></summary>
 
 ##### Parameters
 
@@ -201,7 +255,7 @@
 </details>
 
 <details>
-    <summary><code>PUT</code> <code><b>/{id}</b></code> <code>Update user data for an user follow id</code></summary>
+    <summary><code>PUT</code> <code><b>/{userId}</b></code> <code>Update user data for an user follow userId</code></summary>
 
 ##### Parameters
 
@@ -225,7 +279,7 @@
 </details>
 
 <details>
-    <summary><code>GET</code> <code><b>/{id}/attendance</b></code> <code>Get check in list from an user follow id</code></summary>
+    <summary><code>GET</code> <code><b>/{userId}/attendance</b></code> <code>Get check in list from an user follow userId</code></summary>
 
 ##### Parameters
 
@@ -237,11 +291,57 @@
 
 ##### Responses in data.
 
-> | name        | Data type                                    | Description |
-> | ----------- | -------------------------------------------- | ----------- |
-> | list        | Array<`{ timeIn: string, timeOut: string }`> |             |
-> | currentPage | number                                       |             |
-> | totalPage   | number                                       |             |
+> | name            | Data type | Description   |
+> | --------------- | --------- | ------------- |
+> | list            | Array     |               |
+> | list[X].timeIn  | string    | Array in list |
+> | list[X].timeOut | string    | Array in list |
+> | currentPage     | number    |               |
+> | totalPage       | number    |               |
+
+</details>
+
+<br/>
+
+### ROUTE: `/plan`
+
+<details>
+    <summary><code>POST</code> <code><b>/</b></code> <code>Do create new plan</code></summary>
+
+##### Parameters
+
+> | Name     | Type   | Data type | Default | Description        |
+> | -------- | ------ | --------- | ------- | ------------------ |
+> | title    | string | required  |         |                    |
+> | details  | string | required  |         |                    |
+> | price    | number | required  |         |                    |
+> | duration | number | required  |         | also accept string |
+
+##### Responses in data.
+
+> | name   | Data type | Description |
+> | ------ | --------- | ----------- |
+> | planId | number    |             |
+
+</details>
+
+<details>
+    <summary><code>PUT</code> <code><b>/{planId}</b></code> <code>Update plan data for a plan follow planId</code></summary>
+
+##### Parameters
+
+> | Name     | Type   | Data type | Default | Description        |
+> | -------- | ------ | --------- | ------- | ------------------ |
+> | title    | string | optional  |         |                    |
+> | details  | string | optional  |         |                    |
+> | price    | number | optional  |         |                    |
+> | duration | number | optional  |         | also accept string |
+
+##### Responses in data.
+
+> | name                                  | Data type                             | Description |
+> | ------------------------------------- | ------------------------------------- | ----------- |
+> | ...(Follow data name from Parameters) | ...(Follow data type from Parameters) |             |
 
 </details>
 
