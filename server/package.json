@@ -19,7 +19,7 @@
     "@discordjs/collection": "^2.0.0",
     "bcrypt": "^5.1.1",
     "jose": "^5.1.1",
-    "mongoose": "^7.6.5",
+    "mongoose": "^8.0.0",
     "next": "^14.0.3",
     "react": "^18",
     "react-dom": "^18"
