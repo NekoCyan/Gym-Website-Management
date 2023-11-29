@@ -23,7 +23,7 @@ export interface IAttendanceModel
 	 * @param limit limit number to get document (limit default 20 - max 100).
 	 * @param page start from 1 (also default with 1).
 	 */
-	getListCheckIn(
+	getCheckInList(
 		userId: number,
 		limit?: number,
 		page?: number,

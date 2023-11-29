@@ -80,13 +80,13 @@ AttendanceSchema.static('checkOut', async function (userId: number): Promise<
 	);
 });
 AttendanceSchema.static(
-	'getListCheckIn',
+	'getCheckInList',
 	async function (
 		userId: number,
 		limit: number = 20,
 		page: number = 1,
 		formatTime: boolean = false,
-	): Promise<ReturnType<IAttendanceModel['getListCheckIn']>> {
+	): Promise<ReturnType<IAttendanceModel['getCheckInList']>> {
 		if (typeof limit !== 'number')
 			throw new Error(ResponseText.InvalidType('limit', 'number'));
 		if (limit < 1) throw new Error(ResponseText.InvalidPageNumber(limit));
@@ -109,7 +109,7 @@ AttendanceSchema.static(
 			const limitNext = page * limit;
 			const skipFromPage = limitNext - limit;
 
-			const getListCheckIn = await this.aggregate()
+			const getCheckInList = await this.aggregate()
 				.match({ userId })
 				.sort({ _id: -1 })
 				.limit(limitNext)
@@ -117,10 +117,10 @@ AttendanceSchema.static(
 				.project({ _id: 0, timeIn: 1, timeOut: 1 })
 				.exec();
 
-			listCheckIn = getListCheckIn;
+			listCheckIn = getCheckInList;
 
 			if (formatTime) {
-				listCheckIn = getListCheckIn.map((checkIn) => {
+				listCheckIn = getCheckInList.map((checkIn) => {
 					return {
 						timeIn: FormatDateTime(checkIn.timeIn),
 						timeOut: FormatDateTime(checkIn.timeOut),

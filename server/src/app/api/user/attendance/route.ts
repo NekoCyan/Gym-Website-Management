@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
 
-		const listCheckIn = await Attendance.getListCheckIn(
+		const listCheckIn = await Attendance.getCheckInList(
 			self.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,

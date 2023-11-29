@@ -31,7 +31,7 @@ export async function GET(
 		const userId = parseInt(id);
 		const user = await User.getUser(userId);
 
-		const listCheckIn = await Attendance.getListCheckIn(
+		const listCheckIn = await Attendance.getCheckInList(
 			user.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
