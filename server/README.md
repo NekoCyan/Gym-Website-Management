@@ -46,7 +46,7 @@
 
 ##### Responses in data.
 
-> | name  | Data type | Description                   |
+> | Name  | Data type | Description                   |
 > | ----- | --------- | ----------------------------- |
 > | token | string    | JWT Token, valid for 24 hours |
 
@@ -64,7 +64,7 @@
 
 ##### Responses in data.
 
-> | name  | Data type | Description                   |
+> | Name  | Data type | Description                   |
 > | ----- | --------- | ----------------------------- |
 > | token | string    | JWT Token, valid for 24 hours |
 
@@ -84,7 +84,7 @@
 
 ##### Responses in data.
 
-> | name        | Data type | Description |
+> | Name        | Data type | Description |
 > | ----------- | --------- | ----------- |
 > | fullName    | string    |             |
 > | gender      | number    |             |
@@ -111,7 +111,7 @@
 
 ##### Responses in data.
 
-> | name                                  | Data type                             | Description |
+> | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
 > | ...(Follow data name from Parameters) | ...(Follow data type from Parameters) |             |
 
@@ -134,7 +134,7 @@
 
 ##### Responses in data.
 
-> | name            | Data type | Description   |
+> | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
 > | list            | Array     |               |
 > | list[X].timeIn  | string    | Array in list |
@@ -154,7 +154,7 @@
 
 ##### Responses in data.
 
-> | name | Data type | Description |
+> | Name | Data type | Description |
 > | ---- | --------- | ----------- |
 
 </details>
@@ -169,7 +169,7 @@
 
 ##### Responses in data.
 
-> | name | Data type | Description |
+> | Name | Data type | Description |
 > | ---- | --------- | ----------- |
 
 </details>
@@ -191,7 +191,7 @@
 
 ##### Responses in data.
 
-> | name             | Data type        | Description   |
+> | Name             | Data type        | Description   |
 > | ---------------- | ---------------- | ------------- |
 > | list             | Array            |               |
 > | list[X].planId   | number           | Array in list |
@@ -215,7 +215,7 @@
 
 ##### Responses in data.
 
-> | name     | Data type        | Description |
+> | Name     | Data type        | Description |
 > | -------- | ---------------- | ----------- |
 > | title    | string           |             |
 > | details  | string           |             |
@@ -242,7 +242,7 @@ _Currently empty._
 
 ##### Responses in data.
 
-> | name        | Data type | Description |
+> | Name        | Data type | Description |
 > | ----------- | --------- | ----------- |
 > | email       | string    |             |
 > | fullName    | string    |             |
@@ -272,7 +272,7 @@ _Currently empty._
 
 ##### Responses in data.
 
-> | name                                  | Data type                             | Description |
+> | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
 > | ...(Follow data name from Parameters) | ...(Follow data type from Parameters) |             |
 
@@ -291,7 +291,7 @@ _Currently empty._
 
 ##### Responses in data.
 
-> | name            | Data type | Description   |
+> | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
 > | list            | Array     |               |
 > | list[X].timeIn  | string    | Array in list |
@@ -319,7 +319,7 @@ _Currently empty._
 
 ##### Responses in data.
 
-> | name   | Data type | Description |
+> | Name   | Data type | Description |
 > | ------ | --------- | ----------- |
 > | planId | number    |             |
 
@@ -339,7 +339,7 @@ _Currently empty._
 
 ##### Responses in data.
 
-> | name                                  | Data type                             | Description |
+> | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
 > | ...(Follow data name from Parameters) | ...(Follow data type from Parameters) |             |
 
