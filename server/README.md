@@ -92,6 +92,8 @@
 > | phoneNumber | string    |             |
 > | photo       | string    |             |
 > | role        | number    |             |
+> | cash        | number    |             |
+> | totalCash   | number    |             |
 
 </details>
 
@@ -251,6 +253,8 @@ _Currently empty._
 > | phoneNumber | string    |             |
 > | photo       | string    |             |
 > | role        | number    |             |
+> | cash        | number    |             |
+> | totalCash   | number    |             |
 
 </details>
 
@@ -259,16 +263,17 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name        | Type     | Data type | Default | Description        |
-> | ----------- | -------- | --------- | ------- | ------------------ |
-> | email       | optional | string    |         |                    |
-> | password    | optional | string    |         |                    |
-> | role        | optional | number    |         |                    |
-> | fullName    | optional | string    |         |                    |
-> | gender      | optional | number    |         | range from -1 to 1 |
-> | address     | optional | string    |         |                    |
-> | phoneNumber | optional | string    |         |                    |
-> | photo       | optional | string    |         |                    |
+> | Name        | Type     | Data type | Default | Description              |
+> | ----------- | -------- | --------- | ------- | ------------------------ |
+> | email       | optional | string    |         |                          |
+> | password    | optional | string    |         |                          |
+> | role        | optional | number    |         |                          |
+> | fullName    | optional | string    |         |                          |
+> | gender      | optional | number    |         | range from -1 to 1       |
+> | address     | optional | string    |         |                          |
+> | phoneNumber | optional | string    |         |                          |
+> | photo       | optional | string    |         |                          |
+> | cash        | optional | number    |         | Increasement from itself |
 
 ##### Responses in data.
 

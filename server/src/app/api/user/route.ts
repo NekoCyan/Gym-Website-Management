@@ -18,6 +18,8 @@ export async function GET(req: NextRequest) {
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
 			role: user.role,
+			cash: user.cash,
+			totalCash: user.totalCash,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);

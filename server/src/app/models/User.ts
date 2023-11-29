@@ -59,6 +59,15 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 		type: Number,
 		default: 0,
 	},
+
+	cash: {
+		type: Number,
+		default: 0,
+	},
+	totalCash: {
+		type: Number,
+		default: 0,
+	},
 });
 
 // validation.
@@ -111,10 +120,15 @@ UserSchema.method(
 
 		// Custom edit for field.
 		if (
-			updateObj.password &&
+			updateObj['password'] &&
 			(await this.comparePassword(updateObj.password))
 		) {
 			throw new Error(ResponseText.OldPasswordSameNew);
+		}
+		if (updateObj['cash']) {
+			if (updateObj.cash > 0)
+				updateObj.totalCash = this.totalCash + updateObj.cash;
+			updateObj.cash = this.cash + updateObj.cash;
 		}
 
 		// Group extra data to update.
@@ -131,6 +145,16 @@ UserSchema.method(
 		return this.save();
 	},
 );
+UserSchema.method('increaseCash', async function (amount: number): Promise<
+	ReturnType<IUserMethods['increaseCash']>
+> {
+	return this.update({ cash: amount });
+});
+UserSchema.method('decreaseCash', async function (amount: number): Promise<
+	ReturnType<IUserMethods['decreaseCash']>
+> {
+	return this.update({ cash: -amount });
+});
 
 // statics.
 UserSchema.static('getUser', async function (userId: number): Promise<
@@ -231,7 +255,7 @@ UserSchema.static(
 	async function (
 		data: Partial<UserData>,
 	): Promise<ReturnType<IUserModel['extractUserData']>> {
-		let { email, password, role } = data;
+		let { email, password, role, cash } = data;
 		let updateObj: Partial<UserData> = {};
 
 		const validateEmail = (email: any) => {
@@ -254,10 +278,17 @@ UserSchema.static(
 				throw new Error(ResponseText.OutOfRange('role', 0, 2));
 			updateObj.role = role;
 		};
+		const validateCash = (cash: any) => {
+			if (isNaN(cash))
+				throw new Error(ResponseText.InvalidType('cash', 'number'));
+			if (typeof cash === 'string') cash = parseInt(cash);
+			updateObj.cash = cash;
+		};
 
 		!IsUndefined(email) && validateEmail(email);
 		!IsUndefined(password) && validatePassword(password);
 		!IsUndefined(role) && validateRole(role);
+		!IsUndefined(cash) && validateCash(cash);
 
 		return updateObj;
 	},
@@ -274,6 +305,21 @@ UserSchema.static(
 		return user.update(data, extraData);
 	},
 );
+UserSchema.static(
+	'updateCash',
+	async function (
+		userId: number,
+		amount: number,
+	): Promise<ReturnType<IUserModel['updateCash']>> {
+		const user = await this.getUser(userId);
+
+		if (amount >= 0) {
+			return user.increaseCash(amount);
+		} else {
+			return user.decreaseCash(-amount);
+		}
+	},
+);
 
 // middleware.
 UserSchema.pre('save', async function (next): Promise<void> {
@@ -287,6 +333,7 @@ UserSchema.pre('save', async function (next): Promise<void> {
 	}
 
 	if (this.isModified('password')) await hashPass();
+	if (this.isModified('email')) this.email = this.email.toLowerCase();
 
 	next();
 });

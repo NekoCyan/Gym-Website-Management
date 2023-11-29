@@ -8,7 +8,7 @@ import {
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
 import { AdminRequired } from '@/utils';
-import { UserData, UserInformations } from '@/app/models/interfaces';
+import { UserData, UserDetails } from '@/app/models/interfaces';
 
 export async function GET(
 	req: NextRequest,
@@ -34,6 +34,8 @@ export async function GET(
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
 			role: user.role,
+			cash: user.cash,
+			totalCash: user.totalCash,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);
@@ -56,12 +58,12 @@ export async function PUT(
 		const userId = parseInt(id);
 		const user = await User.getUser(userId);
 
-		const body: Partial<UserInformations & Omit<UserData, 'userId'>> =
+		const body: Partial<UserDetails & Omit<UserData, 'userId'>> =
 			await req.json();
 		let updateObj: typeof body = {};
 
 		// Validate & Extract.
-		const userInformations = await User.extractUserInformations(body);
+		const userInformations = await User.extractUserDetails(body);
 		const userData = await User.extractUserData(body);
 
 		updateObj = { ...userInformations, ...userData };
