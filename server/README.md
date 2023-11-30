@@ -181,10 +181,10 @@
 
 ##### Parameters
 
-> | Name   | Type     | Data type | Default | Description                                                  |
-> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
-> | limit  | optional | number    | 20      |                                                              |
-> | page   | optional | number    | 1       |                                                              |
+> | Name   | Type     | Data type | Default | Description                                                 |
+> | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
+> | limit  | optional | number    | 20      |                                                             |
+> | page   | optional | number    | 1       |                                                             |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
@@ -209,8 +209,8 @@
 
 ##### Parameters
 
-> | Name   | Type     | Data type | Default | Description                                                  |
-> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
+> | Name   | Type     | Data type | Default | Description                                                 |
+> | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
@@ -340,7 +340,7 @@ _Currently empty._
 
 > | Name   | Type     | Data type | Default | Description                                                             |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------------------- |
-> | limit  | optional | number    | 20      | max: 100                                                                |
+> | limit  | optional | number    | 20      |                                                                         |
 > | page   | optional | number    | 1       |                                                                         |
 > | format | optional | boolean   | false   | format `timeIn` and `timeOut` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
@@ -361,10 +361,10 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name   | Type     | Data type | Default | Description                                                  |
-> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
-> | limit  | optional | number    | 20      | max: 100                                                     |
-> | page   | optional | number    | 1       |                                                              |
+> | Name   | Type     | Data type | Default | Description                                                 |
+> | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
+> | limit  | optional | number    | 20      |                                                             |
+> | page   | optional | number    | 1       |                                                             |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
@@ -436,8 +436,8 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name   | Type     | Data type | Default | Description                                                  |
-> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
+> | Name   | Type     | Data type | Default | Description                                                 |
+> | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
