@@ -235,7 +235,7 @@ def login(request):
                     request.session['user_email'] = db_email
                     request.session['user_name'] = db_name
                     request.session['user_photo'] = db_photo
-                    response = redirect("http://127.0.0.1:8000/trainerapp/")
+                    response = redirect("http://127.0.0.1:3000/trainerapp/")
                     response.set_cookie('user_id', db_id)
                     response.set_cookie('user_email', db_email)
                     return response

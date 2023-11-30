@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership and Transactions</title>
+    <link rel="stylesheet" href="{% static 'css/styles1.css' %}">  <!-- Liên kết đến tệp CSS của bạn -->
+</head>
+<body>
+    <div class="container">
+        <h1>Membership and Transactions</h1>
+
+        <!-- Hiển thị thông tin thành viên -->
+        <div class="member-info">
+            <h2>Membership Information</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <!-- Thêm các cột khác tùy thuộc vào model của bạn -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for member in members %}
+                        <tr>
+                            <td>{{ member.id }}</td>
+                            <td>{{ member.name }}</td>
+                            <td>{{ member.email }}</td>
+                            <!-- Thêm các trường khác tùy thuộc vào model của bạn -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Hiển thị lịch sử giao dịch -->
+        <div class="transaction-history">
+            <h2>Transaction History</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <!-- Thêm các cột khác tùy thuộc vào model của bạn -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.id }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            <td>{{ transaction.get_status_display }}</td>
+                            <!-- Thêm các trường khác tùy thuộc vào model của bạn -->
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="{% static 'js/scripts.js' %}"></script>  <!-- Liên kết đến tệp Javascript của bạn -->
+</body>
+</html>
