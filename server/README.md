@@ -87,11 +87,11 @@
 > | Name        | Data type | Description |
 > | ----------- | --------- | ----------- |
 > | fullName    | string    |             |
-> | gender      | number    |             |
+> | gender      | string    |             |
 > | address     | string    |             |
 > | phoneNumber | string    |             |
 > | photo       | string    |             |
-> | role        | number    |             |
+> | role        | string    |             |
 > | cash        | number    |             |
 > | totalCash   | number    |             |
 
@@ -248,11 +248,11 @@ _Currently empty._
 > | ----------- | --------- | ----------- |
 > | email       | string    |             |
 > | fullName    | string    |             |
-> | gender      | number    |             |
+> | gender      | string    |             |
 > | address     | string    |             |
 > | phoneNumber | string    |             |
 > | photo       | string    |             |
-> | role        | number    |             |
+> | role        | string    |             |
 > | cash        | number    |             |
 > | totalCash   | number    |             |
 

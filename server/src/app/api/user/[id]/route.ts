@@ -7,7 +7,7 @@ import {
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { AdminRequired } from '@/utils';
+import { AdminRequired, GENDER, ROLES } from '@/utils';
 import { UserData, UserDetails } from '@/app/models/interfaces';
 
 export async function GET(
@@ -29,11 +29,11 @@ export async function GET(
 		return Response({
 			email: user.email,
 			fullName: user.fullName,
-			gender: user.gender,
+			gender: GENDER[user.gender],
 			address: user.address,
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
-			role: user.role,
+			role: ROLES[user.role],
 			cash: user.cash,
 			totalCash: user.totalCash,
 		});

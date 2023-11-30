@@ -4,6 +4,7 @@ import { Response, ErrorResponse } from '@/utils/ResponseHandler';
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
 import { UserData, UserDetails } from '@/app/models/interfaces';
+import { GENDER, ROLES } from '@/utils';
 
 export async function GET(req: NextRequest) {
 	try {
@@ -13,11 +14,11 @@ export async function GET(req: NextRequest) {
 
 		return Response({
 			fullName: user.fullName,
-			gender: user.gender,
+			gender: GENDER[user.gender],
 			address: user.address,
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
-			role: user.role,
+			role: ROLES[user.role],
 			cash: user.cash,
 			totalCash: user.totalCash,
 		});
