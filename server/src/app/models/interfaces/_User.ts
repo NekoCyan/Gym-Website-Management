@@ -17,8 +17,8 @@ export interface UserData {
 
 	role: number;
 
-	cash: number;
-	totalCash: number;
+	balance: number;
+	totalBalance: number;
 }
 
 export interface IUser
@@ -36,8 +36,8 @@ export interface IUserMethods {
 		data: Partial<UserData & UserDetails>,
 		extraData?: { [key: string]: any },
 	): Promise<UserHydratedDocument>;
-	increaseCash(amount: number): Promise<Pick<UserData, 'cash' | 'totalCash'>>;
-	decreaseCash(amount: number): Promise<Pick<UserData, 'cash' | 'totalCash'>>;
+	increaseBalance(amount: number): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
+	decreaseBalance(amount: number): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
 }
 export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 	getUser(userId: number): Promise<UserHydratedDocument>;
@@ -58,9 +58,9 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 		data: Partial<UserData & UserDetails>,
 		extraData?: { [key: string]: any },
 	): ReturnType<IUserMethods['update']>;
-	updateCash(
+	updateBalance(
 		userId: number,
 		amount: number,
-	): Promise<Pick<UserData, 'cash' | 'totalCash'>>;
+	): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
 }
 export type UserHydratedDocument = HydratedDocument<IUser, IUserMethods>;

@@ -60,11 +60,11 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 		default: 0,
 	},
 
-	cash: {
+	balance: {
 		type: Number,
 		default: 0,
 	},
-	totalCash: {
+	totalBalance: {
 		type: Number,
 		default: 0,
 	},
@@ -125,10 +125,10 @@ UserSchema.method(
 		) {
 			throw new Error(ResponseText.OldPasswordSameNew);
 		}
-		if (updateObj['cash']) {
-			if (updateObj.cash > 0)
-				updateObj.totalCash = this.totalCash + updateObj.cash;
-			updateObj.cash = this.cash + updateObj.cash;
+		if (updateObj['balance']) {
+			if (updateObj.balance > 0)
+				updateObj.totalBalance = this.totalBalance + updateObj.balance;
+			updateObj.balance = this.balance + updateObj.balance;
 		}
 
 		// Group extra data to update.
@@ -145,15 +145,15 @@ UserSchema.method(
 		return this.save();
 	},
 );
-UserSchema.method('increaseCash', async function (amount: number): Promise<
-	ReturnType<IUserMethods['increaseCash']>
+UserSchema.method('increaseBalance', async function (amount: number): Promise<
+	ReturnType<IUserMethods['increaseBalance']>
 > {
-	return this.update({ cash: amount });
+	return this.update({ balance: amount });
 });
-UserSchema.method('decreaseCash', async function (amount: number): Promise<
-	ReturnType<IUserMethods['decreaseCash']>
+UserSchema.method('decreaseBalance', async function (amount: number): Promise<
+	ReturnType<IUserMethods['decreaseBalance']>
 > {
-	return this.update({ cash: -amount });
+	return this.update({ balance: -amount });
 });
 
 // statics.
@@ -255,7 +255,7 @@ UserSchema.static(
 	async function (
 		data: Partial<Omit<UserData, 'userId'>>,
 	): Promise<ReturnType<IUserModel['extractUserData']>> {
-		let { email, password, role, cash } = data;
+		let { email, password, role, balance } = data;
 		let updateObj: Partial<UserData> = {};
 
 		const validateEmail = (email: any) => {
@@ -278,17 +278,17 @@ UserSchema.static(
 				throw new Error(ResponseText.OutOfRange('role', 0, 2));
 			updateObj.role = role;
 		};
-		const validateCash = (cash: any) => {
-			if (isNaN(cash))
-				throw new Error(ResponseText.InvalidType('cash', 'number'));
-			if (typeof cash === 'string') cash = parseInt(cash);
-			updateObj.cash = cash;
+		const validateBalance = (balance: any) => {
+			if (isNaN(balance))
+				throw new Error(ResponseText.InvalidType('balance', 'number'));
+			if (typeof balance === 'string') balance = parseInt(balance);
+			updateObj.balance = balance;
 		};
 
 		!IsUndefined(email) && validateEmail(email);
 		!IsUndefined(password) && validatePassword(password);
 		!IsUndefined(role) && validateRole(role);
-		!IsUndefined(cash) && validateCash(cash);
+		!IsUndefined(balance) && validateBalance(balance);
 
 		return updateObj;
 	},
@@ -306,17 +306,17 @@ UserSchema.static(
 	},
 );
 UserSchema.static(
-	'updateCash',
+	'updateBalance',
 	async function (
 		userId: number,
 		amount: number,
-	): Promise<ReturnType<IUserModel['updateCash']>> {
+	): Promise<ReturnType<IUserModel['updateBalance']>> {
 		const user = await this.getUser(userId);
 
 		if (amount >= 0) {
-			return user.increaseCash(amount);
+			return user.increaseBalance(amount);
 		} else {
-			return user.decreaseCash(-amount);
+			return user.decreaseBalance(-amount);
 		}
 	},
 );

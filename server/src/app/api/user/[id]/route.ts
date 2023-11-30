@@ -34,8 +34,8 @@ export async function GET(
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
 			role: ROLES[user.role],
-			cash: user.cash,
-			totalCash: user.totalCash,
+			balance: user.balance,
+			totalBalance: user.totalBalance,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);
