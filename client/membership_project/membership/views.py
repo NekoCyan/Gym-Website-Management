@@ -2,8 +2,12 @@ from rest.framework.views import APIView
 from rest.framework.response import Response
 from rest.framework import status
 from rest.framework.permissions import IsAuthenticated
-from .modedls import Member 
+from .modedls import Member, Transaction 
 from .serializers import MemberSerializer
+from django.views import View
+from django.contrib.auth import login 
+from django.shortcuts import render, redirect
+from .forms import CustomUserCreationForm
 
 class AdditionView(APIView):
     def post(self, request, *args, **kwargs):
@@ -96,3 +100,38 @@ class TransactionView(APIView):
             return Response({"message": "Transaction created successfully", "code": 201, "success": True}, status=status.HTTP_201_CREATED)
         else:
             return Response({"message": "Invalid data", "code": 400, "success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+class RegistrationView(View):
+    template_name = 'registration.html'
+    
+    def get(self, request, *args, **kwargs):
+        form = CustomUserCreationForm()
+        return render(request, self.template_name, {"form": form})
+    
+    def post(self, request, *args, **kwargs):
+        form = CustomUserCreationForm(request.POST)
+        #điều kiện đúng
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('success')
+        else:
+            return render(request, self.template_name, {"form": form})
+
+class SuccessView(View):
+    template_name ='success.html'
+    
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+        
+                
+def membership_and_transactions(request):
+    members = Member.objects.all()
+    transactions = Transaction.objects.all()
+
+    context = {
+        'members': members,
+        'transactions': transactions,
+    }
+
+    return render(request, 'membership.html', context)
