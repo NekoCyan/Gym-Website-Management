@@ -94,8 +94,9 @@ PlanSchema.static(
 			updateObj.details = details;
 		};
 		const validatePrice = (price: any) => {
-			if (typeof price !== 'number')
+			if (isNaN(price))
 				throw new Error(ResponseText.InvalidType('price', 'number'));
+			if (typeof price === 'string') price = parseInt(price);
 			updateObj.price = price;
 		};
 		const validateDuration = (duration: any) => {
