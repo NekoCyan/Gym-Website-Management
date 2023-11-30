@@ -50,7 +50,9 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 	extractUserDetails(
 		data: Partial<UserDetails>,
 	): Promise<Partial<UserDetails>>;
-	extractUserData(data: Partial<UserData>): Promise<Partial<UserData>>;
+	extractUserData(
+		data: Partial<Omit<UserData, 'userId'>>,
+	): Promise<Partial<Omit<UserData, 'userId'>>>;
 	updateUser(
 		userId: number,
 		data: Partial<UserData & UserDetails>,

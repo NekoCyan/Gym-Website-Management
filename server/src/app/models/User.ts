@@ -253,7 +253,7 @@ UserSchema.static(
 UserSchema.static(
 	'extractUserData',
 	async function (
-		data: Partial<UserData>,
+		data: Partial<Omit<UserData, 'userId'>>,
 	): Promise<ReturnType<IUserModel['extractUserData']>> {
 		let { email, password, role, cash } = data;
 		let updateObj: Partial<UserData> = {};
