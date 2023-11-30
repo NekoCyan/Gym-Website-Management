@@ -1,8 +1,9 @@
-import mongoose, { Schema, Types } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import {
 	ITransaction,
 	ITransactionMethods,
 	ITransactionModel,
+	ITransactionVirtuals,
 	TransactionData,
 	TransactionHydratedDocument,
 } from './interfaces';
@@ -18,7 +19,9 @@ import {
 const TransactionSchema = new mongoose.Schema<
 	ITransaction,
 	ITransactionModel,
-	ITransactionMethods
+	ITransactionMethods,
+	{},
+	ITransactionVirtuals
 >({
 	transactionId: {
 		type: Schema.Types.BigInt,
