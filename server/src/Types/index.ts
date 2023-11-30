@@ -15,3 +15,10 @@ export enum GENDER {
 	FEMALE = 0,
 	MALE = 1,
 }
+
+export enum TRANSACTION {
+	PENDING = 0,
+	SUCCEED = 1,
+	FAILED = 2,
+	CANCELLED = 3,
+}

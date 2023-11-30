@@ -24,6 +24,13 @@ export const ROLES = CreateEnum({
 
 export const GENDER = CreateEnum({ UNKNOWN: -1, FEMALE: 0, MALE: 1 });
 
+export const TRANSACTION = CreateEnum({
+	PENDING: 0,
+	SUCCEED: 1,
+	FAILED: 2,
+	CANCELLED: 3,
+});
+
 export const ResponseText = {
 	// API Response.
 	InvalidAPIRequest: `Invalid API request.`,
@@ -87,5 +94,10 @@ export const ResponseText = {
 	// Plan.
 	PlanIdNotFound: (variable: string | number) => {
 		return `Plan with ID ${variable.toString()} is not found.`;
+	},
+
+	// Transaction.
+	TransactionIdNotFound: (variable: string | bigint) => {
+		return `Transaction with ID ${variable.toString()} is not found.`;
 	},
 };

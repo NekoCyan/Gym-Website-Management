@@ -121,18 +121,16 @@
 
 <br />
 
-### ROUTE: `/attendance`
-
 <details>
-    <summary><code>GET</code> <code><b>/</b></code> <code>Get list of check in</code></summary>
+    <summary><code>GET</code> <code><b>/attendance</b></code> <code>Get list of check in</code></summary>
 
 ##### Parameters
 
-> | Name   | Type     | Data type | Default | Description                                 |
-> | ------ | -------- | --------- | ------- | ------------------------------------------- |
-> | limit  | optional | number    | 20      |                                             |
-> | page   | optional | number    | 1       |                                             |
-> | format | optional | boolean   | false   | format ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+> | Name   | Type     | Data type | Default | Description                                                             |
+> | ------ | -------- | --------- | ------- | ----------------------------------------------------------------------- |
+> | limit  | optional | number    | 20      |                                                                         |
+> | page   | optional | number    | 1       |                                                                         |
+> | format | optional | boolean   | false   | format `timeIn` and `timeOut` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
 
@@ -147,7 +145,7 @@
 </details>
 
 <details>
-    <summary><code>POST</code> <code><b>/checkin</b></code> <code>Do check in</code></summary>
+    <summary><code>POST</code> <code><b>/attendance/checkin</b></code> <code>Do check in</code></summary>
 
 ##### Parameters
 
@@ -162,7 +160,7 @@
 </details>
 
 <details>
-    <summary><code>POST</code> <code><b>/checkout</b></code> <code>Do check out</code></summary>
+    <summary><code>POST</code> <code><b>/attendance/checkout</b></code> <code>Do check out</code></summary>
 
 ##### Parameters
 
@@ -173,6 +171,58 @@
 
 > | Name | Data type | Description |
 > | ---- | --------- | ----------- |
+
+</details>
+
+<br />
+
+<details>
+    <summary><code>GET</code> <code><b>/transaction</b></code> <code>Get list of transaction</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                  |
+> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
+> | limit  | optional | number    | 20      |                                                              |
+> | page   | optional | number    | 1       |                                                              |
+> | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name                  | Data type | Description   |
+> | --------------------- | --------- | ------------- |
+> | list                  | Array     |               |
+> | list[X].transactionId | string    | Array in list |
+> | list[X].name          | string    | Array in list |
+> | list[X].details       | string    | Array in list |
+> | list[X].price         | number    | Array in list |
+> | list[X].quantity      | number    | Array in list |
+> | list[X].status        | string    | Array in list |
+> | list[X].createdAt     | string    | Array in list |
+> | currentPage           | number    |               |
+> | totalPage             | number    |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/transaction/{transactionId}</b></code> <code>Get transaction data from transaction follow transactionId</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                  |
+> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
+> | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name      | Data type | Description |
+> | --------- | --------- | ----------- |
+> | name      | string    |             |
+> | details   | string    |             |
+> | price     | number    |             |
+> | quantity  | number    |             |
+> | status    | string    |             |
+> | createdAt | string    |             |
 
 </details>
 
@@ -193,16 +243,16 @@
 
 ##### Responses in data.
 
-> | Name             | Data type        | Description   |
-> | ---------------- | ---------------- | ------------- |
-> | list             | Array            |               |
-> | list[X].planId   | number           | Array in list |
-> | list[X].title    | string           | Array in list |
-> | list[X].details  | string           | Array in list |
-> | list[X].price    | number           | Array in list |
-> | list[X].duration | number or string | Array in list |
-> | currentPage      | number           |               |
-> | totalPage        | number           |               |
+> | Name             | Data type        | Description                             |
+> | ---------------- | ---------------- | --------------------------------------- |
+> | list             | Array            |                                         |
+> | list[X].planId   | number           | Array in list                           |
+> | list[X].title    | string           | Array in list                           |
+> | list[X].details  | string           | Array in list                           |
+> | list[X].price    | number           | Array in list                           |
+> | list[X].duration | number or string | Array in list, string when long is true |
+> | currentPage      | number           |                                         |
+> | totalPage        | number           |                                         |
 
 </details>
 
@@ -217,12 +267,12 @@
 
 ##### Responses in data.
 
-> | Name     | Data type        | Description |
-> | -------- | ---------------- | ----------- |
-> | title    | string           |             |
-> | details  | string           |             |
-> | price    | number           |             |
-> | duration | number or string |             |
+> | Name     | Data type        | Description              |
+> | -------- | ---------------- | ------------------------ |
+> | title    | string           |                          |
+> | details  | string           |                          |
+> | price    | number           |                          |
+> | duration | number or string | string when long is true |
 
 </details>
 
@@ -288,11 +338,11 @@ _Currently empty._
 
 ##### Parameters
 
-> | Name   | Type     | Data type | Default | Description                                 |
-> | ------ | -------- | --------- | ------- | ------------------------------------------- |
-> | limit  | optional | number    | 20      | max: 100                                    |
-> | page   | optional | number    | 1       |                                             |
-> | format | optional | boolean   | false   | format ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+> | Name   | Type     | Data type | Default | Description                                                             |
+> | ------ | -------- | --------- | ------- | ----------------------------------------------------------------------- |
+> | limit  | optional | number    | 20      | max: 100                                                                |
+> | page   | optional | number    | 1       |                                                                         |
+> | format | optional | boolean   | false   | format `timeIn` and `timeOut` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
 ##### Responses in data.
 
@@ -303,6 +353,33 @@ _Currently empty._
 > | list[X].timeOut | string    | Array in list |
 > | currentPage     | number    |               |
 > | totalPage       | number    |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/{userId}/transaction</b></code> <code>Get transaction list from an user follow userId</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                  |
+> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
+> | limit  | optional | number    | 20      | max: 100                                                     |
+> | page   | optional | number    | 1       |                                                              |
+> | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name              | Data type | Description   |
+> | ----------------- | --------- | ------------- |
+> | list              | Array     |               |
+> | list[X].name      | string    | Array in list |
+> | list[X].details   | string    | Array in list |
+> | list[X].price     | number    | Array in list |
+> | list[X].quantity  | number    | Array in list |
+> | list[X].status    | string    | Array in list |
+> | list[X].createdAt | string    | Array in list |
+> | currentPage       | number    |               |
+> | totalPage         | number    |               |
 
 </details>
 
@@ -347,6 +424,33 @@ _Currently empty._
 > | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
 > | ...(Follow data name from Parameters) | ...(Follow data type from Parameters) |             |
+
+</details>
+
+<br/>
+
+### ROUTE: `/transaction`
+
+<details>
+    <summary><code>GET</code> <code><b>/{transactionId}</b></code> <code>Get transaction data from transaction follow transactionId</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                  |
+> | ------ | -------- | --------- | ------- | ------------------------------------------------------------ |
+> | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name      | Data type | Description |
+> | --------- | --------- | ----------- |
+> | userId    | number    |             |
+> | name      | string    |             |
+> | details   | string    |             |
+> | price     | number    |             |
+> | quantity  | number    |             |
+> | status    | string    |             |
+> | createdAt | string    |             |
 
 </details>
 
