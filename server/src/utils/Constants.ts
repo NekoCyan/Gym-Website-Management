@@ -52,6 +52,12 @@ export const ResponseText = {
 	InvalidPageNumber: (page: number) => {
 		return `Invalid page number ${page}.`;
 	},
+	Min: (variable: string, min: number) => {
+		return `${variable} cannot be less than ${min}.`;
+	},
+	Max: (variable: string, max: number) => {
+		return `${variable} cannot be more than ${max}.`;
+	},
 	MinLength: (variable: string, minLength: number) => {
 		return `${variable} cannot be less than ${minLength} characters.`;
 	},

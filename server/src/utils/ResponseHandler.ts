@@ -15,6 +15,12 @@ export function InvalidTypeResponse(variable: string, ...allowTypes: string[]) {
 export function InvalidResponse(variable: string) {
 	return ErrorResponse(new Error(ResponseText.Invalid(variable)));
 }
+export function MinResponse(variable: string, min: number) {
+	return ErrorResponse(new Error(ResponseText.Min(variable, min)));
+}
+export function MaxResponse(variable: string, max: number) {
+	return ErrorResponse(new Error(ResponseText.Max(variable, max)));
+}
 export function MinLengthResponse(variable: string, minLength: number) {
 	return ErrorResponse(
 		new Error(ResponseText.MinLength(variable, minLength)),
