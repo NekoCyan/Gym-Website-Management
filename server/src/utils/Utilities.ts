@@ -112,7 +112,7 @@ export function FormatShortDateTime(date: DateTimeInput) {
 }
 
 // Open AI made this e.e
-function FormatFullDateTime(
+export function FormatFullDateTime(
 	date: Date | string | number,
 	long: boolean = false,
 ): string {
