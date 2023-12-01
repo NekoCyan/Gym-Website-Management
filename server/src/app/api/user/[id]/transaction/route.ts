@@ -11,7 +11,8 @@ import {
 	AdminRequired,
 	FormatShortDateTime,
 	SearchParamsToObject,
-	TRANSACTION,
+	TRANSACTION_STATUS,
+	TRANSACTION_TYPE,
 } from '@/utils';
 import Transaction from '@/app/models/Transaction';
 
@@ -47,10 +48,13 @@ export async function GET(
 				transactionId: x.transactionId.toString(),
 				name: x.name,
 				details: x.details,
+				type: TRANSACTION_TYPE[x.type],
 				price: x.price,
 				quantity: x.quantity,
-				status: TRANSACTION[x.status],
-				createdAt: isFormat ? FormatShortDateTime(x.createdAt) : x.createdAt,
+				status: TRANSACTION_STATUS[x.status],
+				createdAt: isFormat
+					? FormatShortDateTime(x.createdAt)
+					: x.createdAt,
 			};
 		});
 

@@ -13,6 +13,8 @@ import {
 	JWT_Verify,
 	IsUndefined,
 	ResponseText,
+	GENDER,
+	ROLES,
 } from '@/utils';
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
@@ -213,8 +215,14 @@ UserSchema.static(
 			if (isNaN(gender))
 				throw new Error(ResponseText.InvalidType('gender', 'number'));
 			if (typeof gender === 'string') gender = parseInt(gender);
-			if (gender < -1 || gender > 1)
-				throw new Error(ResponseText.OutOfRange('gender', -1, 1));
+			if (gender < GENDER.__MIN! || gender > GENDER.__MAX!)
+				throw new Error(
+					ResponseText.OutOfRange(
+						'gender',
+						GENDER.__MIN!,
+						GENDER.__MAX!,
+					),
+				);
 			updateObj.gender = gender;
 		};
 		const validateFullName = (fullName: any) => {
@@ -274,8 +282,10 @@ UserSchema.static(
 			if (isNaN(role))
 				throw new Error(ResponseText.InvalidType('role', 'number'));
 			if (typeof role === 'string') role = parseInt(role);
-			if (role < 0 || role > 2)
-				throw new Error(ResponseText.OutOfRange('role', 0, 2));
+			if (role < ROLES.__MIN! || role > ROLES.__MAX!)
+				throw new Error(
+					ResponseText.OutOfRange('role', ROLES.__MIN!, ROLES.__MAX!),
+				);
 			updateObj.role = role;
 		};
 		const validateBalance = (balance: any) => {

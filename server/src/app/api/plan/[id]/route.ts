@@ -17,7 +17,7 @@ export async function GET(
 ) {
 	try {
 		let { id } = params;
-		console.log(id)
+		
 		const searchParams: { long: string } = SearchParamsToObject(
 			req.nextUrl.searchParams,
 		);

@@ -8,7 +8,8 @@ import {
 	AdminRequired,
 	FormatShortDateTime,
 	SearchParamsToObject,
-	TRANSACTION,
+	TRANSACTION_STATUS,
+	TRANSACTION_TYPE,
 } from '@/utils';
 
 export async function GET(
@@ -30,16 +31,25 @@ export async function GET(
 		const isFormat = format === 'true';
 
 		const transaction = await Transaction.getTransaction(BigInt(id));
-		const { userId, name, details, price, quantity, status, createdAt } =
-			transaction;
+		const {
+			userId,
+			name,
+			details,
+			type,
+			price,
+			quantity,
+			status,
+			createdAt,
+		} = transaction;
 
 		return Response({
 			userId,
 			name,
 			details,
+			type: TRANSACTION_TYPE[type],
 			price,
 			quantity,
-			status: TRANSACTION[status],
+			status: TRANSACTION_STATUS[status],
 			createdAt: isFormat ? FormatShortDateTime(createdAt) : createdAt,
 		});
 	} catch (e: any) {

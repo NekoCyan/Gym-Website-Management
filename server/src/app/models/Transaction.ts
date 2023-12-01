@@ -11,6 +11,8 @@ import {
 	GenerateSnowflake,
 	IsUndefined,
 	ResponseText,
+	TRANSACTION_STATUS,
+	TRANSACTION_TYPE,
 	TimestampFromSnowflake,
 	ValidateForList,
 } from '@/utils';
@@ -36,6 +38,10 @@ const TransactionSchema = new mongoose.Schema<
 	},
 	details: {
 		type: String,
+	},
+	type: {
+		type: Number,
+		required: [true, ResponseText.Required('type')],
 	},
 	price: {
 		type: Number,
@@ -69,7 +75,7 @@ TransactionSchema.static(
 	async function (
 		data: Partial<Omit<TransactionData, 'transactionId'>>,
 	): Promise<ReturnType<ITransactionModel['extractTransactionData']>> {
-		let { userId, name, details, price, quantity, status } = data;
+		let { userId, name, details, type, price, quantity, status } = data;
 		let updateObj: Partial<Omit<TransactionData, 'transactionId'>> = {};
 
 		const validateUserId = (userId: any) => {
@@ -87,6 +93,23 @@ TransactionSchema.static(
 			if (typeof details !== 'string')
 				throw new Error(ResponseText.InvalidType('details', 'string'));
 			updateObj.details = details;
+		};
+		const validateType = (type: any) => {
+			if (isNaN(type))
+				throw new Error(ResponseText.InvalidType('type', 'number'));
+			if (typeof type === 'string') type = parseInt(type);
+			if (
+				type < TRANSACTION_TYPE.__MIN! ||
+				type > TRANSACTION_TYPE.__MAX!
+			)
+				throw new Error(
+					ResponseText.OutOfRange(
+						'type',
+						TRANSACTION_TYPE.__MIN!,
+						TRANSACTION_TYPE.__MAX!,
+					),
+				);
+			updateObj.type = type;
 		};
 		const validatePrice = (price: any) => {
 			if (isNaN(price))
@@ -106,14 +129,24 @@ TransactionSchema.static(
 			if (isNaN(status))
 				throw new Error(ResponseText.InvalidType('status', 'number'));
 			if (typeof status === 'string') status = parseInt(status);
-			if (status < 0 || status > 3)
-				throw new Error(ResponseText.OutOfRange('status', 0, 3));
+			if (
+				status < TRANSACTION_STATUS.__MIN! ||
+				status > TRANSACTION_STATUS.__MAX!
+			)
+				throw new Error(
+					ResponseText.OutOfRange(
+						'status',
+						TRANSACTION_STATUS.__MIN!,
+						TRANSACTION_STATUS.__MAX!,
+					),
+				);
 			updateObj.status = status;
 		};
 
 		!IsUndefined(userId) && validateUserId(userId);
 		!IsUndefined(name) && validateName(name);
 		!IsUndefined(details) && validateDetails(details);
+		!IsUndefined(type) && validateType(type);
 		!IsUndefined(price) && validatePrice(price);
 		!IsUndefined(quantity) && validateQuantity(quantity);
 		!IsUndefined(status) && validateStatus(status);

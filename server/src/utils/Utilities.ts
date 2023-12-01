@@ -70,16 +70,38 @@ export function IsUndefined(variable: any): boolean {
 }
 
 export function CreateEnum<T extends { [key: string]: number }>(
-	keys: T,
-): Readonly<T & { [key: number]: keyof T }> {
-	const obj: any = {};
+	objects: T,
+): Readonly<
+	T & { [key: number]: keyof T } & {
+		__LENGTH: number;
+		__MIN: number | undefined;
+		__MAX: number | undefined;
+	}
+> {
+	let obj: any = {};
 
-	for (const [key, value] of Object.entries(keys)) {
-		if (value === null) continue;
-		obj[key] = value;
-		obj[value] = key;
+	let count = 0;
+	let min: number | undefined;
+	let max: number | undefined;
+
+	const keys = Object.keys(objects);
+	if (keys.length > 0) {
+		const values = Object.values(objects).sort((a, b) => a - b);
+		min = values[0];
+		max = values[values.length - 1];
+
+		for (const [key, value] of Object.entries(objects)) {
+			if (value === null) continue;
+			obj[key] = value;
+			obj[value] = key;
+
+			count++;
+		}
 	}
 
+	obj['__MIN'] = min;
+	obj['__MAX'] = max;
+	obj['__LENGTH'] = count;
 	return Object.freeze(obj);
 }
 

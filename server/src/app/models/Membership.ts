@@ -11,7 +11,8 @@ import {
 	DateToTimestamp,
 	FormatFullDateTime,
 	ResponseText,
-	TRANSACTION,
+	TRANSACTION_TYPE,
+	TRANSACTION_STATUS,
 	ValidateForList,
 } from '@/utils';
 import UserModel from './User';
@@ -131,9 +132,10 @@ MembershipSchema.static(
 			userId: user.userId,
 			name,
 			details,
+			type: TRANSACTION_TYPE.MEMBERSHIP,
 			price: plan.price,
 			quantity: quantity,
-			status: TRANSACTION.SUCCEED,
+			status: TRANSACTION_STATUS.SUCCEED,
 		});
 	},
 );

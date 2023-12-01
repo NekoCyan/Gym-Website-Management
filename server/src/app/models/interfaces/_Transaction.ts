@@ -6,6 +6,7 @@ export interface TransactionData {
 	userId: number;
 	name: string;
 	details: string;
+	type: number;
 	price: number;
 	quantity: number;
 	status: number;
