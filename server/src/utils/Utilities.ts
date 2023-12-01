@@ -152,11 +152,14 @@ export function FormatFullDateTime(
 		timeString += ` ${PadZero(minutes)} ${plural(minutes, 'minute')}`;
 		timeString += ` ${PadZero(seconds)} ${plural(seconds, 'second')}`;
 	} else {
-		timeString += formatTime(years, 'year');
-		timeString += ` ${formatTime(months, 'month')}`;
-		if (days > 0 || (years === 0 && months === 0)) {
-			timeString += ` ${formatTime(days, 'day')}`;
-		}
+		if (years > 0) timeString += formatTime(years, 'year');
+		if (months > 0) timeString += ` ${formatTime(months, 'month')}`;
+		if (days > 0) timeString += ` ${formatTime(days, 'day')}`;
+		if (hours > 0) timeString += ` ${formatTime(hours, 'hour')}`;
+		if (minutes > 0)
+			timeString += ` ${PadZero(minutes)} ${plural(minutes, 'minute')}`;
+		if (seconds > 0)
+			timeString += ` ${PadZero(seconds)} ${plural(seconds, 'second')}`;
 	}
 
 	return timeString.trim();
