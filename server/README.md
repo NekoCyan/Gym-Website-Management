@@ -8,7 +8,14 @@
 
 ---
 
+## About request.
+
+-   Default max of `limit` in search params for all request: `100`.
+
+## About response.
+
 -   Default Content-Type for all response: `application/json`.
+-   Default successful response code: `200`.
 -   Default Object API for all response:
 
 ```ts
@@ -19,8 +26,6 @@
     "data": { [key: string]: any }
 }
 ```
-
--   Default max of `limit` in search params for all request: `100`.
 
 ---
 
@@ -228,6 +233,50 @@
 
 <br />
 
+<details>
+    <summary><code>GET</code> <code><b>/membership</b></code> <code>Get list of membership (that using plan)</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                            |
+> | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
+> | limit  | optional | number    | 20      |                                                                        |
+> | page   | optional | number    | 1       |                                                                        |
+> | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name            | Data type | Description   |
+> | --------------- | --------- | ------------- |
+> | list            | Array     |               |
+> | list[X].planId  | number    | Array in list |
+> | list[X].startAt | string    | Array in list |
+> | list[X].endAt   | string    | Array in list |
+> | currentPage     | number    |               |
+> | totalPage       | number    |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/membership/{planId}</b></code> <code>Get membership data from membership follow planId</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                            |
+> | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
+> | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name    | Data type | Description |
+> | ------- | --------- | ----------- |
+> | startAt | string    |             |
+> | endAt   | string    |             |
+
+</details>
+
+<br />
+
 ### ROUTE: `/plan`
 
 <details>
@@ -273,6 +322,22 @@
 > | details  | string           |                          |
 > | price    | number           |                          |
 > | duration | number or string | string when long is true |
+
+</details>
+
+<details>
+    <summary><code>POST</code> <code><b>/{planId}/buy</b></code> <code>Do buy a membership from plan follow planId</code></summary>
+
+##### Parameters
+
+> | Name     | Type     | Data type | Default | Description |
+> | -------- | -------- | --------- | ------- | ----------- |
+> | quantity | required | number    |         |             |
+
+##### Responses in data.
+
+> | Name | Data type | Description |
+> | ---- | --------- | ----------- |
 
 </details>
 
@@ -380,6 +445,48 @@ _Currently empty._
 > | list[X].createdAt | string    | Array in list |
 > | currentPage       | number    |               |
 > | totalPage         | number    |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/{userId}/membership</b></code> <code>Get membership list from an user follow userId</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                            |
+> | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
+> | limit  | optional | number    | 20      |                                                                        |
+> | page   | optional | number    | 1       |                                                                        |
+> | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name            | Data type | Description   |
+> | --------------- | --------- | ------------- |
+> | list            | Array     |               |
+> | list[X].planId  | number    | Array in list |
+> | list[X].startAt | string    | Array in list |
+> | list[X].endAt   | string    | Array in list |
+> | currentPage     | number    |               |
+> | totalPage       | number    |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/{userId}/membership/{membershipId}</b></code> <code>Get membership data follow membershipId from an user follow userId</code></summary>
+
+##### Parameters
+
+> | Name   | Type     | Data type | Default | Description                                                            |
+> | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
+> | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+
+##### Responses in data.
+
+> | Name    | Data type | Description |
+> | ------- | --------- | ----------- |
+> | startAt | string    |             |
+> | endAt   | string    |             |
 
 </details>
 
