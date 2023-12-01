@@ -9,7 +9,7 @@ import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
 import {
 	AdminRequired,
-	FormatDateTime,
+	FormatShortDateTime,
 	SearchParamsToObject,
 	TRANSACTION,
 } from '@/utils';
@@ -40,7 +40,6 @@ export async function GET(
 			user.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
-			isFormat,
 		);
 		let { list, currentPage, totalPage } = transactionList;
 		let resList = list.map((x) => {
@@ -51,7 +50,7 @@ export async function GET(
 				price: x.price,
 				quantity: x.quantity,
 				status: TRANSACTION[x.status],
-				createdAt: isFormat ? FormatDateTime(x.createdAt) : x.createdAt,
+				createdAt: isFormat ? FormatShortDateTime(x.createdAt) : x.createdAt,
 			};
 		});
 

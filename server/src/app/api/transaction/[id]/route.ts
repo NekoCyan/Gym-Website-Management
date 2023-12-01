@@ -6,7 +6,7 @@ import User from '@/app/models/User';
 import Transaction from '@/app/models/Transaction';
 import {
 	AdminRequired,
-	FormatDateTime,
+	FormatShortDateTime,
 	SearchParamsToObject,
 	TRANSACTION,
 } from '@/utils';
@@ -40,7 +40,7 @@ export async function GET(
 			price,
 			quantity,
 			status: TRANSACTION[status],
-			createdAt: isFormat ? FormatDateTime(createdAt) : createdAt,
+			createdAt: isFormat ? FormatShortDateTime(createdAt) : createdAt,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);

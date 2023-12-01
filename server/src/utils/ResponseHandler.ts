@@ -65,6 +65,16 @@ export function UserIdNotFoundResponse(variable: string | number) {
 export function PlanIdNotFoundResponse(variable: string | number) {
 	return ErrorResponse(new Error(ResponseText.PlanIdNotFound(variable)));
 }
+// Transaction.
+export function TransactionIdNotFoundResponse(variable: string | bigint) {
+	return ErrorResponse(
+		new Error(ResponseText.TransactionIdNotFound(variable)),
+	);
+}
+// Membership.
+export function MembershipExpiredResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.MembershipExpired(variable)));
+}
 
 export function Response<T extends { [key: string]: any }>(
 	data: T = {} as T,
@@ -143,6 +153,7 @@ export function ErrorResponse(
 		statusCode = HTTPStatusCode.NOT_FOUND;
 	else if (resLower.includes('already exists'))
 		statusCode = HTTPStatusCode.CONFLICT;
+	else if (resLower.includes('expired')) statusCode = HTTPStatusCode.GONE;
 	else if (
 		['less than', 'greater than', 'range of'].some((x) =>
 			resLower.includes(x.toLowerCase()),

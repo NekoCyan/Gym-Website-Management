@@ -1,5 +1,7 @@
 import { JWTPayload } from 'jose';
 
+export type DateTimeInput = Date | string | number;
+
 export interface TokenPayload extends JWTPayload {
 	userId: number;
 }

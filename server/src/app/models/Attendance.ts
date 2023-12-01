@@ -4,7 +4,7 @@ import {
 	IAttendanceMethods,
 	IAttendanceModel,
 } from './interfaces';
-import { FormatDateTime, ResponseText, ValidateForList } from '@/utils';
+import { FormatShortDateTime, ResponseText, ValidateForList } from '@/utils';
 
 const AttendanceSchema = new mongoose.Schema<
 	IAttendance,
@@ -55,7 +55,7 @@ AttendanceSchema.static('checkIn', async function (userId: number): Promise<
 
 	if (lastCheckIn != null && lastCheckIn.timeOut === '')
 		throw new Error(
-			ResponseText.AlreadyCheckedIn(FormatDateTime(lastCheckIn.timeIn)),
+			ResponseText.AlreadyCheckedIn(FormatShortDateTime(lastCheckIn.timeIn)),
 		);
 
 	await this.create({ userId, timeIn: new Date().toISOString() });
@@ -112,8 +112,8 @@ AttendanceSchema.static(
 
 			if (formatTime) {
 				listCheckIn = getCheckInList.map((x) => {
-					x.timeIn = FormatDateTime(x.timeIn);
-					x.timeOut = FormatDateTime(x.timeOut);
+					x.timeIn = FormatShortDateTime(x.timeIn);
+					x.timeOut = FormatShortDateTime(x.timeOut);
 
 					return x;
 				});

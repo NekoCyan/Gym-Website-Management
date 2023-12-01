@@ -1,5 +1,5 @@
 import { SignJWT, jwtVerify } from 'jose';
-import { TokenPayload } from '@/Types';
+import { DateTimeInput, TokenPayload } from '@/Types';
 import ms from 'ms';
 import { DiscordSnowflake } from '@sapphire/snowflake';
 
@@ -83,10 +83,10 @@ export function CreateEnum<T extends { [key: string]: number }>(
 	return Object.freeze(obj);
 }
 
-export function FormatDateTime(date: Date | string) {
+export function FormatShortDateTime(date: DateTimeInput) {
 	if (!date) return '';
+	date = new Date(date);
 
-	if (typeof date === 'string') date = new Date(date);
 	let result = [];
 
 	let year = date.getFullYear(); // getFullYear() returns the year (four digits for dates between year 1000 and 9999) of the specified date.
@@ -97,7 +97,7 @@ export function FormatDateTime(date: Date | string) {
 	let minutes = date.getMinutes(); // getMinutes() returns the minutes (from 0 to 59) of the specified date and time.
 	let seconds = date.getSeconds(); // getSeconds() returns the seconds (from 0 to 59) of the specified date and time.
 
-	const _0 = AddZero;
+	const _0 = PadZero;
 
 	let tt = hours >= 12 ? 'PM' : 'AM'; // AM and PM
 
@@ -111,7 +111,58 @@ export function FormatDateTime(date: Date | string) {
 	return result.join(' ');
 }
 
-export function AddZero(number: number) {
+// Open AI made this e.e
+function FormatFullDateTime(
+	date: Date | string | number,
+	long: boolean = false,
+): string {
+	if (!date) return '';
+	date = new Date(date);
+	const timestamp = date.getTime();
+
+	const second = 1000;
+	const minute = 60 * second;
+	const hour = 60 * minute;
+	const day = 24 * hour;
+	const month = 30 * day;
+	const year = 365 * day;
+
+	const years = Math.floor(timestamp / year);
+	const months = Math.floor((timestamp % year) / month);
+	const days = Math.floor(((timestamp % year) % month) / day);
+	const hours = Math.floor((((timestamp % year) % month) % day) / hour);
+	const minutes = Math.floor(
+		((((timestamp % year) % month) % day) % hour) / minute,
+	);
+	const seconds = Math.floor(
+		(((((timestamp % year) % month) % day) % hour) % minute) / second,
+	);
+
+	const plural = (num: number, str: string) => (num > 1 ? `${str}s` : str);
+	const formatTime = (time: number, unit: string) =>
+		`${time} ${plural(time, unit)}`;
+
+	let timeString = '';
+
+	if (long) {
+		timeString += formatTime(years, 'year');
+		timeString += ` ${formatTime(months, 'month')}`;
+		timeString += ` ${formatTime(days, 'day')}`;
+		timeString += ` ${formatTime(hours, 'hour')}`;
+		timeString += ` ${PadZero(minutes)} ${plural(minutes, 'minute')}`;
+		timeString += ` ${PadZero(seconds)} ${plural(seconds, 'second')}`;
+	} else {
+		timeString += formatTime(years, 'year');
+		timeString += ` ${formatTime(months, 'month')}`;
+		if (days > 0 || (years === 0 && months === 0)) {
+			timeString += ` ${formatTime(days, 'day')}`;
+		}
+	}
+
+	return timeString.trim();
+}
+
+export function PadZero(number: number) {
 	return number < 10 ? `0${number}` : number;
 }
 
@@ -176,4 +227,15 @@ export function GenerateSnowflake() {
 
 export function TimestampFromSnowflake(id: bigint) {
 	return DiscordSnowflake.timestampFrom(id);
+}
+
+export function DateToTimestamp(date: Date | string | number) {
+	return new Date(date).getTime();
+}
+
+export function Currency(data: number) {
+	return new Intl.NumberFormat('en-US', {
+		style: 'currency',
+		currency: 'USD',
+	}).format(data);
 }

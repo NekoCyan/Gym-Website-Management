@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { Response, ErrorResponse } from '@/utils/ResponseHandler';
-import { FormatDateTime, SearchParamsToObject, TRANSACTION } from '@/utils';
+import { FormatShortDateTime, SearchParamsToObject, TRANSACTION } from '@/utils';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 				price: x.price,
 				quantity: x.quantity,
 				status: TRANSACTION[x.status],
-				createdAt: isFormat ? FormatDateTime(x.createdAt) : x.createdAt,
+				createdAt: isFormat ? FormatShortDateTime(x.createdAt) : x.createdAt,
 			};
 		});
 

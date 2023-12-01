@@ -7,6 +7,7 @@ export const HTTPStatusCode = {
 	FORBIDDEN: 403,
 	NOT_FOUND: 404,
 	CONFLICT: 409,
+	GONE: 410,
 	UNPROCESSABLE_ENTITY: 422,
 	INTERNAL_SERVER_ERROR: 500,
 };
@@ -78,6 +79,7 @@ export const ResponseText = {
 	BadRequest: `Bad Request.`,
 	NoPermission: `You do not have permission to access this resource.`,
 	Unauthorized: `Unauthorized.`,
+	InsufficientBalance: `Insufficient balance.`,
 
 	// User.
 	OldPasswordSameNew: `The new password cannot be the same with the old password.`,
@@ -99,5 +101,10 @@ export const ResponseText = {
 	// Transaction.
 	TransactionIdNotFound: (variable: string | bigint) => {
 		return `Transaction with ID ${variable.toString()} is not found.`;
+	},
+
+	// Membership.
+	MembershipExpired: (variable: string | number) => {
+		return `Membership (plan with ID ${variable.toString()}) has expired / not used before.`;
 	},
 };

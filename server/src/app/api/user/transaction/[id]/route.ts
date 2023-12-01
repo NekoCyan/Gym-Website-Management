@@ -1,10 +1,10 @@
 import type { NextRequest } from 'next/server';
-import { Response, ErrorResponse } from '@/utils/ResponseHandler';
+import { Response, ErrorResponse, TransactionIdNotFoundResponse } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
 import Transaction from '@/app/models/Transaction';
-import { FormatDateTime, SearchParamsToObject, TRANSACTION } from '@/utils';
+import { FormatShortDateTime, SearchParamsToObject, TRANSACTION } from '@/utils';
 
 export async function GET(
 	req: NextRequest,
@@ -23,6 +23,8 @@ export async function GET(
 		let { format } = body;
 		const isFormat = format === 'true';
 
+		if (isNaN(id as any)) return TransactionIdNotFoundResponse(id);
+
 		const transaction = await Transaction.getTransactionFromUser(
 			BigInt(id),
 			self.userId,
@@ -35,7 +37,7 @@ export async function GET(
 			price,
 			quantity,
 			status: TRANSACTION[status],
-			createdAt: isFormat ? FormatDateTime(createdAt) : createdAt,
+			createdAt: isFormat ? FormatShortDateTime(createdAt) : createdAt,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);

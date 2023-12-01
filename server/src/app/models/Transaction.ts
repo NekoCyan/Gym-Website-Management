@@ -8,7 +8,6 @@ import {
 	TransactionHydratedDocument,
 } from './interfaces';
 import {
-	FormatDateTime,
 	GenerateSnowflake,
 	IsUndefined,
 	ResponseText,
