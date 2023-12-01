@@ -166,7 +166,7 @@ PlanSchema.static(
 			const getPlanList = await this.aggregate()
 				.limit(limitNext)
 				.skip(skipFromPage)
-				.project({ _id: 0 })
+				.project({ _id: 0, __v: 0 })
 				.exec();
 
 			listCheckIn = getPlanList;
