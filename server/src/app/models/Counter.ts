@@ -5,6 +5,7 @@ import {
 	ICounterModel,
 	IModels,
 } from './interfaces';
+import { ResponseText } from '@/utils';
 
 const CounterSchema = new mongoose.Schema<
 	ICounter,
@@ -13,7 +14,7 @@ const CounterSchema = new mongoose.Schema<
 >({
 	_id: {
 		type: String,
-		required: true,
+		required: [true, ResponseText.Required('_id')],
 	},
 	seq: {
 		type: Number,
@@ -24,7 +25,10 @@ const CounterSchema = new mongoose.Schema<
 // statics.
 CounterSchema.static(
 	'getNextSequence',
-	async function (modelName: IModels | string, fieldName: string): Promise<number> {
+	async function (
+		modelName: IModels | string,
+		fieldName: string,
+	): Promise<number> {
 		if (typeof modelName === 'function') modelName = modelName.modelName;
 
 		const counter: ICounter = await this.findOneAndUpdate(

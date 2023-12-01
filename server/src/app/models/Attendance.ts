@@ -13,7 +13,7 @@ const AttendanceSchema = new mongoose.Schema<
 >({
 	userId: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('userId')],
 	},
 	timeIn: {
 		type: String,
@@ -55,7 +55,9 @@ AttendanceSchema.static('checkIn', async function (userId: number): Promise<
 
 	if (lastCheckIn != null && lastCheckIn.timeOut === '')
 		throw new Error(
-			ResponseText.AlreadyCheckedIn(FormatShortDateTime(lastCheckIn.timeIn)),
+			ResponseText.AlreadyCheckedIn(
+				FormatShortDateTime(lastCheckIn.timeIn),
+			),
 		);
 
 	await this.create({ userId, timeIn: new Date().toISOString() });

@@ -19,6 +19,7 @@ const PlanSchema = new mongoose.Schema<IPlan, IPlanModel, IPlanMethods>({
 	price: {
 		type: Number,
 		required: [true, ResponseText.Required('price')],
+		min: [0, ResponseText.Min('price', 0)],
 	},
 	duration: {
 		type: Number,
@@ -97,6 +98,7 @@ PlanSchema.static(
 			if (isNaN(price))
 				throw new Error(ResponseText.InvalidType('price', 'number'));
 			if (typeof price === 'string') price = parseInt(price);
+			if (price < 0) throw new Error(ResponseText.Min('price', 0));
 			updateObj.price = price;
 		};
 		const validateDuration = (duration: any) => {

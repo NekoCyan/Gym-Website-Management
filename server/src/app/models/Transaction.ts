@@ -28,26 +28,28 @@ const TransactionSchema = new mongoose.Schema<
 	},
 	userId: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('userId')],
 	},
 	name: {
 		type: String,
-		required: true,
+		required: [true, ResponseText.Required('name')],
 	},
 	details: {
 		type: String,
 	},
 	price: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('price')],
+		min: [0, ResponseText.Min('price', 0)],
 	},
 	quantity: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('quantity')],
+		min: [1, ResponseText.Min('quantity', 1)],
 	},
 	status: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('status')],
 	},
 });
 
@@ -90,16 +92,14 @@ TransactionSchema.static(
 			if (isNaN(price))
 				throw new Error(ResponseText.InvalidType('price', 'number'));
 			if (typeof price === 'string') price = parseInt(price);
+			if (price < 0) throw new Error(ResponseText.Min('price', 0));
 			updateObj.price = price;
 		};
 		const validateQuantity = (quantity: any) => {
 			if (isNaN(quantity))
 				throw new Error(ResponseText.InvalidType('quantity', 'number'));
 			if (typeof quantity === 'string') quantity = parseInt(quantity);
-			if (quantity < 0)
-				throw new Error(
-					ResponseText.OutOfRange('quantity', 0, Infinity),
-				);
+			if (quantity < 1) throw new Error(ResponseText.Min('quantity', 1));
 			updateObj.quantity = quantity;
 		};
 		const validateStatus = (status: any) => {

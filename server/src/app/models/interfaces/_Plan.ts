@@ -16,8 +16,8 @@ export interface IPlanMethods {
 	): Promise<PlanHydratedDocument>;
 }
 export interface IPlanModel extends Model<IPlan, {}, IPlanMethods> {
-	getPlan(planId: number): Promise<PlanHydratedDocument>;
 	extractPlanData(data: Partial<PlanData>): Promise<Partial<PlanData>>;
+	getPlan(planId: number): Promise<PlanHydratedDocument>;
 	createPlan(data: Omit<PlanData, 'planId'>): Promise<PlanHydratedDocument>;
 	updatePlan(
 		planId: number,

@@ -27,11 +27,11 @@ const MembershipSchema = new mongoose.Schema<
 >({
 	userId: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('userId')],
 	},
 	planId: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('planId')],
 	},
 	startAt: {
 		type: String,
