@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 		await dbConnect();
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
-		
+
 		const body: { limit: string; page: string; format: string } =
 			SearchParamsToObject(req.nextUrl.searchParams);
 		let { limit, page, format } = body;
@@ -21,7 +21,6 @@ export async function GET(req: NextRequest) {
 			self.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
-			isFormat,
 		);
 		let { list, currentPage, totalPage } = transactionList;
 		let resList = list.map((x) => {

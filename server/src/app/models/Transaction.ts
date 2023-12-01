@@ -183,7 +183,6 @@ TransactionSchema.static(
 		userId: number,
 		_limit: number = 20,
 		_page: number = 1,
-		formatTime: boolean = false,
 	): Promise<ReturnType<ITransactionModel['getTransactionList']>> {
 		const { limit, page } = await ValidateForList(_limit, _page);
 
@@ -199,23 +198,17 @@ TransactionSchema.static(
 			const limitNext = page * limit;
 			const skipFromPage = limitNext - limit;
 
-			const _getTransactionList = await this.aggregate()
+			const getTransactionList = await this.aggregate()
 				.match({ userId })
 				.sort({ _id: -1 })
 				.limit(limitNext)
 				.skip(skipFromPage)
 				.project({ _id: 0, __v: 0 })
 				.exec();
-			const getTransactionList = _getTransactionList.map((x) =>
-				// This is useful for virtual.
+
+			listTransaction = getTransactionList.map((x) =>
 				TransactionModel.hydrate(x),
 			);
-
-			listTransaction = getTransactionList.map((x) => {
-				if (formatTime) x.createdAt = FormatDateTime(x.createdAt);
-
-				return x;
-			});
 		}
 
 		return {

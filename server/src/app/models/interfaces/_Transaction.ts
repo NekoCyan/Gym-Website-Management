@@ -35,7 +35,6 @@ export interface ITransactionModel
 		userId: number,
 		limit?: number,
 		page?: number,
-		formatTime?: boolean,
 	): Promise<DocumentList<TransactionHydratedDocument>>;
 	transactionIdToBigInt(transactionParser: {
 		low: number;
