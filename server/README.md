@@ -2,7 +2,7 @@
 
 > http://localhost:3000/api/{ROUTE}/{ENDPOINT}
 
--   Request methods: `GET`, `POST`, `PUT`.
+-   Request methods: `GET`, `POST`, `PUT` and `DELETE`.
 -   Expect `auth` in `ROUTE`, all requests will need `Authorization` in headers.
 -   Request methods with `POST` and `PUT` will need payload, if there's no data for payload, leave it to `{}` (Make sure do not let it empty).
 
@@ -91,6 +91,7 @@
 
 > | Name        | Data type | Description |
 > | ----------- | --------- | ----------- |
+> | userId      | number    |             |
 > | fullName    | string    |             |
 > | gender      | string    |             |
 > | address     | string    |             |
@@ -343,6 +344,69 @@
 
 </details>
 
+<br />
+
+### ROUTE: `/product`
+
+<details>
+    <summary><code>GET</code> <code><b>/</b></code> <code>Get list of product</code></summary>
+
+##### Parameters
+
+> | Name  | Type     | Data type | Default | Description |
+> | ----- | -------- | --------- | ------- | ----------- |
+> | limit | optional | number    | 20      |             |
+> | page  | optional | number    | 1       |             |
+
+##### Responses in data.
+
+> | Name            | Data type | Description   |
+> | --------------- | --------- | ------------- |
+> | list            | Array     |               |
+> | list[X].name    | string    | Array in list |
+> | list[X].details | string    | Array in list |
+> | list[X].price   | number    | Array in list |
+> | list[X].storage | number    | Array in list |
+> | currentPage     | number    |               |
+> | totalPage       | number    |               |
+
+</details>
+
+<details>
+    <summary><code>GET</code> <code><b>/{productId}</b></code> <code>Get product data from product follow productId</code></summary>
+
+##### Parameters
+
+> | Name | Type | Data type | Default | Description |
+> | ---- | ---- | --------- | ------- | ----------- |
+
+##### Responses in data.
+
+> | Name    | Data type | Description |
+> | ------- | --------- | ----------- |
+> | name    | string    |             |
+> | details | string    |             |
+> | price   | number    |             |
+> | storage | number    |             |
+
+</details>
+
+<details>
+    <summary><code>POST</code> <code><b>/{productId}/buy</b></code> <code>Do buy a product from product follow productId</code></summary>
+
+##### Parameters
+
+> | Name     | Type     | Data type | Default | Description |
+> | -------- | -------- | --------- | ------- | ----------- |
+> | quantity | required | number    |         |             |
+
+##### Responses in data.
+
+> | Name | Data type | Description |
+> | ---- | --------- | ----------- |
+
+</details>
+
 ## Role 1: Trainer
 
 _Currently empty._
@@ -562,6 +626,65 @@ _Currently empty._
 > | quantity  | number    |             |
 > | status    | string    |             |
 > | createdAt | string    |             |
+
+</details>
+
+<br/>
+
+### ROUTE: `/product`
+
+<details>
+    <summary><code>POST</code> <code><b>/</b></code> <code>Do create new product</code></summary>
+
+##### Parameters
+
+> | Name    | Type     | Data type | Default | Description |
+> | ------- | -------- | --------- | ------- | ----------- |
+> | name    | required | string    |         |             |
+> | details | required | string    |         |             |
+> | price   | required | number    |         |             |
+> | storage | required | number    |         |             |
+
+##### Responses in data.
+
+> | Name      | Data type | Description |
+> | --------- | --------- | ----------- |
+> | productId | number    |             |
+
+</details>
+
+<details>
+    <summary><code>PUT</code> <code><b>/{productId}</b></code> <code>Update product data for a product follow productId</code></summary>
+
+##### Parameters
+
+> | Name    | Type     | Data type | Default | Description              |
+> | ------- | -------- | --------- | ------- | ------------------------ |
+> | name    | optional | string    |         |                          |
+> | details | optional | string    |         |                          |
+> | price   | optional | number    |         |                          |
+> | storage | optional | number    |         | Increasement from itself |
+
+##### Responses in data.
+
+> | Name                                  | Data type                             | Description |
+> | ------------------------------------- | ------------------------------------- | ----------- |
+> | ...(Follow data name from Parameters) | ...(Follow data type from Parameters) |             |
+
+</details>
+
+<details>
+    <summary><code>DELETE</code> <code><b>/{productId}</b></code> <code>Delete product data for a product follow productId</code></summary>
+
+##### Parameters
+
+> | Name | Type | Data type | Default | Description |
+> | ---- | ---- | --------- | ------- | ----------- |
+
+##### Responses in data.
+
+> | Name | Data type | Description |
+> | ---- | --------- | ----------- |
 
 </details>
 
