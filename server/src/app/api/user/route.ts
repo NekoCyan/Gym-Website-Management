@@ -13,6 +13,7 @@ export async function GET(req: NextRequest) {
 		const user = await User.findByAuthToken(authorization!);
 
 		return Response({
+			userId: user.userId,
 			fullName: user.fullName,
 			gender: GENDER[user.gender],
 			address: user.address,
