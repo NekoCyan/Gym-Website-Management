@@ -1,6 +1,11 @@
 import type { NextRequest } from 'next/server';
-import { Response, ErrorResponse } from '@/utils/ResponseHandler';
-import { FormatShortDateTime, SearchParamsToObject, TRANSACTION } from '@/utils';
+import { Response, ErrorResponse, InvalidTypeResponse } from '@/utils/ResponseHandler';
+import {
+	FormatShortDateTime,
+	SearchParamsToObject,
+	TRANSACTION_STATUS,
+	TRANSACTION_TYPE,
+} from '@/utils';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
@@ -12,27 +17,39 @@ export async function GET(req: NextRequest) {
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
 
-		const body: { limit: string; page: string; format: string } =
-			SearchParamsToObject(req.nextUrl.searchParams);
-		let { limit, page, format } = body;
+		const body: {
+			limit: string;
+			page: string;
+			format: string;
+			type: string;
+		} = SearchParamsToObject(req.nextUrl.searchParams);
+		let { limit, page, format, type } = body;
 		const isFormat = format === 'true';
+		if (isNaN(type as any)) return InvalidTypeResponse('type', 'number');
 
 		const transactionList = await Transaction.getTransactionList(
 			self.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
+			type ? parseInt(type) : undefined,
 		);
 		let { list, currentPage, totalPage } = transactionList;
 		let resList = list.map((x) => {
-			return {
+			let returnObj = {
 				transactionId: x.transactionId.toString(),
 				name: x.name,
 				details: x.details,
+				type: TRANSACTION_TYPE[x.type],
 				price: x.price,
 				quantity: x.quantity,
-				status: TRANSACTION[x.status],
-				createdAt: isFormat ? FormatShortDateTime(x.createdAt) : x.createdAt,
+				status: TRANSACTION_STATUS[x.status],
+				createdAt: isFormat
+					? FormatShortDateTime(x.createdAt)
+					: x.createdAt,
 			};
+			if (parseInt(type) === -1) delete (returnObj as any).type;
+
+			return returnObj;
 		});
 
 		return Response({ list: resList, currentPage, totalPage });

@@ -3,6 +3,7 @@ import {
 	Response,
 	ErrorResponse,
 	UserIdNotFoundResponse,
+	InvalidTypeResponse,
 } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
@@ -28,10 +29,15 @@ export async function GET(
 		const self = await User.findByAuthToken(authorization!);
 		AdminRequired(self);
 
-		const body: { limit: string; page: string; format: string } =
-			SearchParamsToObject(req.nextUrl.searchParams);
-		let { limit, page, format } = body;
+		const body: {
+			limit: string;
+			page: string;
+			format: string;
+			type: string;
+		} = SearchParamsToObject(req.nextUrl.searchParams);
+		let { limit, page, format, type } = body;
 		const isFormat = format === 'true';
+		if (isNaN(type as any)) return InvalidTypeResponse('type', 'number');
 
 		if (isNaN(id as any)) return UserIdNotFoundResponse(id);
 		const userId = parseInt(id);
@@ -41,10 +47,11 @@ export async function GET(
 			user.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
+			type ? parseInt(type) : undefined,
 		);
 		let { list, currentPage, totalPage } = transactionList;
 		let resList = list.map((x) => {
-			return {
+			let returnObj = {
 				transactionId: x.transactionId.toString(),
 				name: x.name,
 				details: x.details,
@@ -56,6 +63,9 @@ export async function GET(
 					? FormatShortDateTime(x.createdAt)
 					: x.createdAt,
 			};
+			if (parseInt(type) === -1) delete (returnObj as any).type;
+
+			return returnObj;
 		});
 
 		return Response({ list: resList, currentPage, totalPage });

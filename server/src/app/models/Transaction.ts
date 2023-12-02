@@ -215,8 +215,18 @@ TransactionSchema.static(
 		userId: number,
 		_limit: number = 20,
 		_page: number = 1,
+		type: number = -1,
 	): Promise<ReturnType<ITransactionModel['getTransactionList']>> {
 		const { limit, page } = await ValidateForList(_limit, _page);
+
+		if (type !== -1 && TRANSACTION_TYPE[type] === undefined)
+			throw new Error(
+				ResponseText.OutOfRange(
+					'type',
+					TRANSACTION_TYPE.__MIN!,
+					TRANSACTION_TYPE.__MAX!,
+				),
+			);
 
 		const totalDocument = await this.countDocuments({ userId });
 		const totalPage = Math.ceil(totalDocument / limit);
@@ -230,8 +240,11 @@ TransactionSchema.static(
 			const limitNext = page * limit;
 			const skipFromPage = limitNext - limit;
 
+			let match: { userId: number; type?: number } = { userId };
+			if (type !== -1) match = { ...match, type };
+
 			const getTransactionList = await this.aggregate()
-				.match({ userId })
+				.match(match)
 				.sort({ _id: -1 })
 				.limit(limitNext)
 				.skip(skipFromPage)

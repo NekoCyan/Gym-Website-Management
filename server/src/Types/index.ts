@@ -18,9 +18,14 @@ export enum GENDER {
 	MALE = 1,
 }
 
-export enum TRANSACTION {
+export enum TRANSACTION_STATUS {
 	PENDING = 0,
 	SUCCEED = 1,
 	FAILED = 2,
 	CANCELLED = 3,
+}
+
+export enum TRANSACTION_TYPE {
+	MEMBERSHIP = 0,
+	PRODUCT = 1,
 }
