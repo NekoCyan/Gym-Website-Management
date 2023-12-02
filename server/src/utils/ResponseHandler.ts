@@ -81,6 +81,10 @@ export function TransactionIdNotFoundResponse(variable: string | bigint) {
 export function MembershipExpiredResponse(variable: string | number) {
 	return ErrorResponse(new Error(ResponseText.MembershipExpired(variable)));
 }
+// Product.
+export function ProductIdNotFoundResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.ProductIdNotFound(variable)));
+}
 
 export function Response<T extends { [key: string]: any }>(
 	data: T = {} as T,
@@ -159,7 +163,12 @@ export function ErrorResponse(
 		statusCode = HTTPStatusCode.NOT_FOUND;
 	else if (resLower.includes('already exists'))
 		statusCode = HTTPStatusCode.CONFLICT;
-	else if (resLower.includes('expired')) statusCode = HTTPStatusCode.GONE;
+	else if (
+		['expired', 'out of stock', 'not enough'].some((x) =>
+			resLower.includes(x.toLowerCase()),
+		)
+	)
+		statusCode = HTTPStatusCode.GONE;
 	else if (
 		['less than', 'greater than', 'range of'].some((x) =>
 			resLower.includes(x.toLowerCase()),

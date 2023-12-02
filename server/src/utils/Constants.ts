@@ -25,11 +25,16 @@ export const ROLES = CreateEnum({
 
 export const GENDER = CreateEnum({ UNKNOWN: -1, FEMALE: 0, MALE: 1 });
 
-export const TRANSACTION = CreateEnum({
+export const TRANSACTION_STATUS = CreateEnum({
 	PENDING: 0,
 	SUCCEED: 1,
 	FAILED: 2,
 	CANCELLED: 3,
+});
+
+export const TRANSACTION_TYPE = CreateEnum({
+	MEMBERSHIP: 0,
+	PRODUCT: 1,
 });
 
 export const ResponseText = {
@@ -39,6 +44,14 @@ export const ResponseText = {
 	// System Response.
 	Invalid: (variable: string) => {
 		return `${variable} is invalid.`;
+	},
+	InvalidDeduction: (
+		variable: string,
+		min: number,
+		currentNumber: number,
+		inputNumber: number,
+	) => {
+		return `Invalid deduction for ${variable} (Min is ${min}, but given input was ${inputNumber}, while current is ${currentNumber}).`;
 	},
 	InvalidType: (variable: string, ...allowTypes: string[]) => {
 		let errorMessage = `Invalid type of ${variable}`;
@@ -55,8 +68,14 @@ export const ResponseText = {
 	Min: (variable: string, min: number) => {
 		return `${variable} cannot be less than ${min}.`;
 	},
+	MinOrEqual: (variable: string, min: number) => {
+		return `${variable} cannot be less than or equal to ${min}.`;
+	},
 	Max: (variable: string, max: number) => {
 		return `${variable} cannot be more than ${max}.`;
+	},
+	MaxOrEqual: (variable: string, max: number) => {
+		return `${variable} cannot be more than or equal to ${max}.`;
 	},
 	MinLength: (variable: string, minLength: number) => {
 		return `${variable} cannot be less than ${minLength} characters.`;
@@ -112,5 +131,17 @@ export const ResponseText = {
 	// Membership.
 	MembershipExpired: (variable: string | number) => {
 		return `Membership (plan with ID ${variable.toString()}) has expired / not used before.`;
+	},
+
+	// Product.
+	ProductNameDuplicated: `Product name is already exists in database (must be unique).`,
+	ProductIdNotFound: (variable: string | number) => {
+		return `Product with ID ${variable.toString()} is not found.`;
+	},
+	ProductOutOfStock: (variable: string | number) => {
+		return `Product with ID ${variable.toString()} is out of stock.`;
+	},
+	ProductNotEnough: (variable: string | number, quantityLeft: number) => {
+		return `Product with ID ${variable.toString()} is not enough (Only ${quantityLeft} left).`;
 	},
 };
