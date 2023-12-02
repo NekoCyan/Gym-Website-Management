@@ -40,14 +40,14 @@
 
 ##### Parameters
 
-> | Name        | Type     | Data type | Default | Description        |
-> | ----------- | -------- | --------- | ------- | ------------------ |
-> | email       | required | string    |         |                    |
-> | password    | required | string    |         | min length is 6    |
-> | fullName    | required | string    |         |                    |
-> | gender      | required | number    |         | range from -1 to 1 |
-> | address     | required | string    |         |                    |
-> | phoneNumber | required | string    |         |                    |
+> | Name        | Type     | Data type | Default | Description            |
+> | ----------- | -------- | --------- | ------- | ---------------------- |
+> | email       | required | string    |         |                        |
+> | password    | required | string    |         | min length is 6        |
+> | fullName    | required | string    |         |                        |
+> | gender      | required | number    |         | [Enum#GENDER](#gender) |
+> | address     | required | string    |         |                        |
+> | phoneNumber | required | string    |         |                        |
 
 ##### Responses in data.
 
@@ -107,14 +107,14 @@
 
 ##### Parameters
 
-> | Name        | Type     | Data type | Default | Description        |
-> | ----------- | -------- | --------- | ------- | ------------------ |
-> | password    | optional | string    |         |                    |
-> | fullName    | optional | string    |         |                    |
-> | gender      | optional | number    |         | range from -1 to 1 |
-> | address     | optional | string    |         |                    |
-> | phoneNumber | optional | string    |         |                    |
-> | photo       | optional | string    |         |                    |
+> | Name        | Type     | Data type | Default | Description            |
+> | ----------- | -------- | --------- | ------- | ---------------------- |
+> | password    | optional | string    |         |                        |
+> | fullName    | optional | string    |         |                        |
+> | gender      | optional | number    |         | [Enum#GENDER](#gender) |
+> | address     | optional | string    |         |                        |
+> | phoneNumber | optional | string    |         |                        |
+> | photo       | optional | string    |         |                        |
 
 ##### Responses in data.
 
@@ -191,21 +191,23 @@
 > | limit  | optional | number    | 20      |                                                             |
 > | page   | optional | number    | 1       |                                                             |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+> | type   | optional | number    | -1      | [Enum#TRANSACTION_TYPE](#transaction_type)                  |
 
 ##### Responses in data.
 
-> | Name                  | Data type | Description   |
-> | --------------------- | --------- | ------------- |
-> | list                  | Array     |               |
-> | list[X].transactionId | string    | Array in list |
-> | list[X].name          | string    | Array in list |
-> | list[X].details       | string    | Array in list |
-> | list[X].price         | number    | Array in list |
-> | list[X].quantity      | number    | Array in list |
-> | list[X].status        | string    | Array in list |
-> | list[X].createdAt     | string    | Array in list |
-> | currentPage           | number    |               |
-> | totalPage             | number    |               |
+> | Name                  | Data type | Description                                                                |
+> | --------------------- | --------- | -------------------------------------------------------------------------- |
+> | list                  | Array     |                                                                            |
+> | list[X].transactionId | string    | Array in list                                                              |
+> | list[X].name          | string    | Array in list                                                              |
+> | list[X].details       | string    | Array in list                                                              |
+> | list[X]?.type         | string    | Array in list, this field will available when request of its has type = -1 |
+> | list[X].price         | number    | Array in list                                                              |
+> | list[X].quantity      | number    | Array in list                                                              |
+> | list[X].status        | string    | Array in list                                                              |
+> | list[X].createdAt     | string    | Array in list                                                              |
+> | currentPage           | number    |                                                                            |
+> | totalPage             | number    |                                                                            |
 
 </details>
 
@@ -382,9 +384,9 @@ _Currently empty._
 > | ----------- | -------- | --------- | ------- | ------------------------ |
 > | email       | optional | string    |         |                          |
 > | password    | optional | string    |         |                          |
-> | role        | optional | number    |         |                          |
+> | role        | optional | number    |         | [Enum#ROLES](#roles)     |
 > | fullName    | optional | string    |         |                          |
-> | gender      | optional | number    |         | range from -1 to 1       |
+> | gender      | optional | number    |         | [Enum#GENDER](#gender)   |
 > | address     | optional | string    |         |                          |
 > | phoneNumber | optional | string    |         |                          |
 > | photo       | optional | string    |         |                          |
@@ -431,20 +433,22 @@ _Currently empty._
 > | limit  | optional | number    | 20      |                                                             |
 > | page   | optional | number    | 1       |                                                             |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
+> | type   | optional | number    | -1      | [Enum#TRANSACTION_TYPE](#transaction_type)                  |
 
 ##### Responses in data.
 
-> | Name              | Data type | Description   |
-> | ----------------- | --------- | ------------- |
-> | list              | Array     |               |
-> | list[X].name      | string    | Array in list |
-> | list[X].details   | string    | Array in list |
-> | list[X].price     | number    | Array in list |
-> | list[X].quantity  | number    | Array in list |
-> | list[X].status    | string    | Array in list |
-> | list[X].createdAt | string    | Array in list |
-> | currentPage       | number    |               |
-> | totalPage         | number    |               |
+> | Name              | Data type | Description                                                                |
+> | ----------------- | --------- | -------------------------------------------------------------------------- |
+> | list              | Array     |                                                                            |
+> | list[X].name      | string    | Array in list                                                              |
+> | list[X].details   | string    | Array in list                                                              |
+> | list[X]?.type     | string    | Array in list, this field will available when request of its has type = -1 |
+> | list[X].price     | number    | Array in list                                                              |
+> | list[X].quantity  | number    | Array in list                                                              |
+> | list[X].status    | string    | Array in list                                                              |
+> | list[X].createdAt | string    | Array in list                                                              |
+> | currentPage       | number    |                                                                            |
+> | totalPage         | number    |                                                                            |
 
 </details>
 
@@ -562,6 +566,42 @@ _Currently empty._
 </details>
 
 <br/>
+
+---
+
+## Enums
+
+### ROLES
+
+> | Name    | Value | Description |
+> | ------- | ----- | ----------- |
+> | User    | 0     |             |
+> | Trainer | 1     |             |
+> | Admin   | 2     |             |
+
+### GENDER
+
+> | Name    | Value | Description |
+> | ------- | ----- | ----------- |
+> | UNKNOWN | -1    |             |
+> | FEMALE  | 0     |             |
+> | MALE    | 1     |             |
+
+### TRANSACTION_STATUS
+
+> | Name      | Value | Description |
+> | --------- | ----- | ----------- |
+> | PENDING   | 0     |             |
+> | SUCCEED   | 1     |             |
+> | FAILED    | 2     |             |
+> | CANCELLED | 3     |             |
+
+### TRANSACTION_TYPE
+
+> | Name       | Value | Description |
+> | ---------- | ----- | ----------- |
+> | MEMBERSHIP | 0     |             |
+> | PRODUCT    | 1     |             |
 
 ---
 
