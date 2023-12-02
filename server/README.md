@@ -227,6 +227,7 @@
 > | --------- | --------- | ----------- |
 > | name      | string    |             |
 > | details   | string    |             |
+> | type      | string    |             |
 > | price     | number    |             |
 > | quantity  | number    |             |
 > | status    | string    |             |
