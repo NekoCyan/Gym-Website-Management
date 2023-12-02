@@ -25,13 +25,15 @@ export async function GET(req: NextRequest) {
 		} = SearchParamsToObject(req.nextUrl.searchParams);
 		let { limit, page, format, type } = body;
 		const isFormat = format === 'true';
-		if (isNaN(type as any)) return InvalidTypeResponse('type', 'number');
+		if (!type) type = '-1';
+
+		if (type && isNaN(type as any)) return InvalidTypeResponse('type', 'number');
 
 		const transactionList = await Transaction.getTransactionList(
 			self.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
-			type ? parseInt(type) : undefined,
+			parseInt(type),
 		);
 		let { list, currentPage, totalPage } = transactionList;
 		let resList = list.map((x) => {
@@ -47,7 +49,7 @@ export async function GET(req: NextRequest) {
 					? FormatShortDateTime(x.createdAt)
 					: x.createdAt,
 			};
-			if (parseInt(type) === -1) delete (returnObj as any).type;
+			if (parseInt(type) !== -1) delete (returnObj as any).type;
 
 			return returnObj;
 		});

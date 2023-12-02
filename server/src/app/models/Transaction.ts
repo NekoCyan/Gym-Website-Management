@@ -228,7 +228,10 @@ TransactionSchema.static(
 				),
 			);
 
-		const totalDocument = await this.countDocuments({ userId });
+		let match: { userId: number; type?: number } = { userId };
+		if (type !== -1) match = { ...match, type };
+
+		const totalDocument = await this.countDocuments({ ...match });
 		const totalPage = Math.ceil(totalDocument / limit);
 		let listTransaction: TransactionHydratedDocument[];
 
@@ -239,9 +242,6 @@ TransactionSchema.static(
 			// Get array from {skipFromPage} to {limitNext}.
 			const limitNext = page * limit;
 			const skipFromPage = limitNext - limit;
-
-			let match: { userId: number; type?: number } = { userId };
-			if (type !== -1) match = { ...match, type };
 
 			const getTransactionList = await this.aggregate()
 				.match(match)

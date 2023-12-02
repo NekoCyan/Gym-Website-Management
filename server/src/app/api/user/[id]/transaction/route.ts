@@ -37,6 +37,8 @@ export async function GET(
 		} = SearchParamsToObject(req.nextUrl.searchParams);
 		let { limit, page, format, type } = body;
 		const isFormat = format === 'true';
+		if (!type) type = '-1';
+
 		if (isNaN(type as any)) return InvalidTypeResponse('type', 'number');
 
 		if (isNaN(id as any)) return UserIdNotFoundResponse(id);
@@ -47,7 +49,7 @@ export async function GET(
 			user.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,
-			type ? parseInt(type) : undefined,
+			parseInt(type),
 		);
 		let { list, currentPage, totalPage } = transactionList;
 		let resList = list.map((x) => {
@@ -63,7 +65,7 @@ export async function GET(
 					? FormatShortDateTime(x.createdAt)
 					: x.createdAt,
 			};
-			if (parseInt(type) === -1) delete (returnObj as any).type;
+			if (parseInt(type) !== -1) delete (returnObj as any).type;
 
 			return returnObj;
 		});
