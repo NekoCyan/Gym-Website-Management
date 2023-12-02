@@ -298,7 +298,7 @@ def Productaddprocess(request):
         pname = request.POST['product_name']
         qty = request.POST['Qty']
         det = request.POST['Details']
-        price = request.POST['Price']
+        price = request.POST['Price']   
         img = request.FILES['photo'].name
         try:
             photo = request.FILES['photo']

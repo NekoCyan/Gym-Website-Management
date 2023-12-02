@@ -5,6 +5,7 @@ import {
 	InvalidAPIRequestResponse,
 	UnauthorizedResponse,
 } from './utils/ResponseHandler';
+import { JWT_Verify } from './utils';
 
 // This function can be marked `async` if using `await` inside
 export async function middleware(req: NextRequest) {
@@ -34,7 +35,8 @@ export async function middleware(req: NextRequest) {
 	if (!['auth'].some((x) => x == route)) {
 		// get authorization in header.
 		const authorization = req.headers.get('Authorization');
-		if (!authorization) return UnauthorizedResponse();
+		if (!authorization || !(await JWT_Verify(authorization)))
+			return UnauthorizedResponse();
 	}
 
 	return NextResponse.next();

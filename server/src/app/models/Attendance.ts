@@ -1,11 +1,10 @@
 import mongoose from 'mongoose';
 import {
-	AttendanceData,
 	IAttendance,
 	IAttendanceMethods,
 	IAttendanceModel,
 } from './interfaces';
-import { FormatDateTime, ResponseText } from '@/utils';
+import { FormatShortDateTime, ResponseText, ValidateForList } from '@/utils';
 
 const AttendanceSchema = new mongoose.Schema<
 	IAttendance,
@@ -14,7 +13,7 @@ const AttendanceSchema = new mongoose.Schema<
 >({
 	userId: {
 		type: Number,
-		required: true,
+		required: [true, ResponseText.Required('userId')],
 	},
 	timeIn: {
 		type: String,
@@ -56,7 +55,9 @@ AttendanceSchema.static('checkIn', async function (userId: number): Promise<
 
 	if (lastCheckIn != null && lastCheckIn.timeOut === '')
 		throw new Error(
-			ResponseText.AlreadyCheckedIn(FormatDateTime(lastCheckIn.timeIn)),
+			ResponseText.AlreadyCheckedIn(
+				FormatShortDateTime(lastCheckIn.timeIn),
+			),
 		);
 
 	await this.create({ userId, timeIn: new Date().toISOString() });
@@ -80,22 +81,14 @@ AttendanceSchema.static('checkOut', async function (userId: number): Promise<
 	);
 });
 AttendanceSchema.static(
-	'getListCheckIn',
+	'getCheckInList',
 	async function (
 		userId: number,
-		limit: number = 20,
-		page: number = 1,
+		_limit: number = 20,
+		_page: number = 1,
 		formatTime: boolean = false,
-	): Promise<ReturnType<IAttendanceModel['getListCheckIn']>> {
-		if (typeof limit !== 'number')
-			throw new Error(ResponseText.InvalidType('limit', 'number'));
-		if (limit < 1) throw new Error(ResponseText.InvalidPageNumber(limit));
-
-		if (typeof page !== 'number')
-			throw new Error(ResponseText.InvalidType('page', 'number'));
-		if (page < 1) throw new Error(ResponseText.InvalidPageNumber(page));
-
-		limit > 100 && (limit = 100);
+	): Promise<ReturnType<IAttendanceModel['getCheckInList']>> {
+		const { limit, page } = await ValidateForList(_limit, _page);
 
 		const totalDocument = await this.countDocuments({ userId });
 		const totalPage = Math.ceil(totalDocument / limit);
@@ -109,7 +102,7 @@ AttendanceSchema.static(
 			const limitNext = page * limit;
 			const skipFromPage = limitNext - limit;
 
-			const getListCheckIn = await this.aggregate()
+			const getCheckInList = await this.aggregate()
 				.match({ userId })
 				.sort({ _id: -1 })
 				.limit(limitNext)
@@ -117,14 +110,14 @@ AttendanceSchema.static(
 				.project({ _id: 0, timeIn: 1, timeOut: 1 })
 				.exec();
 
-			listCheckIn = getListCheckIn;
+			listCheckIn = getCheckInList;
 
 			if (formatTime) {
-				listCheckIn = getListCheckIn.map((checkIn) => {
-					return {
-						timeIn: FormatDateTime(checkIn.timeIn),
-						timeOut: FormatDateTime(checkIn.timeOut),
-					};
+				listCheckIn = getCheckInList.map((x) => {
+					x.timeIn = FormatShortDateTime(x.timeIn);
+					x.timeOut = FormatShortDateTime(x.timeOut);
+
+					return x;
 				});
 			}
 		}

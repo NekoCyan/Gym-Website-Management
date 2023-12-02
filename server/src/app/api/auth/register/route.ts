@@ -7,14 +7,14 @@ import {
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { UserData, UserInformations } from '@/app/models/interfaces';
+import { UserData, UserDetails } from '@/app/models/interfaces';
 import { IsUndefined } from '@/utils';
 
 export async function POST(req: NextRequest) {
 	try {
 		await dbConnect();
 
-		const body: UserData & UserInformations = await req.json();
+		const body: UserData & UserDetails = await req.json();
 		let { email, password, fullName, gender, address, phoneNumber } = body;
 
 		if (IsUndefined(email)) return RequiredResponse('email');
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
 		if (IsUndefined(address)) return RequiredResponse('address');
 		if (IsUndefined(phoneNumber)) return RequiredResponse('phoneNumber');
 
-		let updateObj = await User.extractUserInformations(body);
+		let updateObj = await User.extractUserDetails(body);
 
 		const result = await User.create({
 			email,

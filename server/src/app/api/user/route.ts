@@ -3,7 +3,8 @@ import { Response, ErrorResponse } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
-import { UserData, UserInformations } from '@/app/models/interfaces';
+import { UserData, UserDetails } from '@/app/models/interfaces';
+import { GENDER, ROLES } from '@/utils';
 
 export async function GET(req: NextRequest) {
 	try {
@@ -12,12 +13,15 @@ export async function GET(req: NextRequest) {
 		const user = await User.findByAuthToken(authorization!);
 
 		return Response({
+			userId: user.userId,
 			fullName: user.fullName,
-			gender: user.gender,
+			gender: GENDER[user.gender],
 			address: user.address,
 			phoneNumber: user.phoneNumber,
 			photo: user.photo,
-			role: user.role,
+			role: ROLES[user.role],
+			balance: user.balance,
+			totalBalance: user.totalBalance,
 		});
 	} catch (e: any) {
 		return ErrorResponse(e);
@@ -30,12 +34,12 @@ export async function PUT(req: NextRequest) {
 		const authorization = req.headers.get('Authorization');
 		const tokenObj = await User.decodeAuthToken(authorization!);
 
-		const body: Partial<UserInformations & Pick<UserData, 'password'>> =
+		const body: Partial<UserDetails & Pick<UserData, 'password'>> =
 			await req.json();
 		let updateObj: typeof body = {};
 
 		// Validate & Extract.
-		const userInformations = await User.extractUserInformations(body);
+		const userInformations = await User.extractUserDetails(body);
 		const userData = await User.extractUserData(body);
 
 		updateObj = { ...userInformations };

@@ -220,7 +220,8 @@ ALTER TABLE `membership_master`
   ADD PRIMARY KEY (`Membership_Id`),
   ADD KEY `User_Id` (`User_Id`),
   ADD KEY `Plan_Id` (`Plan_Id`);
-
+  ADD KEY 'Start_At` (`Start_Id'),
+  ADD Key 'End_At` (`End_Id'),
 --
 -- Indexes for table `order_details`
 --

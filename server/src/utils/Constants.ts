@@ -1,4 +1,4 @@
-import { CreateEnum } from '.';
+import { CommaAnd, CreateEnum } from '.';
 
 export const HTTPStatusCode = {
 	OK: 200,
@@ -7,6 +7,7 @@ export const HTTPStatusCode = {
 	FORBIDDEN: 403,
 	NOT_FOUND: 404,
 	CONFLICT: 409,
+	GONE: 410,
 	UNPROCESSABLE_ENTITY: 422,
 	INTERNAL_SERVER_ERROR: 500,
 };
@@ -24,6 +25,18 @@ export const ROLES = CreateEnum({
 
 export const GENDER = CreateEnum({ UNKNOWN: -1, FEMALE: 0, MALE: 1 });
 
+export const TRANSACTION_STATUS = CreateEnum({
+	PENDING: 0,
+	SUCCEED: 1,
+	FAILED: 2,
+	CANCELLED: 3,
+});
+
+export const TRANSACTION_TYPE = CreateEnum({
+	MEMBERSHIP: 0,
+	PRODUCT: 1,
+});
+
 export const ResponseText = {
 	// API Response.
 	InvalidAPIRequest: `Invalid API request.`,
@@ -32,10 +45,18 @@ export const ResponseText = {
 	Invalid: (variable: string) => {
 		return `${variable} is invalid.`;
 	},
-	InvalidType: (variable: string, allowType?: 'string' | 'number') => {
+	InvalidDeduction: (
+		variable: string,
+		min: number,
+		currentNumber: number,
+		inputNumber: number,
+	) => {
+		return `Invalid deduction for ${variable} (Min is ${min}, but given input was ${inputNumber}, while current is ${currentNumber}).`;
+	},
+	InvalidType: (variable: string, ...allowTypes: string[]) => {
 		let errorMessage = `Invalid type of ${variable}`;
-		if (allowType) {
-			errorMessage += ` (Only accept ${allowType})`;
+		if (allowTypes) {
+			errorMessage += ` (Only accept(s) ${CommaAnd(allowTypes)})`;
 		}
 		errorMessage += '.';
 
@@ -43,6 +64,18 @@ export const ResponseText = {
 	},
 	InvalidPageNumber: (page: number) => {
 		return `Invalid page number ${page}.`;
+	},
+	Min: (variable: string, min: number) => {
+		return `${variable} cannot be less than ${min}.`;
+	},
+	MinOrEqual: (variable: string, min: number) => {
+		return `${variable} cannot be less than or equal to ${min}.`;
+	},
+	Max: (variable: string, max: number) => {
+		return `${variable} cannot be more than ${max}.`;
+	},
+	MaxOrEqual: (variable: string, max: number) => {
+		return `${variable} cannot be more than or equal to ${max}.`;
 	},
 	MinLength: (variable: string, minLength: number) => {
 		return `${variable} cannot be less than ${minLength} characters.`;
@@ -71,6 +104,7 @@ export const ResponseText = {
 	BadRequest: `Bad Request.`,
 	NoPermission: `You do not have permission to access this resource.`,
 	Unauthorized: `Unauthorized.`,
+	InsufficientBalance: `Insufficient balance.`,
 
 	// User.
 	OldPasswordSameNew: `The new password cannot be the same with the old password.`,
@@ -82,5 +116,32 @@ export const ResponseText = {
 	NoCheckInRecord: `You have not check in yet.`,
 	AlreadyCheckedIn: (stringTime: string) => {
 		return `You have already checked in since ${stringTime} in the last time, please check out first before check in again.`;
+	},
+
+	// Plan.
+	PlanIdNotFound: (variable: string | number) => {
+		return `Plan with ID ${variable.toString()} is not found.`;
+	},
+
+	// Transaction.
+	TransactionIdNotFound: (variable: string | bigint) => {
+		return `Transaction with ID ${variable.toString()} is not found.`;
+	},
+
+	// Membership.
+	MembershipExpired: (variable: string | number) => {
+		return `Membership (plan with ID ${variable.toString()}) has expired / not used before.`;
+	},
+
+	// Product.
+	ProductNameDuplicated: `Product name is already exists in database (must be unique).`,
+	ProductIdNotFound: (variable: string | number) => {
+		return `Product with ID ${variable.toString()} is not found.`;
+	},
+	ProductOutOfStock: (variable: string | number) => {
+		return `Product with ID ${variable.toString()} is out of stock.`;
+	},
+	ProductNotEnough: (variable: string | number, quantityLeft: number) => {
+		return `Product with ID ${variable.toString()} is not enough (Only ${quantityLeft} left).`;
 	},
 };

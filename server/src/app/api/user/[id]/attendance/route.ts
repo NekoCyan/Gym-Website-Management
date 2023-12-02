@@ -17,21 +17,21 @@ export async function GET(
 	try {
 		let { id } = params;
 
-		const body: { limit: string; page: string; format: string } =
-			SearchParamsToObject(req.nextUrl.searchParams);
-		let { limit, page, format } = body;
-		const isFormat = format === 'true';
-
 		await dbConnect();
 		const authorization = req.headers.get('Authorization');
 		const self = await User.findByAuthToken(authorization!);
 		AdminRequired(self);
 
+		const body: { limit: string; page: string; format: string } =
+			SearchParamsToObject(req.nextUrl.searchParams);
+		let { limit, page, format } = body;
+		const isFormat = format === 'true';
+
 		if (isNaN(id as any)) return UserIdNotFoundResponse(id);
 		const userId = parseInt(id);
 		const user = await User.getUser(userId);
 
-		const listCheckIn = await Attendance.getListCheckIn(
+		const listCheckIn = await Attendance.getCheckInList(
 			user.userId,
 			limit ? parseInt(limit) : undefined,
 			page ? parseInt(page) : undefined,

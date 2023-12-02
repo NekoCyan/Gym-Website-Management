@@ -4,7 +4,7 @@ import {
 	IUserMethods,
 	IUserModel,
 	UserData,
-	UserInformations,
+	UserDetails,
 } from './interfaces';
 
 import {
@@ -13,6 +13,8 @@ import {
 	JWT_Verify,
 	IsUndefined,
 	ResponseText,
+	GENDER,
+	ROLES,
 } from '@/utils';
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
@@ -59,6 +61,15 @@ const UserSchema = new mongoose.Schema<IUser, IUserModel, IUserMethods>({
 		type: Number,
 		default: 0,
 	},
+
+	balance: {
+		type: Number,
+		default: 0,
+	},
+	totalBalance: {
+		type: Number,
+		default: 0,
+	},
 });
 
 // validation.
@@ -91,32 +102,35 @@ UserSchema.method(
 UserSchema.method(
 	'update',
 	async function (
-		data: Partial<UserData & UserInformations>,
-		extraData?: { [key: string]: any },
+		data: Partial<UserData & UserDetails>,
+		extraData: { [key: string]: any } = {},
 	): Promise<ReturnType<IUserMethods['update']>> {
-		let updateObj: Partial<UserData & UserInformations> & {
+		let updateObj: Partial<UserData & UserDetails> & {
 			[key: string]: any;
 		} = {};
 
-		// UserInformations.
-		const userInformations: Partial<UserInformations> =
-			await UserModel.extractUserInformations(data).catch((e) => e);
-		if (userInformations instanceof Error) throw userInformations;
+		// UserDetails.
+		const userInformations: Partial<UserDetails> =
+			await UserModel.extractUserDetails(data);
 		// UserData.
 		const userData: Partial<UserData> = await UserModel.extractUserData(
 			data,
-		).catch((e) => e);
-		if (userData instanceof Error) throw userData;
+		);
 
 		// Group validated fields to update.
 		updateObj = { ...userInformations, ...userData };
 
 		// Custom edit for field.
 		if (
-			updateObj.password &&
+			updateObj['password'] &&
 			(await this.comparePassword(updateObj.password))
 		) {
 			throw new Error(ResponseText.OldPasswordSameNew);
+		}
+		if (updateObj['balance']) {
+			if (updateObj.balance > 0)
+				updateObj.totalBalance = this.totalBalance + updateObj.balance;
+			updateObj.balance = this.balance + updateObj.balance;
 		}
 
 		// Group extra data to update.
@@ -133,6 +147,16 @@ UserSchema.method(
 		return this.save();
 	},
 );
+UserSchema.method('increaseBalance', async function (amount: number): Promise<
+	ReturnType<IUserMethods['increaseBalance']>
+> {
+	return this.update({ balance: amount });
+});
+UserSchema.method('decreaseBalance', async function (amount: number): Promise<
+	ReturnType<IUserMethods['decreaseBalance']>
+> {
+	return this.update({ balance: -amount });
+});
 
 // statics.
 UserSchema.static('getUser', async function (userId: number): Promise<
@@ -180,19 +204,25 @@ UserSchema.static('decodeAuthToken', async function (token: string): Promise<
 	return verify;
 });
 UserSchema.static(
-	'extractUserInformations',
+	'extractUserDetails',
 	async function (
-		data: Partial<UserInformations>,
-	): Promise<ReturnType<IUserModel['extractUserInformations']>> {
+		data: Partial<UserDetails>,
+	): Promise<ReturnType<IUserModel['extractUserDetails']>> {
 		let { fullName, gender, address, phoneNumber, photo } = data;
-		let updateObj: Partial<UserInformations> = {};
+		let updateObj: Partial<UserDetails> = {};
 
 		const validateGender = (gender: any) => {
 			if (isNaN(gender))
 				throw new Error(ResponseText.InvalidType('gender', 'number'));
 			if (typeof gender === 'string') gender = parseInt(gender);
-			if (gender < -1 || gender > 1)
-				throw new Error(ResponseText.OutOfRange('gender', -1, 1));
+			if (gender < GENDER.__MIN! || gender > GENDER.__MAX!)
+				throw new Error(
+					ResponseText.OutOfRange(
+						'gender',
+						GENDER.__MIN!,
+						GENDER.__MAX!,
+					),
+				);
 			updateObj.gender = gender;
 		};
 		const validateFullName = (fullName: any) => {
@@ -231,9 +261,9 @@ UserSchema.static(
 UserSchema.static(
 	'extractUserData',
 	async function (
-		data: Partial<UserData>,
+		data: Partial<Omit<UserData, 'userId'>>,
 	): Promise<ReturnType<IUserModel['extractUserData']>> {
-		let { email, password, role } = data;
+		let { email, password, role, balance } = data;
 		let updateObj: Partial<UserData> = {};
 
 		const validateEmail = (email: any) => {
@@ -252,14 +282,23 @@ UserSchema.static(
 			if (isNaN(role))
 				throw new Error(ResponseText.InvalidType('role', 'number'));
 			if (typeof role === 'string') role = parseInt(role);
-			if (role < 0 || role > 2)
-				throw new Error(ResponseText.OutOfRange('role', 0, 2));
+			if (role < ROLES.__MIN! || role > ROLES.__MAX!)
+				throw new Error(
+					ResponseText.OutOfRange('role', ROLES.__MIN!, ROLES.__MAX!),
+				);
 			updateObj.role = role;
+		};
+		const validateBalance = (balance: any) => {
+			if (isNaN(balance))
+				throw new Error(ResponseText.InvalidType('balance', 'number'));
+			if (typeof balance === 'string') balance = parseInt(balance);
+			updateObj.balance = balance;
 		};
 
 		!IsUndefined(email) && validateEmail(email);
 		!IsUndefined(password) && validatePassword(password);
 		!IsUndefined(role) && validateRole(role);
+		!IsUndefined(balance) && validateBalance(balance);
 
 		return updateObj;
 	},
@@ -268,12 +307,27 @@ UserSchema.static(
 	'updateUser',
 	async function (
 		userId: number,
-		data: Partial<UserData & UserInformations>,
-		extraData?: { [key: string]: any },
+		data: Partial<UserData & UserDetails>,
+		extraData: { [key: string]: any },
 	): Promise<ReturnType<IUserModel['updateUser']>> {
 		const user = await this.getUser(userId);
 
 		return user.update(data, extraData);
+	},
+);
+UserSchema.static(
+	'updateBalance',
+	async function (
+		userId: number,
+		amount: number,
+	): Promise<ReturnType<IUserModel['updateBalance']>> {
+		const user = await this.getUser(userId);
+
+		if (amount >= 0) {
+			return user.increaseBalance(amount);
+		} else {
+			return user.decreaseBalance(-amount);
+		}
 	},
 );
 
@@ -289,6 +343,7 @@ UserSchema.pre('save', async function (next): Promise<void> {
 	}
 
 	if (this.isModified('password')) await hashPass();
+	if (this.isModified('email')) this.email = this.email.toLowerCase();
 
 	next();
 });

@@ -7,16 +7,19 @@ export function InvalidAPIRequestResponse() {
 	return ErrorResponse(new Error(ResponseText.InvalidAPIRequest));
 }
 // System Response.
-export function InvalidTypeResponse(
-	variable: string,
-	allowType?: 'string' | 'number',
-) {
+export function InvalidTypeResponse(variable: string, ...allowTypes: string[]) {
 	return ErrorResponse(
-		new Error(ResponseText.InvalidType(variable, allowType)),
+		new Error(ResponseText.InvalidType(variable, ...allowTypes)),
 	);
 }
 export function InvalidResponse(variable: string) {
 	return ErrorResponse(new Error(ResponseText.Invalid(variable)));
+}
+export function MinResponse(variable: string, min: number) {
+	return ErrorResponse(new Error(ResponseText.Min(variable, min)));
+}
+export function MaxResponse(variable: string, max: number) {
+	return ErrorResponse(new Error(ResponseText.Max(variable, max)));
 }
 export function MinLengthResponse(variable: string, minLength: number) {
 	return ErrorResponse(
@@ -63,6 +66,24 @@ export function OldPasswordSameNewResponse() {
 }
 export function UserIdNotFoundResponse(variable: string | number) {
 	return ErrorResponse(new Error(ResponseText.UserIdNotFound(variable)));
+}
+// Plan.
+export function PlanIdNotFoundResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.PlanIdNotFound(variable)));
+}
+// Transaction.
+export function TransactionIdNotFoundResponse(variable: string | bigint) {
+	return ErrorResponse(
+		new Error(ResponseText.TransactionIdNotFound(variable)),
+	);
+}
+// Membership.
+export function MembershipExpiredResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.MembershipExpired(variable)));
+}
+// Product.
+export function ProductIdNotFoundResponse(variable: string | number) {
+	return ErrorResponse(new Error(ResponseText.ProductIdNotFound(variable)));
 }
 
 export function Response<T extends { [key: string]: any }>(
@@ -142,6 +163,12 @@ export function ErrorResponse(
 		statusCode = HTTPStatusCode.NOT_FOUND;
 	else if (resLower.includes('already exists'))
 		statusCode = HTTPStatusCode.CONFLICT;
+	else if (
+		['expired', 'out of stock', 'not enough'].some((x) =>
+			resLower.includes(x.toLowerCase()),
+		)
+	)
+		statusCode = HTTPStatusCode.GONE;
 	else if (
 		['less than', 'greater than', 'range of'].some((x) =>
 			resLower.includes(x.toLowerCase()),
