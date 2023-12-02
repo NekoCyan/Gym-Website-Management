@@ -1,6 +1,6 @@
 import type { NextRequest } from 'next/server';
 import { Response, ErrorResponse, UserIdNotFoundResponse } from '@/utils/ResponseHandler';
-import { AdminRequired, FormatShortDateTime, SearchParamsToObject, TRANSACTION } from '@/utils';
+import { AdminRequired, FormatShortDateTime, SearchParamsToObject } from '@/utils';
 
 import dbConnect from '@/lib/dbConnect';
 import User from '@/app/models/User';
