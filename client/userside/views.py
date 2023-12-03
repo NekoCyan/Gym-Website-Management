@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from django.conf import settings
+from .forms import UserProfile
 
 import datetime
 
