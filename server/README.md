@@ -449,9 +449,9 @@ _Currently empty._
 > | ----------- | -------- | --------- | ------- | ------------------------ |
 > | email       | optional | string    |         |                          |
 > | password    | optional | string    |         |                          |
-> | role        | optional | number    |         | [Enum#ROLES](#roles)     |
+> | role        | optional | string    |         | [Enum#ROLES](#roles)     |
 > | fullName    | optional | string    |         |                          |
-> | gender      | optional | number    |         | [Enum#GENDER](#gender)   |
+> | gender      | optional | string    |         | [Enum#GENDER](#gender)   |
 > | address     | optional | string    |         |                          |
 > | phoneNumber | optional | string    |         |                          |
 > | photo       | optional | string    |         |                          |

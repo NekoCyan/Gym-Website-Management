@@ -2,7 +2,6 @@ import type { NextRequest } from 'next/server';
 import {
 	Response,
 	ErrorResponse,
-	UserIdNotFoundResponse,
 } from '@/utils/ResponseHandler';
 
 import dbConnect from '@/lib/dbConnect';
