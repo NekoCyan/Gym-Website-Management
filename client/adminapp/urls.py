@@ -1,6 +1,7 @@
 from django.urls import path
 from adminapp import views
 from .views import UserListCreateView, UserDetailView
+from .views import UserListView
 
 urlpatterns = [
 
@@ -136,7 +137,7 @@ urlpatterns = [
     path('users/', UserListCreateView.as_view(), name='user-list-create'),
     path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
 
-
+    path('user/list/', UserListView.as_view(), name='user-list'),
     path('AddOrder.html',views.AddOrder,name='AddOrder.html'),
     
     path('ViewOrder.html',views.ViewOrder,name='ViewOrder.html'),
