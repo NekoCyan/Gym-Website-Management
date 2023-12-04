@@ -1,5 +1,6 @@
 from django.urls import path
 from adminapp import views
+from .views import UserListCreateView, UserDetailView
 
 urlpatterns = [
 
@@ -58,7 +59,6 @@ urlpatterns = [
 
     path('TrainerDetail/delete/<int:id>', views.TrainerDetaildelete, name="TrainerDetaildelete"),
 
-1
 
 
     path('AddProduct.html',views.AddProduct,name='AddProduct.html'),
@@ -133,7 +133,8 @@ urlpatterns = [
 
     path('Payment/delete/<int:id>', views.Paymentdelete, name="Paymentdelete"),
     
-
+    path('users/', UserListCreateView.as_view(), name='user-list-create'),
+    path('users/<int:pk>/', UserDetailView.as_view(), name='user-detail'),
 
 
     path('AddOrder.html',views.AddOrder,name='AddOrder.html'),

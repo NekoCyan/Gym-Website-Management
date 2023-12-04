@@ -6,7 +6,14 @@ from django.conf.urls.static import static
 from django.core.mail import send_mail
 from django.conf import settings
 from django.db import connection
+from rest_framework import generics
+from .models import User
+from .form import UserForm
+from django.views import View
+from .serializers import UserSerializer
+from .enums import ROLES, GENDER
 import requests
+import pymongo
 # Create your views here.
 # Create your views here.
 import mysql.connector as mcdb
@@ -147,7 +154,7 @@ def changepasswordprocess(request):
 
 
 def register_admin_with_route(email, password, fullName, gender, address, phoneNumber):
-    route = "http://http://localhost:3000/api/auth/register"
+    route = "http://localhost:3000/api/auth/register"
 
     data = {
         "email": email,
@@ -170,10 +177,10 @@ def register_admin_with_route(email, password, fullName, gender, address, phoneN
             # Registration failed
             error_message = response.json().get("error")
             # Handle the error
-            print(f"Registration failed. Error: {error_message}")
+            print(f"Đăng ký thất bại. Lỗi: {error_message}")
     except requests.RequestException as e:
         # Handle any exceptions that may occur during the request
-        print(f"Error during registration request: {str(e)}")
+        print(f"Lỗi khi request: {str(e)}")
 
 def register(request):
     if request.method == 'POST':
@@ -185,8 +192,7 @@ def register(request):
         address = request.POST.get('address')
         phoneNumber = request.POST.get('phoneNumber')
 
-        # Register the user with the Next.js API
-        register_user_with_nextjs(email, password, fullName, gender, address, phoneNumber)
+        register_admin_with_route(email, password, fullName, gender, address, phoneNumber)
 
         # Continue with your Django registration logic
         # For example, you can redirect the user to a success page
@@ -285,7 +291,13 @@ def Userdelete(request,id):
     return redirect(ViewUser) 
 
 
+class UserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 def AddTrainerDetail(request):
@@ -683,3 +695,66 @@ def ViewFeedback(request):
     #return list(data)
     print(list(data))
     return render(request,'Admin/ViewFeedback.html', {'mydata': data})
+
+class AddUserView(View):
+    template_name = 'add_user.html'
+
+    def get(self, request):
+        mydata = [
+            (role.value, role.name) for role in ROLES
+        ]
+        return render(request, self.template_name, {'mydata': mydata, 'form': UserForm(choices={'gender': GENDER.choices()})})
+
+    def post(self, request):
+        form = UserForm(request.POST, request.FILES)
+        if form.is_valid():
+            api_url = 'http://localhost:3000/api/user'  # Adjust this URL
+
+            # Example using requests library for API request
+            try:
+                response = requests.post(api_url, data=form.cleaned_data)
+                response.raise_for_status()  # Check for HTTP errors
+
+                if response.status_code == 200:
+                    messages.success(request, 'User added successfully')
+                else:
+                    messages.error(request, 'Failed to add user')
+            except requests.RequestException as e:
+                messages.error(request, f'Error: {e}')
+
+            return redirect('add-user')
+        else:
+            messages.error(request, 'Error in the form. Please check the fields.')
+            return render(request, self.template_name, {'form': form})
+class UserListView(View):
+    template_name = 'user_list.html'
+
+    def get(self, request):
+        # Connect to MongoDB
+        client = pymongo.MongoClient("mongodb:gym-website-api")
+        database = client.get_database("myproject1")
+        user_collection = database.get_collection("user")
+
+        # Fetch user data
+        user_data = user_collection.find()
+
+        # Close MongoDB connection
+        client.close()
+
+        # Format data for template
+        mydata = [
+            (
+                user['userId'],
+                user['role'],
+                user['fullName'],
+                user['gender'],
+                user['email'],
+                user['address'],
+                user['phoneNumber'],
+                user['photo'],
+                user['id_proof'],
+            )
+            for user in user_data
+        ]
+
+        return render(request, self.template_name, {'mydata': mydata})
