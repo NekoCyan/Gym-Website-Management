@@ -5,8 +5,20 @@ from django.core.files.storage import FileSystemStorage
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from django.conf import settings
-from .forms import UserProfile
-
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializers import RegisterSerializer, UserCreateSerializer,LoginSerializer
+from .models import User_Profile
+from django.conf import settings
+from .forms import User_Profile
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.encoding import force_bytes
+from django.utils.http import urlsafe_base64_encode
+from .utils import is_valid_email, is_valid_password
+import requests
 import datetime
 
 import mysql.connector as mcdb
@@ -161,103 +173,134 @@ def registerprocess(request):
         plan = request.POST['plan']
         print(plan)
         password = request.POST['password']
-        try:
-            photo = request.FILES['photo']
-            f = open("Adminapp/static/upload/"+img, 'wb')
-            for i in photo:
-                f.write(i)
-            f.close()
-            idproof = request.FILES['id_proof']
-            fi = open("Adminapp/static/upload/"+id_proof, 'wb')
-            for i in id_proof:
-                f.write(i)
-            f.close()
-        except:
-            pass
-        cur.execute("INSERT INTO `user_master`(`Type_Id`,`User_Name`,`Gender`,`Email`,`Password`,`Address`,`Mobile`,`Photo`,`ID_Proof`) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(typeid,name,gender,email,password,address,mobile,img,id_proof))
-        u_id = cur.lastrowid  
-        print(u_id)
-        conn.commit()
-        cur.execute("SELECT * FROM `plan_master` WHERE `Plan_Id` = '{}'".format(plan))
-        s_date = datetime.date.today()
-        print(s_date)
-        print(plan)
-        data = cur.fetchone()
-        print(data)
-        planidd = data[0]
-        planprice = data[3]
-        plandetails = data[2]
-        status = "cancel"
-        print(data)
-        import datetime as dt
+        
+        register_api_url = 'http://http://localhost:3000/api/auth/register'  
+        payload = {
+            'mname': name,
+            'gender': gender,
+            'email': email,
+            'address': address,
+            'mobile': mobile,
+            'photo': request.FILES['photo'],
+            'id_proof': request.FILES['id_proof'],
+            'plan': plan,
+            'password': password,
+        }
+        response = requests.post(register_api_url, data=payload)
 
-        '''if plan == "1":
-            now = dt.datetime.now()
-            e_date = now + dt.timedelta(months=+1)
-            #e_date = s_date + 30
-        elif plan == "2":
-            now = dt.datetime.now()
-            e_date = now + dt.timedelta(months=+2)
-            #e_date = s_date + 180
-        elif plan == "3":
-            now = dt.datetime.now()
-            e_date = now + dt.timedelta(months=+3)
-            #e_date = s_date + 180'''
-        e_date = '1-1-2021'
-        cur.execute("INSERT INTO `membership_master`(`User_Id`,`Plan_Id`,`Start_Date`,`End_Date`,`Amount`,`Details`,`Membership_Status`) VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(u_id,planidd,s_date,e_date,planprice,plandetails,'Pending'))
-        m_id = cur.lastrowid
-        conn.commit()
-        return redirect("/payment/{}".format(m_id)) 
+        if response.status_code == 201:  # Kiểm tra nếu đăng ký thành công
+            json_response = response.json()
+            m_id = json_response.get('m_id')
+            return redirect(f'/payment/{m_id}')
+        else:
+            # Xử lý lỗi nếu đăng ký không thành công
+            return render(request, 'error.html', {'error_message': 'Đăng nhập thất bại'})
+
     else:
-        return redirect(register)
+        return redirect('register')
+    
+class RegisterAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.POST.get('email')
+        password = request.POST.get('password')
 
+        if not is_valid_email(email):
+            return Response({'error': 'Invalid email address'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if not is_valid_password(password):
+            return Response({'error': 'Password must be at least 6 characters long'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+
+            # Gọi authenticate để đảm bảo thông tin đăng nhập đúng
+            user = authenticate(request, username=serializer.validated_data['email'], password=serializer.validated_data['password'])
+            if user:
+                login(request, user)
+            new_user = User.objects.create_user(
+                username=serializer.validated_data['email'],
+                password=serializer.validated_data['password']
+            )
+            # Tạo token xác nhận
+            token = default_token_generator.make_token(user)
+            # Tạo confirmation_link
+            uidb64 = urlsafe_base64_encode(force_bytes(user.id))
+            confirmation_link = f'http://http://localhost:3000/confirm-registration/{uidb64}/{token}/'
+
+            # Gửi email xác nhận
+            subject = 'Xác nhận đăng ký'
+            message = f'Chào mừng bạn đến với ứng dụng của chúng tôi! Nhấp vào liên kết sau để xác nhận đăng ký: {confirmation_link}'
+            from_email = settings.DEFAULT_FROM_EMAIL
+            to_email = [user.email]
+
+            send_mail(subject, message, from_email, to_email, fail_silently=False)
+            
+            User_Profile.objects.create(user=user, address=request.POST.get('address'), phone_number=request.POST.get('phone_number'))
+            #Tạo token    
+            from rest_framework.authtoken.models import Token
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'user_id': new_user.id, 'message': 'Registration successful'}, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class LoginAPIView(APIView):
+    def post(self, request, *args, **kwargs):
+        serializer = LoginSerializer(data=request.data)
+        if serializer.is_valid():
+            user = authenticate(request, username=serializer.validated_data['useremail'], password=serializer.validated_data['userpassword'])
+            if user:
+                login(request, user)
+                # Xử lý logic sau khi người dùng đăng nhập ở đây
+                # ...
+                return Response({'token': 'your_generated_token'}, status=status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
 def login(request):
     if request.method == 'POST':
         print(request.POST)
         uemail = request.POST['useremil']
         upassword = request.POST['userpassword']
         usertype = request.POST['type']
-        cur.execute("select * from `user_master` where `Email` = '{}' and `Password` = '{}'".format(uemail,upassword))
-        data = cur.fetchone()
         
-        if data is not None:
+        api_url = request.Post(api_url, json={'email': uemail, 'password': upassword})
 
-            if len(data) > 0:
-                #Fetch Data
-                db_id = data[0]
-                db_email = data[4]
-                db_name = data[2]
-                db_photo = data[8]
-                print(db_id)
-                print(db_email)
-                #Session Create Code
-                if usertype=="Trainer" and data[1]==2:
-                    request.session['user_id'] = db_id
-                    request.session['user_email'] = db_email
-                    request.session['user_name'] = db_name
-                    request.session['user_photo'] = db_photo
-                    response = redirect("http://127.0.0.1:3000/trainerapp/")
-                    response.set_cookie('user_id', db_id)
-                    response.set_cookie('user_email', db_email)
-                    return response
-                elif usertype=="Member" and data[1]==1:
-                    request.session['user_id'] = db_id
-                    request.session['user_email'] = db_email
-                    response = redirect(home)
-                    response.set_cookie('user_id', db_id)
-                    response.set_cookie('user_email', db_email)
-                    return response
-                else:
-                    return render(request, 'Userside/login.html')
+        if response.status.code == 200:
+            # Xử lý dữ liệu từ API Node.js nếu cần
+            data_from_nodejs = response.json()
+
+            # Lưu API token vào session hoặc cookie
+            request.session['api_token'] = data_from_nodejs.get('token')
+
+            # Đoạn code kiểm tra quyền và chuyển hướng tương ứng
+            if usertype == "Trainer" and data_from_nodejs.get('userType') == 2:
+                request.session['user_id'] = data_from_nodejs.get('userId')
+                request.session['user_email'] = uemail
+                request.session['user_name'] = data_from_nodejs.get('userName')
+                request.session['user_photo'] = data_from_nodejs.get('userPhoto')
+                response = redirect("http://127.0.0.1:3000/trainerapp/")
+                response.set_cookie('user_id', data_from_nodejs.get('userId'))
+                response.set_cookie('user_email', uemail)
+                return response
+            elif usertype == "Member" and data_from_nodejs.get('userType') == 1:
+                request.session['user_id'] = data_from_nodejs.get('userId')
+                request.session['user_email'] = uemail
+                response = redirect(home)
+                response.set_cookie('user_id', data_from_nodejs.get('userId'))
+                response.set_cookie('user_email', uemail)
+                return response
+            else:
+                return render(request, 'Userside/login.html')
 
                 #Session Create Code
                 #Cookie Code
                 
                 #Cookie Code
-            else:
-                return render(request, 'Userside/login.html')         
-        return render(request, 'Userside/login.html')
-        
+        else:
+            return render(request, 'error.html', {'error_message': 'request API không thành công'})  
        # return redirect(dashboard) 
     else:
         return render(request, 'Userside/login.html')
@@ -489,3 +532,8 @@ def viewfeedback(request):
     #return list(data)
     print(list(data))
     return render(request,'Userside/viewfeedback.html',{'mydata': data})
+
+def login_view(request):
+    if requests.method == 'POST':
+        email = requests.post.get('useremail')
+        pass
