@@ -13,7 +13,7 @@
  }
 </style>
 <!--Register Section-->
-<section class="page-title" style="background-image:url(static/images/background/51.jpg)">
+<section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
     <div class="auto-container">
         <div class="clearfix">
             <div class="pull-left">
@@ -39,10 +39,10 @@
              <br>
                 Step 1: Register with us by filling below form.<br>
                 Step 2: After submitting the form, you will be redirected to the payment confirmation page.<br>
-                Step 3: On payment confirmation page, Select the payment method, upload the payment receipt, enter the transaction no. and 
+                Step 3: On the payment confirmation page, Select the payment method, upload the payment receipt, enter the transaction no. and 
                 submit the form.<br>
-                Step 4: After successfull submission of all the details asked above, your request to join the Gym will be sent to our management. You will recieve a confirmation E-mail.<br>
-                Step 5: After receiving Confirmation E-mail, you can login with your E-mail and password.    
+                Step 4: After successful submission of all the details asked above, your request to join the Gym will be sent to our management.<br>
+                Step 5: Now you can login with your Email id and Password and check your Membership Status.    
             </td>        
         </tr>      
     </table>
@@ -52,32 +52,29 @@
 <section class="register-section">
     <div class="auto-container">
         <div class="row clearfix">
-
-            
-                
-         
-            
-            <!--Form Column-->
-            
             <!--Form Column-->
             <div class="form-column column col-lg-6 col-md-12 col-sm-12">
-            
                 <div class="sec-title">
                     <h2>Register Here</h2>
                     <div class="separate"></div>
                 </div>
-                
-                <!--Login Form-->
+
+                <!-- Thông báo lỗi -->
+                {% if error_message %}
+                    <div class="alert alert-danger" role="alert">
+                        {{ error_message }}
+                    </div>
+                {% endif %}
+
+                <!-- Form đăng ký -->
                 <div class="styled-form register-form">
-                    <form method="post" action="/confrm" enctype="multipart/form-data">
+                    <form method="POST" action="/registerprocess" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-                            
                             <h5 style="color:black">Name:</h5>
-                            <input type="text" name="mname" style="border: solid;border-color: black;border-width: thin;" value="" placeholder="Your Name*" pattern="^[A-Za-z -]+$"  title="Please Enter Only Characters" minlength="3" maxlength="25" required>
+                            <input type="text" name="mname" style="border: solid;border-color: black;border-width: thin;" value="" placeholder="Your Name*" pattern="^[A-Za-z -]+$" title="Please Enter Only Characters" minlength="3" required>
                         </div>
                         <div class="form-group">
-                            
                             <h5 style="color:black">Gender:</h5><br/>
                             <input type="radio" name="gender" value="M" required> Male
                             <br>
@@ -89,22 +86,18 @@
                             <input type="email" name="email" style="border: solid;border-color: black;border-width: thin;" value="" placeholder="Email Address*" required>
                         </div>
                         <div class="form-group">
-                            
                             <h5 style="color:black">Address:</h5>
                             <input type="text" name="address" value="" placeholder="Your Address*" style="border: solid;border-color: black;border-width: thin;" required>
                         </div>
                         <div class="form-group">
-                            
                             <h5 style="color:black">Mobile:</h5>
                             <input type="text" maxlength="10" name="mobile" minlength="10" pattern="[0-9]{10}" value="" title="please enter valid Mobile Number" style="border: solid;border-color: black;border-width: thin;" placeholder="Your Mobile No..*" required>
                         </div>
                         <div class="form-group">
-                            
                             <h5 style="color:black">Photo:</h5><br>
                             <input type="file" name="photo" accept="image/*" style="border: solid;border-color: black;border-width: thin;" required>
                         </div>
-                       <div class="form-group">
-                            
+                        <div class="form-group">
                             <h5 style="color:black">ID Proof:</h5><br>
                             <input type="file" name="id_proof" accept=".pdf" style="border: solid;border-color: black;border-width: thin;" required>
                         </div>
@@ -119,13 +112,12 @@
                             <input type="password" name="cnfrmpassword" maxlength="8" minlength="6" id="confirm_password" style="border: solid;border-color: black;border-width: thin;" value="" placeholder="Confirm Password*" required>
                         </div>
                         <div class="form-group">
-                            
                             <h5 style="color:black">Choose Plan:</h5><br/>
-                            <input type="radio" name="plan" value="Basic Plan" required> Basic Plan (1 Month ₹1200)
+                            <input type="radio" name="plan" value="1" required> Basic Plan (1 Month ₹1200)
                             <br>
-                            <input type="radio" name="plan" value="Standard Plan"> Standard Plan (6 Month ₹6000)
+                            <input type="radio" name="plan" value="2"> Standard Plan (6 Month ₹6000)
                             <br>
-                            <input type="radio" name="plan" value="Ultimate Plan"> Ultimate Plan (12 Month ₹10000)
+                            <input type="radio" name="plan" value="3"> Ultimate Plan (12 Month ₹10000)
                         </div>
                         <h6 style="color:black">I Agree Terms & Conditions</h6><input type="checkbox" id="term" name="term" required>
                         <br><br>
@@ -133,31 +125,27 @@
                             <div class="form-group pull-left">
                                 <input type="submit" value="submit" style="color: white;background-color: black;" class="theme-btn btn-style-three">
                             </div>
-                           
                         </div>
                     </form>
                     <script>
-                        var password = document.getElementById("password")
-                      , confirm_password = document.getElementById("confirm_password");
-                    
-                    function validatePassword(){
-                      if(password.value != confirm_password.value) {
-                        confirm_password.setCustomValidity("Password Don't Match");
-                      } else {
-                        confirm_password.setCustomValidity('');
-                      }
-                    }
-                    
-                    password.onchange = validatePassword;
-                    confirm_password.onkeyup = validatePassword;
-                        </script>
+                        var password = document.getElementById("password"),
+                            confirm_password = document.getElementById("confirm_password");
+
+                        function validatePassword(){
+                            if(password.value != confirm_password.value) {
+                                confirm_password.setCustomValidity("Password Don't Match");
+                            } else {
+                                confirm_password.setCustomValidity('');
+                            }
+                        }
+
+                        password.onchange = validatePassword;
+                        confirm_password.onkeyup = validatePassword;
+                    </script>
                 </div>
-                
             </div>
-            
         </div>
     </div>
-
 </section>
 <!--End Register Section-->
 

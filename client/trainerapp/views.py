@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from django.conf import settings
+import requests
 # Create your views here.
 
 import mysql.connector as mcdb
@@ -137,3 +138,5 @@ def Workoutdelete(request,id):
     conn.commit()
     return redirect(ViewWorkout)
 
+def get_data_from_nodejs_api(request):
+    nodejs
