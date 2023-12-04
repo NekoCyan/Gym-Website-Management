@@ -89,17 +89,17 @@
 
 ##### Responses in data.
 
-> | Name        | Data type | Description |
-> | ----------- | --------- | ----------- |
-> | userId      | number    |             |
-> | fullName    | string    |             |
-> | gender      | string    |             |
-> | address     | string    |             |
-> | phoneNumber | string    |             |
-> | photo       | string    |             |
-> | role        | string    |             |
-> | cash        | number    |             |
-> | totalCash   | number    |             |
+> | Name         | Data type | Description |
+> | ------------ | --------- | ----------- |
+> | userId       | number    |             |
+> | fullName     | string    |             |
+> | gender       | string    |             |
+> | address      | string    |             |
+> | phoneNumber  | string    |             |
+> | photo        | string    |             |
+> | role         | string    |             |
+> | balance      | number    |             |
+> | totalBalance | number    |             |
 
 </details>
 
@@ -426,17 +426,17 @@ _Currently empty._
 
 ##### Responses in data.
 
-> | Name        | Data type | Description |
-> | ----------- | --------- | ----------- |
-> | email       | string    |             |
-> | fullName    | string    |             |
-> | gender      | string    |             |
-> | address     | string    |             |
-> | phoneNumber | string    |             |
-> | photo       | string    |             |
-> | role        | string    |             |
-> | cash        | number    |             |
-> | totalCash   | number    |             |
+> | Name         | Data type | Description |
+> | ------------ | --------- | ----------- |
+> | email        | string    |             |
+> | fullName     | string    |             |
+> | gender       | string    |             |
+> | address      | string    |             |
+> | phoneNumber  | string    |             |
+> | photo        | string    |             |
+> | role         | string    |             |
+> | balance      | number    |             |
+> | totalBalance | number    |             |
 
 </details>
 
@@ -455,7 +455,7 @@ _Currently empty._
 > | address     | optional | string    |         |                          |
 > | phoneNumber | optional | string    |         |                          |
 > | photo       | optional | string    |         |                          |
-> | cash        | optional | number    |         | Increasement from itself |
+> | balance     | optional | number    |         | Increasement from itself |
 
 ##### Responses in data.
 
