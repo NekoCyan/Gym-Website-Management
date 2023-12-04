@@ -2,6 +2,9 @@ from django.core.validators import FileExtensionValidator
 from django.core.validators import MinValueValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
+import sys
+print(sys.path)
+
 
 # Create your models here.
 
@@ -137,7 +140,3 @@ class classMembership(models.Model):
     name = models.CharField(max_length= 100)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-
-# class User_Profile(models.Model):
-#     user = models.OneToOneField(User_Profile, on_delete=models.CASCADE)
-#     Membership_plan = models.ForeignKey(Membership_plan, on_delete=models.SET_NULL, null=True)

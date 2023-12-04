@@ -24,6 +24,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('',include('userside.urls')),
     path('myadmin/',include('adminapp.urls')),
-     path('trainerapp/',include('trainerapp.urls')),
-    
+    path('trainerapp/',include('trainerapp.urls')),
 ]

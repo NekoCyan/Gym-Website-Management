@@ -2,7 +2,7 @@ from rest.framework.views import APIView
 from rest.framework.response import Response
 from rest.framework import status
 from rest.framework.permissions import IsAuthenticated
-from .modedls import Member, Transaction 
+from .models import Member, Transaction 
 from .serializers import MemberSerializer
 from django.views import View
 from django.contrib.auth import login 
