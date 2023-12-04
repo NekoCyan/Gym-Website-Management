@@ -38,7 +38,7 @@
 <details>
     <summary><code>POST</code> <code><b>/register</b></code> <code>Do create new user</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name        | Type     | Data type | Default | Description            |
 > | ----------- | -------- | --------- | ------- | ---------------------- |
@@ -49,7 +49,7 @@
 > | address     | required | string    |         |                        |
 > | phoneNumber | required | string    |         |                        |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name  | Data type | Description                   |
 > | ----- | --------- | ----------------------------- |
@@ -60,14 +60,14 @@
 <details>
     <summary><code>POST</code> <code><b>/login</b></code> <code>Do user login</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name     | Type     | Data type | Default | Description     |
 > | -------- | -------- | --------- | ------- | --------------- |
 > | email    | required | string    |         |                 |
 > | password | required | string    |         | min length is 6 |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name  | Data type | Description                   |
 > | ----- | --------- | ----------------------------- |
@@ -82,12 +82,12 @@
 <details>
     <summary><code>GET</code> <code><b>/</b></code> <code>Get user data</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name | Type | Data type | Default | Description |
 > | ---- | ---- | --------- | ------- | ----------- |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name         | Data type | Description |
 > | ------------ | --------- | ----------- |
@@ -106,7 +106,7 @@
 <details>
     <summary><code>PUT</code> <code><b>/</b></code> <code>Update user data</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name        | Type     | Data type | Default | Description            |
 > | ----------- | -------- | --------- | ------- | ---------------------- |
@@ -117,7 +117,7 @@
 > | phoneNumber | optional | string    |         |                        |
 > | photo       | optional | string    |         |                        |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
@@ -130,7 +130,7 @@
 <details>
     <summary><code>GET</code> <code><b>/attendance</b></code> <code>Get list of check in</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                             |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------------------- |
@@ -138,7 +138,7 @@
 > | page   | optional | number    | 1       |                                                                         |
 > | format | optional | boolean   | false   | format `timeIn` and `timeOut` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
@@ -153,12 +153,12 @@
 <details>
     <summary><code>POST</code> <code><b>/attendance/checkin</b></code> <code>Do check in</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name | Type | Data type | Default | Description |
 > | ---- | ---- | --------- | ------- | ----------- |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name | Data type | Description |
 > | ---- | --------- | ----------- |
@@ -168,12 +168,12 @@
 <details>
     <summary><code>POST</code> <code><b>/attendance/checkout</b></code> <code>Do check out</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name | Type | Data type | Default | Description |
 > | ---- | ---- | --------- | ------- | ----------- |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name | Data type | Description |
 > | ---- | --------- | ----------- |
@@ -185,7 +185,7 @@
 <details>
     <summary><code>GET</code> <code><b>/transaction</b></code> <code>Get list of transaction</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                 |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
@@ -194,7 +194,7 @@
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 > | type   | optional | number    | -1      | [Enum#TRANSACTION_TYPE](#transaction_type)                  |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name                  | Data type | Description                                                                |
 > | --------------------- | --------- | -------------------------------------------------------------------------- |
@@ -215,13 +215,13 @@
 <details>
     <summary><code>GET</code> <code><b>/transaction/{transactionId}</b></code> <code>Get transaction data from transaction follow transactionId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                 |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name      | Data type | Description |
 > | --------- | --------- | ----------- |
@@ -240,7 +240,7 @@
 <details>
     <summary><code>GET</code> <code><b>/membership</b></code> <code>Get list of membership (that using plan)</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                            |
 > | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
@@ -248,7 +248,7 @@
 > | page   | optional | number    | 1       |                                                                        |
 > | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
@@ -264,13 +264,13 @@
 <details>
     <summary><code>GET</code> <code><b>/membership/{planId}</b></code> <code>Get membership data from membership follow planId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                            |
 > | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
 > | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name    | Data type | Description |
 > | ------- | --------- | ----------- |
@@ -286,7 +286,7 @@
 <details>
     <summary><code>GET</code> <code><b>/</b></code> <code>Get list of plan</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name  | Type     | Data type | Default | Description                            |
 > | ----- | -------- | --------- | ------- | -------------------------------------- |
@@ -294,7 +294,7 @@
 > | page  | optional | number    | 1       |                                        |
 > | long  | optional | boolean   | false   | format timestamp to readable date time |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name             | Data type        | Description                             |
 > | ---------------- | ---------------- | --------------------------------------- |
@@ -312,13 +312,13 @@
 <details>
     <summary><code>GET</code> <code><b>/{planId}</b></code> <code>Get plan data from plan follow planId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name | Type     | Data type | Default | Description                            |
 > | ---- | -------- | --------- | ------- | -------------------------------------- |
 > | long | optional | boolean   | false   | format timestamp to readable date time |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name     | Data type        | Description              |
 > | -------- | ---------------- | ------------------------ |
@@ -332,13 +332,13 @@
 <details>
     <summary><code>POST</code> <code><b>/{planId}/buy</b></code> <code>Do buy a membership from plan follow planId</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name     | Type     | Data type | Default | Description |
 > | -------- | -------- | --------- | ------- | ----------- |
 > | quantity | required | number    |         |             |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name | Data type | Description |
 > | ---- | --------- | ----------- |
@@ -352,14 +352,14 @@
 <details>
     <summary><code>GET</code> <code><b>/</b></code> <code>Get list of product</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name  | Type     | Data type | Default | Description |
 > | ----- | -------- | --------- | ------- | ----------- |
 > | limit | optional | number    | 20      |             |
 > | page  | optional | number    | 1       |             |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
@@ -376,12 +376,12 @@
 <details>
     <summary><code>GET</code> <code><b>/{productId}</b></code> <code>Get product data from product follow productId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name | Type | Data type | Default | Description |
 > | ---- | ---- | --------- | ------- | ----------- |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name    | Data type | Description |
 > | ------- | --------- | ----------- |
@@ -395,13 +395,13 @@
 <details>
     <summary><code>POST</code> <code><b>/{productId}/buy</b></code> <code>Do buy a product from product follow productId</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name     | Type     | Data type | Default | Description |
 > | -------- | -------- | --------- | ------- | ----------- |
 > | quantity | required | number    |         |             |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name | Data type | Description |
 > | ---- | --------- | ----------- |
@@ -419,12 +419,12 @@ _Currently empty._
 <details>
     <summary><code>GET</code> <code><b>/{userId}</b></code> <code>Get user data from an user data follow userId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name | Type | Data type | Default | Description |
 > | ---- | ---- | --------- | ------- | ----------- |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name         | Data type | Description |
 > | ------------ | --------- | ----------- |
@@ -443,7 +443,7 @@ _Currently empty._
 <details>
     <summary><code>PUT</code> <code><b>/{userId}</b></code> <code>Update user data for an user follow userId</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name        | Type     | Data type | Default | Description              |
 > | ----------- | -------- | --------- | ------- | ------------------------ |
@@ -457,7 +457,7 @@ _Currently empty._
 > | photo       | optional | string    |         |                          |
 > | balance     | optional | number    |         | Increasement from itself |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
@@ -466,9 +466,39 @@ _Currently empty._
 </details>
 
 <details>
+    <summary><code>GET</code> <code><b>/list</b></code> <code>Get list of user</code></summary>
+
+##### Search Parameters
+
+> | Name  | Type     | Data type | Default | Description |
+> | ----- | -------- | --------- | ------- | ----------- |
+> | limit | optional | number    | 20      |             |
+> | page  | optional | number    | 1       |             |
+
+##### Responses in data
+
+> | Name                 | Data type | Description   |
+> | -------------------- | --------- | ------------- |
+> | list                 | Array     |               |
+> | list[X].userId       | number    | Array in list |
+> | list[X].email        | string    | Array in list |
+> | list[X].role         | string    | Array in list |
+> | list[X].fullName     | string    | Array in list |
+> | list[X].gender       | string    | Array in list |
+> | list[X].address      | string    | Array in list |
+> | list[X].phoneNumber  | string    | Array in list |
+> | list[X].photo        | string    | Array in list |
+> | list[X].balance      | number    | Array in list |
+> | list[X].totalBalance | number    | Array in list |
+> | currentPage          | number    |               |
+> | totalPage            | number    |               |
+
+</details>
+
+<details>
     <summary><code>GET</code> <code><b>/{userId}/attendance</b></code> <code>Get check in list from an user follow userId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                             |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------------------- |
@@ -476,7 +506,7 @@ _Currently empty._
 > | page   | optional | number    | 1       |                                                                         |
 > | format | optional | boolean   | false   | format `timeIn` and `timeOut` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
@@ -491,7 +521,7 @@ _Currently empty._
 <details>
     <summary><code>GET</code> <code><b>/{userId}/transaction</b></code> <code>Get transaction list from an user follow userId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                 |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
@@ -500,7 +530,7 @@ _Currently empty._
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 > | type   | optional | number    | -1      | [Enum#TRANSACTION_TYPE](#transaction_type)                  |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name              | Data type | Description                                                                |
 > | ----------------- | --------- | -------------------------------------------------------------------------- |
@@ -520,7 +550,7 @@ _Currently empty._
 <details>
     <summary><code>GET</code> <code><b>/{userId}/membership</b></code> <code>Get membership list from an user follow userId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                            |
 > | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
@@ -528,7 +558,7 @@ _Currently empty._
 > | page   | optional | number    | 1       |                                                                        |
 > | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name            | Data type | Description   |
 > | --------------- | --------- | ------------- |
@@ -544,13 +574,13 @@ _Currently empty._
 <details>
     <summary><code>GET</code> <code><b>/{userId}/membership/{membershipId}</b></code> <code>Get membership data follow membershipId from an user follow userId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                            |
 > | ------ | -------- | --------- | ------- | ---------------------------------------------------------------------- |
 > | format | optional | boolean   | false   | format `startAt` and `endAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name    | Data type | Description |
 > | ------- | --------- | ----------- |
@@ -566,7 +596,7 @@ _Currently empty._
 <details>
     <summary><code>POST</code> <code><b>/</b></code> <code>Do create new plan</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name     | Type     | Data type | Default | Description        |
 > | -------- | -------- | --------- | ------- | ------------------ |
@@ -575,7 +605,7 @@ _Currently empty._
 > | price    | required | number    |         |                    |
 > | duration | required | number    |         | also accept string |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name   | Data type | Description |
 > | ------ | --------- | ----------- |
@@ -586,7 +616,7 @@ _Currently empty._
 <details>
     <summary><code>PUT</code> <code><b>/{planId}</b></code> <code>Update plan data for a plan follow planId</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name     | Type     | Data type | Default | Description        |
 > | -------- | -------- | --------- | ------- | ------------------ |
@@ -595,7 +625,7 @@ _Currently empty._
 > | price    | optional | number    |         |                    |
 > | duration | optional | number    |         | also accept string |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
@@ -610,13 +640,13 @@ _Currently empty._
 <details>
     <summary><code>GET</code> <code><b>/{transactionId}</b></code> <code>Get transaction data from transaction follow transactionId</code></summary>
 
-##### Parameters
+##### Search Parameters
 
 > | Name   | Type     | Data type | Default | Description                                                 |
 > | ------ | -------- | --------- | ------- | ----------------------------------------------------------- |
 > | format | optional | boolean   | false   | format `createAt` from ISO date to `dd/mm/yyyy hh:MM:ss tt` |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name      | Data type | Description |
 > | --------- | --------- | ----------- |
@@ -637,7 +667,7 @@ _Currently empty._
 <details>
     <summary><code>POST</code> <code><b>/</b></code> <code>Do create new product</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name    | Type     | Data type | Default | Description |
 > | ------- | -------- | --------- | ------- | ----------- |
@@ -646,7 +676,7 @@ _Currently empty._
 > | price   | required | number    |         |             |
 > | storage | required | number    |         |             |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name      | Data type | Description |
 > | --------- | --------- | ----------- |
@@ -657,7 +687,7 @@ _Currently empty._
 <details>
     <summary><code>PUT</code> <code><b>/{productId}</b></code> <code>Update product data for a product follow productId</code></summary>
 
-##### Parameters
+##### Payload request
 
 > | Name    | Type     | Data type | Default | Description              |
 > | ------- | -------- | --------- | ------- | ------------------------ |
@@ -666,7 +696,7 @@ _Currently empty._
 > | price   | optional | number    |         |                          |
 > | storage | optional | number    |         | Increasement from itself |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name                                  | Data type                             | Description |
 > | ------------------------------------- | ------------------------------------- | ----------- |
@@ -682,7 +712,7 @@ _Currently empty._
 > | Name | Type | Data type | Default | Description |
 > | ---- | ---- | --------- | ------- | ----------- |
 
-##### Responses in data.
+##### Responses in data
 
 > | Name | Data type | Description |
 > | ---- | --------- | ----------- |
