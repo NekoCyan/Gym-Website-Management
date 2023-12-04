@@ -87,5 +87,6 @@ urlpatterns = [
 
     path('workout_edit',views.workout_edit,name='workout_edit'),
 
-    
+    path('', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]
