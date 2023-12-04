@@ -1,12 +1,12 @@
-# utils.py
-import re
+from rest_framework.response import Response
+from rest_framework import status
 
 def is_valid_email(email):
     """
     Kiểm tra xem một chuỗi có đúng định dạng email hay không.
     """
-    email_regex = re.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
-    return bool(re.match(email_regex, email))
+    email_regex = request.compile(r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$')
+    return bool(request.match(email_regex, email))
 
 def is_valid_password(password):
     """
@@ -16,5 +16,9 @@ def is_valid_password(password):
     """
     return len(password) >= 6
 
-# Các hàm khác có thể được thêm vào sau này
+def success_response(data=None):
+    return Response(data, status=status.HTTP_200_OK)
+
+def error_response(message, status_code=status.HTTP_400_BAD_REQUEST):
+    return Response({'error': message}, status=status_code)
  

@@ -2,7 +2,7 @@ from django.core.validators import FileExtensionValidator
 from django.core.validators import MinValueValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
-
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 
 class User_type(models.Model):

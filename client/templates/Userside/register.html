@@ -2,75 +2,43 @@
 {% load static %}
 
 {% block mycontent %}
-<title>Registeration</title>
+<title>Registration</title>
 
 <style>
-    table, tr, td {
-        border: solid;
-        border-color: black;
-        background-color: rgb(240, 221, 206);
-        color: black
+    body {
+        font-family: Arial, Helvetica, sans-serif;
     }
+        table, tr, td {
+            border: solid;
+            border-color: black;
+            background-color: rgb(240, 221, 206);
+            color: black
+        }
 </style>
-<!--Register Section-->
-<section class="page-title" style="background-image:url(static/User/images/background/51.jpg)">
-    <div class="auto-container">
-        <div class="clearfix">
-            <div class="pull-left">
-                <h2>Register</h2>
-                <div class="text">Fitness is not a destination it is a way of life.</div>
-            </div>
-            <div class="pull-right">
-                <ul class="page-breadcrumb">
-                    <li><a href="index-2.html">home</a></li>
-                    <li>Register</li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</section>
-<br>
-<div>
-    <center>
-        <table>
-            <tr>
-                <td>
-                    <center><h4><b>How to Apply for GYM Membership?</b></h4></center>
-                    <br>
-                    Step 1: Register with us by filling below form.<br>
-                    Step 2: After submitting the form, you will be redirected to the payment confirmation page.<br>
-                    Step 3: On the payment confirmation page, Select the payment method, upload the payment receipt, enter the transaction no. and
-                    submit the form.<br>
-                    Step 4: After successful submission of all the details asked above, your request to join the Gym will be sent to our management.<br>
-                    Step 5: Now you can login with your Email id and Password and check your Membership Status.
-                </td>
-            </tr>
-        </table>
-    </center>
-</div>
 
 <section class="register-section">
     <div class="auto-container">
         <div class="row clearfix">
-            <!--Form Column-->
+            <!-- Form Column -->
             <div class="form-column column col-lg-6 col-md-12 col-sm-12">
                 <div class="sec-title">
                     <h2>Register Here</h2>
                     <div class="separate"></div>
                 </div>
 
-                <!-- Thông báo lỗi -->
+                <!-- Error Message -->
                 {% if error_message %}
                 <div class="alert alert-danger" role="alert">
                     {{ error_message }}
                 </div>
                 {% endif %}
 
-                <!-- Form đăng ký -->
+                <!-- Registration Form -->
                 <div class="styled-form register-form">
-                    <form method="POST" action="/registerprocess" enctype="multipart/form-data">
+                    <form method="POST" action="{% url 'registerprocess' %}" enctype="multipart/form-data">
                         {% csrf_token %}
-                        <!-- Các trường dữ liệu đăng ký -->
+                        <!-- Registration form fields go here -->
+
                         <div class="form-group">
                             <h5 style="color:black">Name:</h5>
                             <input type="text" name="mname" style="border: solid;border-color: black;border-width: thin;"
@@ -78,10 +46,10 @@
                                 title="Please Enter Only Characters" minlength="3" required>
                         </div>
                         <div class="form-group">
-                            <h5 style="color:black">Gender:</h5><br />
-                            <input type="radio" name="gender" value="M" required> Male
+                            <h5 style="color:black">Gender:</h5><br/>
+                            <input type="radio" name="gender" value="1" required> Male
                             <br>
-                            <input type="radio" name="gender" value="F"> Female
+                            <input type="radio" name="gender" value="0"> Female
                         </div>
                         <div class="form-group">
                             <span class="adon-icon"><span class="fa fa-envelope-o"></span></span>
@@ -167,6 +135,6 @@
         </div>
     </div>
 </section>
-<!--End Register Section-->
+<!-- End Register Section -->
 
 {% endblock %}

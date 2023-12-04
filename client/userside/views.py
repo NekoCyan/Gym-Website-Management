@@ -8,12 +8,14 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import RegisterSerializer,LoginSerializer
 from django.conf import settings
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User,AbstractBaseUser, BaseUserManager
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
+from django.db import models
+
+import json
 import requests
 import datetime
 
@@ -153,93 +155,76 @@ def testimonialadd(request):
 
 
 def register(request):
-    return render(request,'Userside/register.html')
+    return render(request, 'Userside/register.html')
 
 def registerprocess(request):
     if request.method == 'POST':
-        print(request.POST)
-        typeid = 1
+        # Extract data from the form
         name = request.POST['mname']
         gender = request.POST['gender']
         email = request.POST['email']
         address = request.POST['address']
         mobile = request.POST['mobile']
-        img = request.FILES['photo'].name
-        id_proof = request.FILES['id_proof'].name
+        photo = request.FILES['photo']
+        id_proof = request.FILES['id_proof']
         plan = request.POST['plan']
-        print(plan)
         password = request.POST['password']
-        
-        register_api_url = 'http://localhost:3000/api/auth/register'  
+
+        # Build the payload as a JSON object
         payload = {
             'email': email,
             'password': password,
             'fullName': name,
-            'gender': 1 if gender == 'M' else 0,  # Chuyển giới tính sang số (1: Male, 0: Female)
+            'gender': gender,
             'address': address,
             'phoneNumber': mobile,
+            'plan': plan,
+            # ... other fields
         }
 
+        # API endpoint URL for registration
+        register_api_url = 'http://localhost:3000/api/auth/register'
+
         try:
-            response = requests.post(register_api_url, json=payload)
+            # Send POST request to the registration API
+            response = requests.post(register_api_url, data=json.dumps(payload), headers={'Content-Type': 'application/json'})
 
-            if response.status_code == 200:  # Kiểm tra nếu đăng ký thành công
-                json_response = response.json()
-                token = json_response.get('token')
+            if response.status_code == 201:
+                # Registration successful, get the token from the response
+                token = response.json().get('token')
 
-                # Xử lý thanh toán
-                payment_api_url = f'http://localhost:3000/api/payment/{token}'
-                payment_payload = {
-                    'plan': int(plan),
-                    'id_proof': id_proof,  # Bạn có thể cần điều chỉnh dữ liệu gửi đi tùy thuộc vào API của bạn
-                    'photo': img,  # Tương tự như trên, điều chỉnh dữ liệu gửi đi
-                }
+                # Save the token to the session or cookies for automatic login
+                request.session['token'] = token
 
-                payment_response = requests.post(payment_api_url, json=payment_payload)
-
-                if payment_response.status_code == 200:
-                    # Xử lý thanh toán thành công
-                    return redirect('/success')  # Chuyển hướng đến trang thông báo thanh toán thành công
-                else:
-                    # lỗi thanh toán
-                    return render(request, 'error.html', {'error_message': 'Lỗi thanh toán'})
-
+                # Redirect to the login page (or any other desired page)
+                return redirect('/login')
             else:
-                # nếu đăng ký không thành công
-                return render(request, 'error.html', {'error_message': 'Đăng ký không thành công'})
-
-        except requests.exceptions.RequestException as e:
-            #  nếu có lỗi khi gửi yêu cầu
-            return render(request, 'error.html', {'error_message': f'Có lỗi khi gửi yêu cầu: {e}'})
+                # Registration failed, handle the error
+                return render(request, 'error.html', {'error_message': 'Registration failed'})
+        except Exception as e:
+            # Handle other exceptions
+            return render(request, 'error.html', {'error_message': str(e)})
 
     else:
+        # If the request method is not POST, redirect to the registration page
         return redirect('register')
-
-class LoginAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        serializer = LoginSerializer(data=request.data)
-        if serializer.is_valid():
-            user = authenticate(request, username=serializer.validated_data['email'], password=serializer.validated_data['password'])
-            if user:
-                login(request, user)
-                # Xử lý logic sau khi người dùng đăng nhập ở đây
-                # ...
-                return Response({'token': 'your_generated_token'}, status=status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
  
+from django.shortcuts import render, redirect
+import requests
+
 def login(request):
     if request.method == 'POST':
-        print(request.POST)
+        # Lấy thông tin từ form đăng nhập
         uemail = request.POST['useremil']
         upassword = request.POST['userpassword']
         usertype = request.POST['type']
-        
-        api_url = request.Post(api_url, json={'email': uemail, 'password': upassword})
 
-        if response.status.code == 200:
+        # Gửi yêu cầu API đến máy chủ Node.js
+        api_url = 'http://localhost:3000/api/auth/login'
+        payload = {'email': uemail, 'password': upassword}
+        response = requests.post(api_url, json=payload)
+
+        if response.status_code == 200:
             # Xử lý dữ liệu từ API Node.js nếu cần
             data_from_nodejs = response.json()
 
@@ -259,20 +244,14 @@ def login(request):
             elif usertype == "Member" and data_from_nodejs.get('userType') == 1:
                 request.session['user_id'] = data_from_nodejs.get('userId')
                 request.session['user_email'] = uemail
-                response = redirect(home)
+                response = redirect('home')  # Chuyển hướng đến trang home
                 response.set_cookie('user_id', data_from_nodejs.get('userId'))
                 response.set_cookie('user_email', uemail)
                 return response
             else:
                 return render(request, 'Userside/login.html')
-
-                #Session Create Code
-                #Cookie Code
-                
-                #Cookie Code
         else:
-            return render(request, 'error.html', {'error_message': 'request API không thành công'})  
-       # return redirect(dashboard) 
+            return render(request, 'error.html', {'error_message': 'Đăng nhập không thành công'})
     else:
         return render(request, 'Userside/login.html')
 
@@ -508,3 +487,37 @@ def login_view(request):
     if requests.method == 'POST':
         email = requests.post.get('useremail')
         pass
+    
+def payment_success(request):
+    return render(request, 'success.html')
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError('The Email field must be set')
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+
+    def create_superuser(self, email, password=None, **extra_fields):
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
+
+class CustomUser(AbstractBaseUser):
+    email = models.EmailField(unique=True)
+    full_name = models.CharField(max_length=255)
+    # Add other fields as needed
+
+    is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+
+    objects = CustomUserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['full_name']
+
+    def __str__(self):
+        return self.email
