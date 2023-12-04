@@ -208,9 +208,7 @@ def registerprocess(request):
     else:
         # If the request method is not POST, redirect to the registration page
         return redirect('register')
- 
-from django.shortcuts import render, redirect
-import requests
+
 
 def login(request):
     if request.method == 'POST':

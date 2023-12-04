@@ -50,7 +50,6 @@ urlpatterns = [
 
 
 
-
     path('AddTrainerDetail.html',views.AddTrainerDetail,name='AddTrainerDetail.html'),
 
     path('ViewTrainerDetail.html',views.ViewTrainerDetail,name='ViewTrainerDetail.html'),
@@ -59,7 +58,7 @@ urlpatterns = [
 
     path('TrainerDetail/delete/<int:id>', views.TrainerDetaildelete, name="TrainerDetaildelete"),
 
-
+1
 
 
     path('AddProduct.html',views.AddProduct,name='AddProduct.html'),

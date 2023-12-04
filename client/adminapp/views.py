@@ -5,6 +5,8 @@ from django.core.files.storage import FileSystemStorage
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db import connection
+import requests
 # Create your views here.
 # Create your views here.
 import mysql.connector as mcdb
@@ -46,39 +48,27 @@ def myaccount(request):
 
 def login(request):
     if request.method == 'POST':
-        print(request.POST)
         admin_email = request.POST['email']
         admin_pass = request.POST['password']
-        cur.execute("select * from `user_master` where `Email` = '{}' and `Password` = '{}' and `Type_Id` = 3".format(admin_email,admin_pass))
-        data = cur.fetchone()
-        
-        if data is not None:
 
-            if len(data) > 0:
-                #Fetch Data
-                admin_db_id = data[0]
-                admin_db_email = data[2]
-                print(admin_db_id)
-                print(admin_db_email)
-                #Session Create Code
-                request.session['admin_id'] = admin_db_id
-                request.session['admin_email'] = admin_db_email
-                #Session Create Code
-                #Cookie Code
-                response = redirect(index)
-                response.set_cookie('admin_id', admin_db_id)
-                response.set_cookie('admin_email', admin_db_email)
-                return response
-                #Cookie Code
-            else:
-                messages.error(request,"Invalid Login!")
-                return render(request, 'Admin/login.html')         
-        messages.error(request,"Invalid Login Details!")
-        return render(request, 'Admin/login.html')
-        
-       # return redirect(dashboard) 
-    else:
-        return render(request, 'Admin/login.html') 
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM `user_master` WHERE `Email` = %s AND `Password` = %s AND `Type_Id` = 3", [admin_email, admin_pass])
+            data = cursor.fetchone()
+
+        if data is not None and len(data) > 0:
+            admin_db_id = data[0]
+            admin_db_email = data[2]
+
+            request.session['admin_id'] = admin_db_id
+            request.session['admin_email'] = admin_db_email
+
+            response = redirect('index')  # Change 'index' to the actual URL you want to redirect to
+            response.set_cookie('admin_id', admin_db_id)
+            response.set_cookie('admin_email', admin_db_email)
+            return response
+        else:
+            messages.error(request, "Invalid Login!")
+    return render(request, 'path/to/your/login.html')  # Adjust the path to your actual HTML template
 
 def logout(request):
     del request.session['admin_id']
@@ -156,6 +146,54 @@ def changepasswordprocess(request):
         return redirect(login)
 
 
+def register_admin_with_route(email, password, fullName, gender, address, phoneNumber):
+    route = "http://http://localhost:3000/api/auth/register"
+
+    data = {
+        "email": email,
+        "password": password,
+        "fullName": fullName,
+        "gender": gender,
+        "address": address,
+        "phoneNumber": phoneNumber,
+    }
+
+    try:
+        response = requests.post(route, json=data)
+
+        if response.status_code == 200:
+            # Registration successful
+            token = response.json().get("token")
+            # You can do something with the token if needed
+            print(f"Registration successful. Token: {token}")
+        else:
+            # Registration failed
+            error_message = response.json().get("error")
+            # Handle the error
+            print(f"Registration failed. Error: {error_message}")
+    except requests.RequestException as e:
+        # Handle any exceptions that may occur during the request
+        print(f"Error during registration request: {str(e)}")
+
+def register(request):
+    if request.method == 'POST':
+        # Get user registration data from the form
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        fullName = request.POST.get('fullName')
+        gender = int(request.POST.get('gender'))  # Convert to int as per your API definition
+        address = request.POST.get('address')
+        phoneNumber = request.POST.get('phoneNumber')
+
+        # Register the user with the Next.js API
+        register_user_with_nextjs(email, password, fullName, gender, address, phoneNumber)
+
+        # Continue with your Django registration logic
+        # For example, you can redirect the user to a success page
+        return redirect('success_page')
+    else:
+        # Render your registration form
+        return render(request, 'templates/Admin/registration.html')  # Adjust the path to your actual HTML template
 
 def AddUtype(request):
     return render(request,'Admin/AddUtype.html')
