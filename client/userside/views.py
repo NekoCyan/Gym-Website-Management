@@ -246,7 +246,7 @@ class LoginAPIView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
-            user = authenticate(request, username=serializer.validated_data['useremail'], password=serializer.validated_data['userpassword'])
+            user = authenticate(request, username=serializer.validated_data['email'], password=serializer.validated_data['password'])
             if user:
                 login(request, user)
                 # Xử lý logic sau khi người dùng đăng nhập ở đây
