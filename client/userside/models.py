@@ -2,9 +2,6 @@ from django.core.validators import FileExtensionValidator
 from django.core.validators import MinValueValidator
 from django.core.validators import MaxValueValidator
 from django.db import models
-import sys
-print(sys.path)
-
 
 # Create your models here.
 

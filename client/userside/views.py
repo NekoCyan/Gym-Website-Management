@@ -14,8 +14,6 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
-from django.utils.http import urlsafe_base64_encode
-from .utils import is_valid_email, is_valid_password
 import requests
 import datetime
 
@@ -172,75 +170,50 @@ def registerprocess(request):
         print(plan)
         password = request.POST['password']
         
-        register_api_url = 'http://http://localhost:3000/api/auth/register'  
+        register_api_url = 'http://localhost:3000/api/auth/register'  
         payload = {
-            'mname': name,
-            'gender': gender,
             'email': email,
-            'address': address,
-            'mobile': mobile,
-            'photo': request.FILES['photo'],
-            'id_proof': request.FILES['id_proof'],
-            'plan': plan,
             'password': password,
+            'fullName': name,
+            'gender': 1 if gender == 'M' else 0,  # Chuyển giới tính sang số (1: Male, 0: Female)
+            'address': address,
+            'phoneNumber': mobile,
         }
-        response = requests.post(register_api_url, data=payload)
 
-        if response.status_code == 201:  # Kiểm tra nếu đăng ký thành công
-            json_response = response.json()
-            m_id = json_response.get('m_id')
-            return redirect(f'/payment/{m_id}')
-        else:
-            # Xử lý lỗi nếu đăng ký không thành công
-            return render(request, 'error.html', {'error_message': 'Đăng nhập thất bại'})
+        try:
+            response = requests.post(register_api_url, json=payload)
+
+            if response.status_code == 200:  # Kiểm tra nếu đăng ký thành công
+                json_response = response.json()
+                token = json_response.get('token')
+
+                # Xử lý thanh toán
+                payment_api_url = f'http://localhost:3000/api/payment/{token}'
+                payment_payload = {
+                    'plan': int(plan),
+                    'id_proof': id_proof,  # Bạn có thể cần điều chỉnh dữ liệu gửi đi tùy thuộc vào API của bạn
+                    'photo': img,  # Tương tự như trên, điều chỉnh dữ liệu gửi đi
+                }
+
+                payment_response = requests.post(payment_api_url, json=payment_payload)
+
+                if payment_response.status_code == 200:
+                    # Xử lý thanh toán thành công
+                    return redirect('/success')  # Chuyển hướng đến trang thông báo thanh toán thành công
+                else:
+                    # lỗi thanh toán
+                    return render(request, 'error.html', {'error_message': 'Lỗi thanh toán'})
+
+            else:
+                # nếu đăng ký không thành công
+                return render(request, 'error.html', {'error_message': 'Đăng ký không thành công'})
+
+        except requests.exceptions.RequestException as e:
+            #  nếu có lỗi khi gửi yêu cầu
+            return render(request, 'error.html', {'error_message': f'Có lỗi khi gửi yêu cầu: {e}'})
 
     else:
         return redirect('register')
-    
-class RegisterAPIView(APIView):
-    def post(self, request, *args, **kwargs):
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-
-        if not is_valid_email(email):
-            return Response({'error': 'Invalid email address'}, status=status.HTTP_400_BAD_REQUEST)
-
-        if not is_valid_password(password):
-            return Response({'error': 'Password must be at least 6 characters long'}, status=status.HTTP_400_BAD_REQUEST)
-
-        serializer = RegisterSerializer(data=request.data)
-        if serializer.is_valid():
-            user = serializer.save()
-
-            # Gọi authenticate để đảm bảo thông tin đăng nhập đúng
-            user = authenticate(request, username=serializer.validated_data['email'], password=serializer.validated_data['password'])
-            if user:
-                login(request, user)
-            new_user = User.objects.create_user(
-                username=serializer.validated_data['email'],
-                password=serializer.validated_data['password']
-            )
-            # Tạo token xác nhận
-            token = default_token_generator.make_token(user)
-            # Tạo confirmation_link
-            uidb64 = urlsafe_base64_encode(force_bytes(user.id))
-            confirmation_link = f'http://http://localhost:3000/confirm-registration/{uidb64}/{token}/'
-
-            # Gửi email xác nhận
-            subject = 'Xác nhận đăng ký'
-            message = f'Chào mừng bạn đến với ứng dụng của chúng tôi! Nhấp vào liên kết sau để xác nhận đăng ký: {confirmation_link}'
-            from_email = settings.DEFAULT_FROM_EMAIL
-            to_email = [user.email]
-
-            send_mail(subject, message, from_email, to_email, fail_silently=False)
-            
-            User_Profile.objects.create(user=user, address=request.POST.get('address'), phone_number=request.POST.get('phone_number'))
-            #Tạo token    
-            from rest_framework.authtoken.models import Token
-            token, created = Token.objects.get_or_create(user=user)
-            return Response({'user_id': new_user.id, 'message': 'Registration successful'}, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class LoginAPIView(APIView):
     def post(self, request, *args, **kwargs):
