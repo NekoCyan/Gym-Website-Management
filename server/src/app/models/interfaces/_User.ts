@@ -1,5 +1,5 @@
 import { Document, Model, HydratedDocument } from 'mongoose';
-import { DocumentResult } from './ExternalDocument';
+import { DocumentList, DocumentResult } from './ExternalDocument';
 
 import { TokenPayload } from '@/Types';
 
@@ -36,8 +36,12 @@ export interface IUserMethods {
 		data: Partial<UserData & UserDetails>,
 		extraData?: { [key: string]: any },
 	): Promise<UserHydratedDocument>;
-	increaseBalance(amount: number): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
-	decreaseBalance(amount: number): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
+	increaseBalance(
+		amount: number,
+	): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
+	decreaseBalance(
+		amount: number,
+	): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
 }
 export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 	getUser(userId: number): Promise<UserHydratedDocument>;
@@ -62,5 +66,9 @@ export interface IUserModel extends Model<IUser, {}, IUserMethods> {
 		userId: number,
 		amount: number,
 	): Promise<Pick<UserData, 'balance' | 'totalBalance'>>;
+	getUserList(
+		limit?: number,
+		page?: number,
+	): Promise<DocumentList<Omit<UserData & UserDetails, 'password'>>>;
 }
 export type UserHydratedDocument = HydratedDocument<IUser, IUserMethods>;

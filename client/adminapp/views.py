@@ -5,6 +5,15 @@ from django.core.files.storage import FileSystemStorage
 from django.conf.urls.static import static
 from django.core.mail import send_mail
 from django.conf import settings
+from django.db import connection
+from rest_framework import generics
+from .models import User
+from .form import UserForm
+from django.views import View
+from .serializers import UserSerializer
+from .enums import ROLES, GENDER
+import requests
+import pymongo
 # Create your views here.
 # Create your views here.
 import mysql.connector as mcdb
@@ -46,39 +55,27 @@ def myaccount(request):
 
 def login(request):
     if request.method == 'POST':
-        print(request.POST)
         admin_email = request.POST['email']
         admin_pass = request.POST['password']
-        cur.execute("select * from `user_master` where `Email` = '{}' and `Password` = '{}' and `Type_Id` = 3".format(admin_email,admin_pass))
-        data = cur.fetchone()
-        
-        if data is not None:
 
-            if len(data) > 0:
-                #Fetch Data
-                admin_db_id = data[0]
-                admin_db_email = data[2]
-                print(admin_db_id)
-                print(admin_db_email)
-                #Session Create Code
-                request.session['admin_id'] = admin_db_id
-                request.session['admin_email'] = admin_db_email
-                #Session Create Code
-                #Cookie Code
-                response = redirect(index)
-                response.set_cookie('admin_id', admin_db_id)
-                response.set_cookie('admin_email', admin_db_email)
-                return response
-                #Cookie Code
-            else:
-                messages.error(request,"Invalid Login!")
-                return render(request, 'Admin/login.html')         
-        messages.error(request,"Invalid Login Details!")
-        return render(request, 'Admin/login.html')
-        
-       # return redirect(dashboard) 
-    else:
-        return render(request, 'Admin/login.html') 
+        with connection.cursor() as cursor:
+            cursor.execute("SELECT * FROM `user_master` WHERE `Email` = %s AND `Password` = %s AND `Type_Id` = 3", [admin_email, admin_pass])
+            data = cursor.fetchone()
+
+        if data is not None and len(data) > 0:
+            admin_db_id = data[0]
+            admin_db_email = data[2]
+
+            request.session['admin_id'] = admin_db_id
+            request.session['admin_email'] = admin_db_email
+
+            response = redirect('index')  # Change 'index' to the actual URL you want to redirect to
+            response.set_cookie('admin_id', admin_db_id)
+            response.set_cookie('admin_email', admin_db_email)
+            return response
+        else:
+            messages.error(request, "Invalid Login!")
+    return render(request, 'path/to/your/login.html')  # Adjust the path to your actual HTML template
 
 def logout(request):
     del request.session['admin_id']
@@ -156,6 +153,53 @@ def changepasswordprocess(request):
         return redirect(login)
 
 
+def register_admin_with_route(email, password, fullName, gender, address, phoneNumber):
+    route = "http://localhost:3000/api/auth/register"
+
+    data = {
+        "email": email,
+        "password": password,
+        "fullName": fullName,
+        "gender": gender,
+        "address": address,
+        "phoneNumber": phoneNumber,
+    }
+
+    try:
+        response = requests.post(route, json=data)
+
+        if response.status_code == 200:
+            # Registration successful
+            token = response.json().get("token")
+            # You can do something with the token if needed
+            print(f"Registration successful. Token: {token}")
+        else:
+            # Registration failed
+            error_message = response.json().get("error")
+            # Handle the error
+            print(f"Đăng ký thất bại. Lỗi: {error_message}")
+    except requests.RequestException as e:
+        # Handle any exceptions that may occur during the request
+        print(f"Lỗi khi request: {str(e)}")
+
+def register(request):
+    if request.method == 'POST':
+        # Get user registration data from the form
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+        fullName = request.POST.get('fullName')
+        gender = int(request.POST.get('gender'))  # Convert to int as per your API definition
+        address = request.POST.get('address')
+        phoneNumber = request.POST.get('phoneNumber')
+
+        register_admin_with_route(email, password, fullName, gender, address, phoneNumber)
+
+        # Continue with your Django registration logic
+        # For example, you can redirect the user to a success page
+        return redirect('success_page')
+    else:
+        # Render your registration form
+        return render(request, 'templates/Admin/registration.html')  # Adjust the path to your actual HTML template
 
 def AddUtype(request):
     return render(request,'Admin/AddUtype.html')
@@ -247,7 +291,13 @@ def Userdelete(request,id):
     return redirect(ViewUser) 
 
 
+class UserListCreateView(generics.ListCreateAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
+class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 
 def AddTrainerDetail(request):
@@ -645,3 +695,66 @@ def ViewFeedback(request):
     #return list(data)
     print(list(data))
     return render(request,'Admin/ViewFeedback.html', {'mydata': data})
+
+class AddUserView(View):
+    template_name = 'add_user.html'
+
+    def get(self, request):
+        mydata = [
+            (role.value, role.name) for role in ROLES
+        ]
+        return render(request, self.template_name, {'mydata': mydata, 'form': UserForm(choices={'gender': GENDER.choices()})})
+
+    def post(self, request):
+        form = UserForm(request.POST, request.FILES)
+        if form.is_valid():
+            api_url = 'http://localhost:3000/api/user'  # Adjust this URL
+
+            # Example using requests library for API request
+            try:
+                response = requests.post(api_url, data=form.cleaned_data)
+                response.raise_for_status()  # Check for HTTP errors
+
+                if response.status_code == 200:
+                    messages.success(request, 'User added successfully')
+                else:
+                    messages.error(request, 'Failed to add user')
+            except requests.RequestException as e:
+                messages.error(request, f'Error: {e}')
+
+            return redirect('add-user')
+        else:
+            messages.error(request, 'Error in the form. Please check the fields.')
+            return render(request, self.template_name, {'form': form})
+class UserListView(View):
+    template_name = 'user_list.html'
+
+    def get(self, request):
+        # Connect to MongoDB
+        client = pymongo.MongoClient("mongodb:gym-website-api")
+        database = client.get_database("myproject1")
+        user_collection = database.get_collection("user")
+
+        # Fetch user data
+        user_data = user_collection.find()
+
+        # Close MongoDB connection
+        client.close()
+
+        # Format data for template
+        mydata = [
+            (
+                user['userId'],
+                user['role'],
+                user['fullName'],
+                user['gender'],
+                user['email'],
+                user['address'],
+                user['phoneNumber'],
+                user['photo'],
+                user['id_proof'],
+            )
+            for user in user_data
+        ]
+
+        return render(request, self.template_name, {'mydata': mydata})

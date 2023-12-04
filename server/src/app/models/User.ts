@@ -5,6 +5,7 @@ import {
 	IUserModel,
 	UserData,
 	UserDetails,
+	UserHydratedDocument,
 } from './interfaces';
 
 import {
@@ -15,6 +16,7 @@ import {
 	ResponseText,
 	GENDER,
 	ROLES,
+	ValidateForList,
 } from '@/utils';
 import { Password_Compare, Password_Hash } from '@/utils/Password';
 
@@ -328,6 +330,42 @@ UserSchema.static(
 		} else {
 			return user.decreaseBalance(-amount);
 		}
+	},
+);
+UserSchema.static(
+	'getUserList',
+	async function (
+		_limit: number = 20,
+		_page: number = 1,
+	): Promise<ReturnType<IUserModel['getUserList']>> {
+		const { limit, page } = await ValidateForList(_limit, _page);
+
+		const totalDocument = await this.countDocuments({});
+		const totalPage = Math.ceil(totalDocument / limit);
+		let listTransaction: UserHydratedDocument[];
+
+		if (page > totalPage) {
+			listTransaction = [];
+		} else {
+			// Skip and Limit will works like the following:
+			// Get array from {skipFromPage} to {limitNext}.
+			const limitNext = page * limit;
+			const skipFromPage = limitNext - limit;
+
+			const getUserList = await this.aggregate()
+				.limit(limitNext)
+				.skip(skipFromPage)
+				.project({ _id: 0, __v: 0, password: 0 })
+				.exec();
+
+			listTransaction = getUserList;
+		}
+
+		return {
+			list: listTransaction,
+			currentPage: page,
+			totalPage,
+		};
 	},
 );
 

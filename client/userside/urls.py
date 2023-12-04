@@ -90,5 +90,7 @@ urlpatterns = [
 
     path('api/register/', RegisterAPIView.as_view(), name='register_api'),
 
-    
+    path('success/', views.payment_success, name='payment_success'),
+     
+    path('success/', views.payment_success, name='payment_success'),
 ]
